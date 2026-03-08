@@ -1,0 +1,2430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SigmaLine - App Comercial</title>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SheetJS para Excel Real -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- DataTables CSS Base -->
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <!-- DataTables Responsive CSS -->
+    <link href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css" rel="stylesheet">
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- CSS Embebido (autocontenido) -->
+    <style>
+/* SigmaLine CRM - Estilos principales */
+
+:root {
+  --sigma-cyan: #00aeef;
+  --sigma-blue: #005691;
+  --sigma-dark: #1a252f;
+  --bg-light: #f0f2f5;
+  --surface: #ffffff;
+  --bottom-nav-height: 60px;
+}
+
+body {
+  background-color: var(--bg-light);
+  font-family: "Roboto", sans-serif;
+  color: #333;
+  padding-bottom: calc(var(--bottom-nav-height) + 20px);
+}
+
+/* --- SIDEBAR (Escritorio) --- */
+.sidebar {
+  background: linear-gradient(
+    180deg,
+    var(--sigma-blue) 0%,
+    var(--sigma-dark) 100%
+  );
+  min-height: 100vh;
+  color: white;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+}
+@media (max-width: 767.98px) {
+  .sidebar {
+    display: none !important;
+  }
+  .main-content {
+    padding: 1rem !important;
+    padding-top: 80px !important;
+  }
+}
+
+.brand-logo {
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  margin-bottom: 0;
+  color: white;
+  text-transform: uppercase;
+}
+
+.nav-link-desktop {
+  color: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: all 0.3s;
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid transparent;
+  text-decoration: none;
+}
+.nav-link-desktop:hover,
+.nav-link-desktop.active {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-weight: 600;
+  border-left: 4px solid var(--sigma-cyan);
+}
+.nav-link-desktop i {
+  font-size: 1.3rem;
+  margin-right: 12px;
+  color: var(--sigma-cyan);
+}
+
+/* --- MÓVIL --- */
+.mobile-top-bar {
+  background: linear-gradient(
+    90deg,
+    var(--sigma-blue) 0%,
+    var(--sigma-dark) 100%
+  );
+  color: white;
+  padding: 10px 15px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  display: none;
+}
+.mobile-brand {
+  font-size: 1.2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+}
+
+.mobile-bottom-nav {
+  background-color: white;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--bottom-nav-height);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1030;
+  display: none;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1px solid #eee;
+}
+.mobile-nav-item {
+  text-align: center;
+  color: #999;
+  font-size: 0.7rem;
+  text-decoration: none;
+  flex-grow: 1;
+  padding: 5px 0;
+  cursor: pointer;
+}
+.mobile-nav-item i {
+  display: block;
+  font-size: 1.4rem;
+  margin-bottom: 2px;
+}
+.mobile-nav-item.active {
+  color: var(--sigma-blue);
+  font-weight: bold;
+}
+
+@media (max-width: 767.98px) {
+  .mobile-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .mobile-bottom-nav {
+    display: flex;
+  }
+  body {
+    padding-bottom: 80px;
+  }
+}
+
+/* --- COMPONENTES --- */
+.user-selector-desktop {
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.user-selector-desktop select {
+  background-color: var(--bg-light);
+  border: none;
+  color: var(--sigma-blue);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.user-selector-mobile select {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+.user-selector-mobile select option {
+  background-color: var(--sigma-dark);
+  color: white;
+}
+
+.main-content {
+  padding: 2rem;
+}
+.card {
+  border: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  border-radius: 12px;
+  background: var(--surface);
+  margin-bottom: 1.5rem;
+}
+
+.kpi-card {
+  border-left: 5px solid var(--sigma-cyan);
+  transition: transform 0.2s;
+  margin-bottom: 10px;
+}
+.kpi-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--sigma-blue);
+}
+
+.badge-cliente {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+.badge-prospecto {
+  background-color: #fff7ed;
+  color: #9a3412;
+  border: 1px solid #fed7aa;
+}
+.badge-vendedor {
+  background-color: var(--sigma-cyan);
+  color: white;
+  border-radius: 50px;
+  font-size: 0.75rem;
+}
+
+.btn-primary {
+  background-color: var(--sigma-cyan);
+  border-color: var(--sigma-cyan);
+  color: white;
+  font-weight: 600;
+}
+.table thead th {
+  background-color: #f8f9fa;
+  color: var(--sigma-blue);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
+  background-color: var(--sigma-cyan);
+  border: none;
+  box-shadow: none;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#saveIndicator {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  z-index: 1050;
+  display: none;
+}
+.modal-body {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+.truncate-text {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* === CLIENTS SECTION IMPROVEMENTS === */
+.clients-kpi-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.clients-kpi-mini {
+  background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
+  border-radius: 12px;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e2e8f0;
+  flex: 1;
+  min-width: 140px;
+  transition: all 0.2s ease;
+}
+.clients-kpi-mini:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.clients-kpi-mini .kpi-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+.clients-kpi-mini .kpi-icon.total {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+.clients-kpi-mini .kpi-icon.clientes {
+  background: #dcfce7;
+  color: #16a34a;
+}
+.clients-kpi-mini .kpi-icon.prospectos {
+  background: #fef3c7;
+  color: #d97706;
+}
+.clients-kpi-mini .kpi-icon.panos {
+  background: #f3e8ff;
+  color: #9333ea;
+}
+.clients-kpi-mini .kpi-data .kpi-number {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--sigma-dark);
+  line-height: 1;
+}
+.clients-kpi-mini .kpi-data .kpi-label {
+  font-size: 0.7rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.filter-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.filter-chip {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #e2e8f0;
+  background: white;
+  color: #64748b;
+  transition: all 0.2s ease;
+}
+.filter-chip:hover {
+  border-color: var(--sigma-cyan);
+  color: var(--sigma-cyan);
+}
+.filter-chip.active {
+  background: var(--sigma-cyan);
+  color: white;
+  border-color: var(--sigma-cyan);
+}
+.filter-chip .chip-count {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: 4px;
+  font-size: 0.7rem;
+}
+.filter-chip.active .chip-count {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.volume-bar {
+  width: 80px;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.volume-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--sigma-cyan), var(--sigma-blue));
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+.volume-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--sigma-dark);
+}
+
+.last-visit-badge {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.last-visit-badge.recent {
+  background: #dcfce7;
+  color: #166534;
+}
+.last-visit-badge.warning {
+  background: #fef3c7;
+  color: #92400e;
+}
+.last-visit-badge.danger {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.last-visit-badge.never {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.action-btns {
+  display: flex;
+  gap: 4px;
+}
+.action-btns .btn {
+  padding: 4px 8px;
+}
+.action-btns .btn i {
+  font-size: 0.9rem;
+}
+
+/* === CLIENT CARDS === */
+.view-toggle {
+  display: flex;
+  gap: 4px;
+}
+.view-toggle .btn {
+  padding: 6px 10px;
+}
+.view-toggle .btn.active {
+  background: var(--sigma-blue);
+  color: white;
+}
+
+.clients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.client-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+}
+.client-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: var(--sigma-cyan);
+}
+
+.client-card-header {
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #f8fafc 0%, #fff 100%);
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.client-card-header h5 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--sigma-blue);
+}
+.client-card-header .badge-status {
+  font-size: 0.7rem;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+.badge-status.cliente {
+  background: #dcfce7;
+  color: #166534;
+}
+.badge-status.prospecto {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.client-card-body {
+  padding: 16px 20px;
+  flex-grow: 1;
+}
+
+.client-metric {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.client-metric-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+.client-metric-icon.panos {
+  background: #f3e8ff;
+  color: #9333ea;
+}
+.client-metric-icon.responsable {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+.client-metric-value {
+  font-weight: 600;
+  color: var(--sigma-dark);
+}
+.client-metric-label {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.client-last-visit {
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-top: 12px;
+  border-left: 3px solid var(--sigma-cyan);
+}
+.client-last-visit.no-visit {
+  border-left-color: #cbd5e1;
+  background: #f1f5f9;
+}
+.client-last-visit.needs-attention {
+  border-left-color: #ef4444;
+  background: #fef2f2;
+}
+.client-last-visit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.client-last-visit-date {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+.client-last-visit-title {
+  font-size: 0.85rem;
+  color: var(--sigma-dark);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.client-last-visit-next {
+  font-size: 0.75rem;
+  color: #dc2626;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.client-card-footer {
+  padding: 12px 20px;
+  background: #fafbfc;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  gap: 8px;
+}
+.client-card-footer .btn {
+  flex: 1;
+  font-size: 0.8rem;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+.client-card-footer .btn i {
+  margin-right: 4px;
+}
+
+@media (max-width: 767.98px) {
+  .clients-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* === VISITS CARDS === */
+.visits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 16px;
+}
+.visit-card {
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+.visit-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+.visit-card-header {
+  padding: 14px 18px;
+  background: linear-gradient(
+    135deg,
+    var(--sigma-blue) 0%,
+    var(--sigma-dark) 100%
+  );
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.visit-card-header .visit-hospital {
+  font-weight: 700;
+  font-size: 1rem;
+}
+.visit-card-header .visit-date {
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+.visit-card-body {
+  padding: 16px 18px;
+}
+.visit-card-detail {
+  font-size: 0.9rem;
+  color: #334155;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.visit-card-next {
+  background: #fef3c7;
+  border-left: 3px solid #f59e0b;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #92400e;
+}
+.visit-card-footer {
+  padding: 12px 18px;
+  background: #f8fafc;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.visit-card-vendor {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+.visit-card-vendor i {
+  margin-right: 4px;
+}
+
+/* === CONTACTS CARDS === */
+.contacts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+.contact-card {
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+.contact-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+.contact-card-header {
+  padding: 14px 18px;
+  background: linear-gradient(135deg, #f8fafc 0%, #fff 100%);
+  border-bottom: 1px solid #f1f5f9;
+}
+.contact-card-header h5 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--sigma-dark);
+}
+.contact-card-header small {
+  color: #64748b;
+  font-size: 0.8rem;
+}
+.contact-card-body {
+  padding: 16px 18px;
+}
+.contact-info-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+.contact-info-row i {
+  width: 20px;
+  color: var(--sigma-cyan);
+}
+.contact-card-footer {
+  padding: 12px 18px;
+  background: #f8fafc;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  gap: 8px;
+}
+.contact-card-footer .btn {
+  flex: 1;
+  font-size: 0.8rem;
+  padding: 8px 12px;
+}
+
+/* === SECTION KPIS === */
+.section-kpi-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.section-kpi {
+  background: white;
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e2e8f0;
+  min-width: 120px;
+}
+.section-kpi .kpi-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+.section-kpi .kpi-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--sigma-dark);
+}
+.section-kpi .kpi-label {
+  font-size: 0.7rem;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+/* Date filter chips */
+.date-filter-chip {
+  padding: 5px 12px;
+  border-radius: 16px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  border: 1px solid #e2e8f0;
+  background: white;
+  color: #64748b;
+  transition: all 0.2s;
+}
+.date-filter-chip:hover {
+  border-color: var(--sigma-cyan);
+}
+.date-filter-chip.active {
+  background: var(--sigma-blue);
+  color: white;
+  border-color: var(--sigma-blue);
+}
+
+/* === TOAST GUARDADO MEJORADO === */
+.toast-save {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  z-index: 1050;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+  display: none;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  animation: slideIn 0.3s ease;
+}
+.toast-save.show {
+  display: flex;
+}
+.toast-save i {
+  font-size: 1.2rem;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* === GOOGLE SHEETS SYNC INDICATOR === */
+#cloudSyncIndicator {
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+#cloudSyncIndicator.syncing {
+  color: #fbbf24 !important;
+  animation: pulse 1s infinite;
+}
+
+#cloudSyncIndicator.synced {
+  color: #22c55e !important;
+}
+
+#cloudSyncIndicator.error {
+  color: #ef4444 !important;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+
+/* === Animación botón Guardar === */
+@keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); }
+    50% { box-shadow: 0 4px 25px rgba(245, 158, 11, 0.7); }
+}
+
+
+/* === BOTÓN GUARDAR HTML DESTACADO === */
+.save-html-btn {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 12px 16px;
+    border-radius: 12px;
+    width: 100%;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+    transition: all 0.3s ease;
+    animation: pulseGlow 2s infinite;
+}
+.save-html-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+}
+.save-html-btn i {
+    margin-right: 8px;
+}
+@keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); }
+    50% { box-shadow: 0 4px 25px rgba(245, 158, 11, 0.7); }
+}
+
+/* Recordatorio toast */
+.save-reminder-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+    padding: 16px 24px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: slideInRight 0.5s ease;
+    max-width: 350px;
+}
+.save-reminder-toast .toast-icon {
+    font-size: 1.5rem;
+}
+.save-reminder-toast .toast-content h6 {
+    margin: 0 0 4px 0;
+    font-weight: 700;
+}
+.save-reminder-toast .toast-content p {
+    margin: 0;
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+.save-reminder-toast .toast-close {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-left: 8px;
+}
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+    </style>
+
+    
+    
+
+</head>
+<body>
+
+<div id="saveIndicator" class="toast align-items-center text-white bg-success border-0 show shadow" role="alert">
+  <div class="d-flex"><div class="toast-body"><i class="bi bi-cloud-check-fill me-2"></i> Guardado</div></div>
+</div>
+
+<!-- BARRA SUPERIOR MÓVIL -->
+<div class="mobile-top-bar">
+    <div class="d-flex align-items-center">
+        <!-- LOGO UNIDO -->
+        <span class="mobile-brand me-2">SIGMALINE</span>
+        <i class="bi bi-hospital-fill text-white-50"></i>
+    </div>
+    <div class="user-selector-mobile">
+        <select id="currentUserMobile" onchange="syncUserSelector(this.value)">
+            <option value="Emiliano">Emiliano</option>
+
+            <option value="Mauricio">Mauricio</option>
+            <option value="Gerencia">👔 Gerencia</option>
+        </select>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        
+        <!-- SIDEBAR -->
+        <div class="col-md-2 sidebar p-4 d-flex flex-column d-none d-md-flex">
+            <div class="mb-5 text-center">
+                <!-- LOGO UNIDO -->
+                <div class="brand-logo">SIGMALINE</div>
+                <small class="text-white-50">ARGENTINA</small>
+            </div>
+            
+            <div class="user-selector-desktop">
+                <label class="mb-2 text-white-50 text-uppercase small fw-bold">Perfil Activo</label>
+                <select id="currentUserDesktop" class="form-select form-select-sm shadow-sm" onchange="syncUserSelector(this.value)">
+                    <option value="Emiliano">Emiliano</option>
+
+                    <option value="Mauricio">Mauricio</option>
+                    <option value="Gerencia" class="fw-bold text-primary">👔 Gerencia (Ver Todos)</option>
+                </select>
+            </div>
+
+            <!-- BOTÓN GUARDAR CAMBIOS (AMARILLO) -->
+            <button id="btnGuardarCambios" class="btn w-100 mb-3" onclick="downloadBackup()" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border: none; color: white; font-weight: 700; padding: 14px 16px; border-radius: 12px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);">
+                <i class="bi bi-download me-2"></i>GUARDAR CAMBIOS
+            </button>
+            
+            <div class="nav flex-column gap-2">
+                <a onclick="switchView('clients')" id="nav-desk-clients" class="nav-link-desktop active"><i class="bi bi-briefcase-fill"></i> Clientes</a>
+
+                <a onclick="switchView('visits')" id="nav-desk-visits" class="nav-link-desktop"><i class="bi bi-journal-text"></i> Visitas</a>
+                <a onclick="switchView('contacts')" id="nav-desk-contacts" class="nav-link-desktop"><i class="bi bi-people-fill"></i> Contactos</a>
+                <a onclick="switchView('reports')" id="nav-desk-reports" class="nav-link-desktop"><i class="bi bi-bar-chart-fill"></i> Stats</a>
+            </div>
+            
+            <!-- BOTÓN GUARDAR HTML DESTACADO -->
+            <button class="save-html-btn mt-3" onclick="downloadHTMLPortable()">
+                <i class="bi bi-download"></i> GUARDAR CAMBIOS
+            </button>
+            
+            <!-- Exportar y Sync -->
+            <div class="mt-4 pt-3 border-top border-secondary">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-sm btn-success" onclick="exportToExcel()"><i class="bi bi-file-earmark-excel"></i> Exportar Excel</button>
+                    <button class="btn btn-sm btn-info" onclick="manualSyncToSheets()">
+                        <span id="cloudSyncIndicator" class="me-1"><i class="bi bi-cloud-arrow-up"></i></span>
+                        Sincronizar Nube
+                    </button>
+                    <button class="btn btn-sm btn-outline-light" onclick="triggerRestore()"><i class="bi bi-cloud-upload"></i> Restaurar</button>
+                    <input type="file" id="restoreFile" style="display: none;" onchange="restoreBackup(this)" accept=".json,.csv">
+                    <button class="btn btn-sm btn-outline-secondary" onclick="configureGoogleSheets()" style="font-size: 0.7rem;">
+                        <i class="bi bi-gear me-1"></i>Configurar Nube
+                    </button>
+                </div>
+            </div>
+            
+            <div class="mt-auto">
+                <p class="text-white-50 small text-center mb-0">v3.5</p>
+            </div>
+        </div>
+
+        <!-- BARRA INFERIOR MÓVIL -->
+        <nav class="mobile-bottom-nav">
+            <a onclick="switchView('clients')" id="nav-mob-clients" class="mobile-nav-item active"><i class="bi bi-briefcase-fill"></i> Clientes</a>
+            <a onclick="switchView('visits')" id="nav-mob-visits" class="mobile-nav-item"><i class="bi bi-journal-plus"></i> Visitas</a>
+
+            <a onclick="switchView('contacts')" id="nav-mob-contacts" class="mobile-nav-item"><i class="bi bi-people"></i> Contactos</a>
+            <a onclick="switchView('reports')" id="nav-mob-reports" class="mobile-nav-item"><i class="bi bi-bar-chart"></i> Stats</a>
+        </nav>
+
+        <!-- CONTENIDO -->
+        <div class="col-12 col-md-10 main-content">
+
+            <!-- VISTA: CARTERA -->
+            <div id="view-clients">
+                <!-- KPIs Mini -->
+                <div class="clients-kpi-row">
+                    <div class="clients-kpi-mini">
+                        <div class="kpi-icon total"><i class="bi bi-building"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-number" id="kpiClientsTotal">0</div>
+                            <div class="kpi-label">Total</div>
+                        </div>
+                    </div>
+                    <div class="clients-kpi-mini">
+                        <div class="kpi-icon clientes"><i class="bi bi-check-circle-fill"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-number" id="kpiClientsActive">0</div>
+                            <div class="kpi-label">Clientes</div>
+                        </div>
+                    </div>
+                    <div class="clients-kpi-mini">
+                        <div class="kpi-icon prospectos"><i class="bi bi-bullseye"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-number" id="kpiClientsProspect">0</div>
+                            <div class="kpi-label">Prospectos</div>
+                        </div>
+                    </div>
+                    <div class="clients-kpi-mini">
+                        <div class="kpi-icon panos"><i class="bi bi-box-seam"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-number" id="kpiClientsPanos">0</div>
+                            <div class="kpi-label">Paños Est.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Header con filtros -->
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                        <div class="input-group" style="max-width: 250px;">
+                            <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                            <input type="text" class="form-control" id="clientSearchInput" placeholder="Buscar hospital..." oninput="filterClientsSearch()">
+                        </div>
+                        <div class="d-flex gap-2">
+                            <!-- Filtros Avanzados -->
+                            <select class="form-select form-select-sm" id="filterZone" style="width: auto;" onchange="renderClientsCards()">
+                                <option value="all">Zona: Todas</option>
+                                <option value="CABA">CABA</option>
+                                <option value="Buenos Aires">Buenos Aires</option>
+                                <option value="GBA Norte">GBA Norte</option>
+                                <option value="GBA Sur">GBA Sur</option>
+                                <option value="GBA Oeste">GBA Oeste</option>
+                                <option value="Catamarca">Catamarca</option>
+                                <option value="Chaco">Chaco</option>
+                                <option value="Chubut">Chubut</option>
+                                <option value="Córdoba">Córdoba</option>
+                                <option value="Corrientes">Corrientes</option>
+                                <option value="Entre Ríos">Entre Ríos</option>
+                                <option value="Formosa">Formosa</option>
+                                <option value="Jujuy">Jujuy</option>
+                                <option value="La Pampa">La Pampa</option>
+                                <option value="La Rioja">La Rioja</option>
+                                <option value="Mendoza">Mendoza</option>
+                                <option value="Misiones">Misiones</option>
+                                <option value="Neuquén">Neuquén</option>
+                                <option value="Río Negro">Río Negro</option>
+                                <option value="Salta">Salta</option>
+                                <option value="San Juan">San Juan</option>
+                                <option value="San Luis">San Luis</option>
+                                <option value="Santa Cruz">Santa Cruz</option>
+                                <option value="Santa Fe">Santa Fe</option>
+                                <option value="Santiago del Estero">Santiago del Estero</option>
+                                <option value="Tierra del Fuego">Tierra del Fuego</option>
+                                <option value="Tucumán">Tucumán</option>
+                            </select>
+                            <select class="form-select form-select-sm" id="filterType" style="width: auto;" onchange="renderClientsCards()">
+                                <option value="all">Tipo: Todos</option>
+                                <option value="Privado">Privado</option>
+                                <option value="Publico">Público</option>
+                            </select>
+                            <select class="form-select form-select-sm" id="filterPotential" style="width: auto;" onchange="renderClientsCards()">
+                                <option value="all">Potencial: Todos</option>
+                                <option value="Alto">Alto</option>
+                                <option value="Medio">Medio</option>
+                                <option value="Bajo">Bajo</option>
+                            </select>
+                            <select class="form-select form-select-sm" id="filterStatus" style="width: auto;" onchange="renderClientsCards()">
+                                <option value="all">Estado: Todos</option>
+                                <option value="CLIENTE">Clientes</option>
+                                <option value="PROSPECTO">Prospectos</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2 align-items-center">
+                        <div class="view-toggle d-none d-md-flex">
+                            <button class="btn btn-sm btn-outline-secondary active" id="viewCards" onclick="setViewMode('cards')" title="Vista tarjetas">
+                                <i class="bi bi-grid-3x2-gap"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary" id="viewTable" onclick="setViewMode('table')" title="Vista tabla">
+                                <i class="bi bi-list-ul"></i>
+                            </button>
+                        </div>
+                        <button class="btn btn-primary btn-sm shadow-sm rounded-pill px-3" onclick="openAddClientModal()" title="Agregar nuevo cliente">
+                            <i class="bi bi-plus-lg me-1"></i>Nuevo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Vista Tarjetas -->
+                <div id="clientsCardsView" class="clients-grid"></div>
+
+                <!-- Vista Tabla (oculta por defecto) -->
+                <div id="clientsTableView" class="card p-0" style="display: none;">
+                    <div class="card-body p-2 p-md-4">
+                        <table id="clientsTable" class="table table-hover align-middle w-100 dt-responsive nowrap">
+                            <thead>
+                                <tr>
+                                    <th>Hospital</th>
+                                    <th>Volumen</th>
+                                    <th>Zona</th>
+                                    <th>Tipo</th>
+                                    <th>Potencial</th>
+                                    <th>Última Visita</th>
+                                    <th>Estado</th>
+                                    <th>Responsable</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- VISTA: VISITAS -->
+            <div id="view-visits" style="display:none;">
+                <!-- KPIs de Visitas -->
+                <div class="clients-kpi-row">
+                    <div class="clients-kpi-mini">
+                        <div class="kpi-icon total"><i class="bi bi-journal-text"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-number" id="kpiVisitsTotal">0</div>
+                            <div class="kpi-label">Total</div>
+                        </div>
+                    </div>
+                    <div class="clients-kpi-mini">
+                        <div class="kpi-icon clientes"><i class="bi bi-calendar-check"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-number" id="kpiVisitsMonth">0</div>
+                            <div class="kpi-label">Este Mes</div>
+                        </div>
+                    </div>
+                    <div class="clients-kpi-mini">
+                        <div class="kpi-icon prospectos"><i class="bi bi-arrow-right-circle"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-number" id="kpiVisitsPending">0</div>
+                            <div class="kpi-label">Con Seguimiento</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filtros y acciones -->
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <div class="d-flex gap-2 align-items-center flex-wrap">
+                        <div class="input-group" style="max-width: 200px;">
+                            <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                            <input type="text" class="form-control" id="visitSearchInput" placeholder="Buscar hospital..." oninput="filterVisitsSearch()">
+                        </div>
+                        <div class="d-flex gap-1 flex-wrap">
+                            <span class="date-filter-chip" data-date="today" onclick="filterVisitsDate('today')">Hoy</span>
+                            <span class="date-filter-chip" data-date="week" onclick="filterVisitsDate('week')">Semana</span>
+                            <span class="date-filter-chip" data-date="month" onclick="filterVisitsDate('month')">Mes</span>
+                            <span class="date-filter-chip" data-date="3months" onclick="filterVisitsDate('3months')">3 Meses</span>
+                            <span class="date-filter-chip" data-date="6months" onclick="filterVisitsDate('6months')">6 Meses</span>
+                            <span class="date-filter-chip active" data-date="all" onclick="filterVisitsDate('all')">Todas</span>
+                        </div>
+                        <small class="text-muted d-none d-md-block">Filtro: <span id="visitsUserLabelDesktop">Todos</span></small>
+                    </div>
+                    <div class="d-flex gap-2 align-items-center">
+                        <div class="view-toggle d-none d-md-flex">
+                            <button class="btn btn-sm btn-outline-secondary active" id="viewVisitsCards" onclick="setVisitsViewMode('cards')" title="Vista tarjetas">
+                                <i class="bi bi-grid-3x2-gap"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary" id="viewVisitsTable" onclick="setVisitsViewMode('table')" title="Vista tabla">
+                                <i class="bi bi-list-ul"></i>
+                            </button>
+                        </div>
+                        <button class="btn btn-outline-success btn-sm" onclick="exportTableToCSV('#visitsTable', 'Reporte.csv')" title="Exportar CSV">
+                            <i class="bi bi-download"></i>
+                        </button>
+                        <button class="btn btn-primary btn-sm shadow-sm rounded-pill px-3" onclick="openVisitModal()" title="Cargar visita">
+                            <i class="bi bi-pen-fill me-1"></i>Cargar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Vista Tarjetas -->
+                <div id="visitsCardsView" class="visits-grid"></div>
+
+                <!-- Vista Tabla -->
+                <div id="visitsTableView" class="card p-0" style="display: none;">
+                    <div class="card-body p-2 p-md-4">
+                        <table id="visitsTable" class="table table-striped align-middle w-100 dt-responsive nowrap">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Hospital</th>
+                                    <th>Gestión</th>
+                                    <th>Vendedor</th>
+                                    <th>Próximo</th>
+                                    <th>Ver</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VISTA: FICHAS -->
+            <div id="view-hospitals" style="display:none;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-primary fw-bold mb-0">Fichas</h4>
+                    <button class="btn btn-outline-dark btn-sm rounded-pill" onclick="exportTableToCSV('#hospitalsTable', 'Sigma_Fichas.csv')"><i class="bi bi-download"></i></button>
+                </div>
+                <div class="card p-0">
+                    <div class="card-body p-2 p-md-4">
+                        <table id="hospitalsTable" class="table table-hover align-middle w-100 dt-responsive nowrap">
+                            <thead>
+                                <tr>
+                                    <th>Hospital</th>
+                                    <th>Próximo Paso</th>
+                                    <th>Productos</th>
+                                    <th>Camas</th>
+                                    <th>Extra</th>
+                                    <th>Edit</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- VISTA: CONTACTOS -->
+            <div id="view-contacts" style="display:none;">
+                <!-- KPIs de Contactos -->
+                <div class="clients-kpi-row">
+                    <div class="clients-kpi-mini">
+                        <div class="kpi-icon total"><i class="bi bi-people-fill"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-number" id="kpiContactsTotal">0</div>
+                            <div class="kpi-label">Total</div>
+                        </div>
+                    </div>
+                    <div class="clients-kpi-mini">
+                        <div class="kpi-icon clientes"><i class="bi bi-telephone-fill"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-number" id="kpiContactsWithPhone">0</div>
+                            <div class="kpi-label">Con Teléfono</div>
+                        </div>
+                    </div>
+                    <div class="clients-kpi-mini">
+                        <div class="kpi-icon panos"><i class="bi bi-hospital"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-number" id="kpiContactsHospitals">0</div>
+                            <div class="kpi-label">Hospitales</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filtros y acciones -->
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <div class="d-flex gap-2 align-items-center">
+                        <input type="text" class="form-control form-control-sm" placeholder="Buscar contacto..." id="contactSearchInput" style="max-width: 200px;" oninput="filterContactsSearch()">
+                    </div>
+                    <div class="d-flex gap-2 align-items-center">
+                        <div class="view-toggle d-none d-md-flex">
+                            <button class="btn btn-sm btn-outline-secondary active" id="viewContactsCards" onclick="setContactsViewMode('cards')" title="Vista tarjetas">
+                                <i class="bi bi-grid-3x2-gap"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary" id="viewContactsTable" onclick="setContactsViewMode('table')" title="Vista tabla">
+                                <i class="bi bi-list-ul"></i>
+                            </button>
+                        </div>
+                        <button class="btn btn-primary btn-sm shadow-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#addContactModal" title="Nuevo contacto">
+                            <i class="bi bi-plus-lg me-1"></i>Nuevo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Vista Tarjetas -->
+                <div id="contactsCardsView" class="contacts-grid"></div>
+
+                <!-- Vista Tabla -->
+                <div id="contactsTableView" class="card p-0" style="display: none;">
+                    <div class="card-body p-2 p-md-4">
+                        <table id="mainTable" class="table table-hover align-middle w-100 dt-responsive nowrap">
+                            <thead>
+                                <tr>
+                                    <th>Hospital</th>
+                                    <th>Nombre</th>
+                                    <th>Puesto</th>
+                                    <th>Datos</th>
+                                    <th>Estado</th>
+                                    <th>Interés</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VISTA: REPORTES -->
+            <div id="view-reports" style="display:none;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-primary fw-bold mb-0">Estadísticas</h4>
+                    <span class="badge bg-white text-secondary border" id="statsBadge">Datos de: <span id="statsUserLabel">Todos</span></span>
+                </div>
+                
+                <!-- KPIs principales -->
+                <div class="row g-3 mb-4">
+                    <div class="col-6 col-md-3">
+                        <div class="card kpi-card p-3 h-100 text-center">
+                            <div class="kpi-value text-primary" id="statsVisitasTotal">0</div>
+                            <div class="text-muted small text-uppercase">Visitas Totales</div>
+                            <small class="text-success" id="statsVisitasTrend">—</small>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="card kpi-card p-3 h-100 text-center" style="border-color: #28a745;">
+                            <div class="kpi-value text-success" id="statsClientesActivos">0</div>
+                            <div class="text-muted small text-uppercase">Clientes Activos</div>
+                            <small class="text-muted" id="statsClientesPct">—</small>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="card kpi-card p-3 h-100 text-center" style="border-color: #17a2b8;">
+                            <div class="kpi-value text-info" id="statsProspectos">0</div>
+                            <div class="text-muted small text-uppercase">Prospectos</div>
+                            <small class="text-muted">En pipeline</small>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="card kpi-card p-3 h-100 text-center" style="border-color: #ffc107;">
+                            <div class="kpi-value text-warning" id="statsPanosTotal">0</div>
+                            <div class="text-muted small text-uppercase">Paños Est.</div>
+                            <small class="text-muted">mensual</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Gráficos y tablas -->
+                <div class="row g-3 mb-4">
+                    <!-- Actividad mensual -->
+                    <div class="col-12 col-md-6">
+                        <div class="card h-100 p-3">
+                            <h6 class="card-title text-secondary mb-3">
+                                <i class="bi bi-graph-up me-2"></i>Actividad Mensual
+                            </h6>
+                            <div style="height: 200px;">
+                                <canvas id="chartActivityMonthly"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Distribución por estado -->
+                    <div class="col-12 col-md-6">
+                        <div class="card h-100 p-3">
+                            <h6 class="card-title text-secondary mb-3">
+                                <i class="bi bi-pie-chart me-2"></i>Pipeline
+                            </h6>
+                            <div style="height: 200px;">
+                                <canvas id="chartPipeline"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row g-3">
+                    <!-- Top 5 Clientes -->
+                    <div class="col-12 col-md-6">
+                        <div class="card h-100 p-3">
+                            <h6 class="card-title text-secondary mb-3">
+                                <i class="bi bi-trophy me-2"></i>Top 5 Clientes (por paños)
+                            </h6>
+                            <ul class="list-group list-group-flush" id="statsTopClientes">
+                                <li class="list-group-item text-muted">Cargando...</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Distribución por zona -->
+                    <div class="col-12 col-md-6">
+                        <div class="card h-100 p-3">
+                            <h6 class="card-title text-secondary mb-3">
+                                <i class="bi bi-geo-alt me-2"></i>Clientes por Zona
+                            </h6>
+                            <ul class="list-group list-group-flush" id="statsZonas">
+                                <li class="list-group-item text-muted">Cargando...</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- MODALES -->
+
+<div class="modal fade" id="viewVisitModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 20px; overflow: hidden; border: none; box-shadow: 0 25px 50px rgba(0,0,0,0.15);">
+            <div class="modal-header border-0 pb-0" style="background: linear-gradient(135deg, #0f172a 0%, #334155 100%); padding: 1.5rem;">
+                <div class="w-100">
+                    <span class="badge bg-white text-dark rounded-pill px-3 py-2 mb-2 shadow-sm">
+                        <i class="bi bi-calendar3 me-1"></i><span id="viewVisitDate">-</span>
+                    </span>
+                    <h4 class="modal-title text-white fw-bold mb-0" id="viewVisitHospital">-</h4>
+                </div>
+                <button type="button" class="btn-close btn-close-white position-absolute" style="top: 1rem; right: 1rem;" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="mb-4">
+                    <h6 class="text-primary fw-bold mb-2 text-uppercase small">
+                        <i class="bi bi-chat-left-text me-2"></i>Reporte de Visita
+                    </h6>
+                    <div class="p-3 bg-light rounded-3 border" id="viewVisitDetail" style="white-space: pre-line; min-height: 80px; font-size: 0.95rem; line-height: 1.6;"></div>
+                </div>
+                
+                <div class="p-3 rounded-3 border-start border-4 border-success bg-success-subtle" id="viewVisitNextContainer">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3" style="width: 36px; height: 36px;">
+                            <i class="bi bi-arrow-right-circle-fill"></i>
+                        </div>
+                        <div>
+                            <small class="text-success-emphasis fw-bold text-uppercase" style="font-size: 0.7rem;">Próximo Paso</small>
+                            <div class="text-dark fw-medium" id="viewVisitNext">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0 p-4 pt-0">
+                <button class="btn btn-outline-secondary w-100 rounded-pill py-2" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg me-2"></i>Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addVisitModal" tabindex="-1">
+    <div class="modal-dialog modal-fullscreen-sm-down modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Nueva Visita</h5>
+                <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addVisitForm">
+                    <div class="mb-2 text-center">
+                        <span class="badge bg-light text-dark">Usuario: <span id="visitVendorName"></span></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="fw-bold">Fecha</label>
+                            <input type="date" class="form-control" id="vFecha">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="fw-bold">Hospital</label>
+                            <input class="form-control" list="hospitalOptions" id="vHospital" placeholder="Escribe para buscar..." required>
+                            <datalist id="hospitalOptions"></datalist>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="fw-bold text-success">Título de la Reunión</label>
+                        <input type="text" class="form-control" id="vTitulo" placeholder="Ej: Presentación cofias, Seguimiento pedido..." maxlength="100">
+                        <small class="text-muted">Este título aparecerá en la tarjeta del cliente</small>
+                    </div>
+
+                    <!-- SECCIÓN PRODUCTOS -->
+                    <div class="card mb-3 bg-light border-0">
+                        <div class="card-body py-2">
+                            <h6 class="fw-bold text-primary mb-2"><i class="bi bi-box-seam me-2"></i>Productos Entregados / Vendidos</h6>
+                            <div class="row g-2">
+                                <div class="col-6 col-md-3">
+                                    <label class="small text-muted">Paños</label>
+                                    <input type="number" class="form-control form-control-sm" id="prodPanos" placeholder="0">
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <label class="small text-muted">Cofias</label>
+                                    <input type="number" class="form-control form-control-sm" id="prodCofias" placeholder="0">
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <label class="small text-muted">Incontinencia</label>
+                                    <input type="number" class="form-control form-control-sm" id="prodIncont" placeholder="0">
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <label class="small text-muted">Pediátricos</label>
+                                    <input type="number" class="form-control form-control-sm" id="prodPediat" placeholder="0">
+                                </div>
+                                <div class="col-4">
+                                    <label class="small text-muted">Desc. 2L</label>
+                                    <input type="number" class="form-control form-control-sm" id="prodDesc2L" placeholder="0">
+                                </div>
+                                <div class="col-4">
+                                    <label class="small text-muted">Desc. 4L</label>
+                                    <input type="number" class="form-control form-control-sm" id="prodDesc4L" placeholder="0">
+                                </div>
+                                <div class="col-4">
+                                    <label class="small text-muted">Desc. 7L</label>
+                                    <input type="number" class="form-control form-control-sm" id="prodDesc7L" placeholder="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="fw-bold">Detalle</label>
+                        <textarea class="form-control" id="vDetalle" rows="4" placeholder="¿Qué pasó en la visita?"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="fw-bold text-primary">Próximo Paso</label>
+                        <input type="text" class="form-control" id="vNext" placeholder="Ej: Volver el lunes">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success w-100" onclick="addVisit()">Guardar Reporte</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addClientModal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header bg-dark text-white"><h5 class="modal-title"><i class="bi bi-building me-2"></i>Nuevo Cliente / Hospital</h5><button class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body">
+<form id="addClientForm">
+    <!-- Fila 1: Hospital & Responsable -->
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <label class="form-label fw-bold">Hospital / Institución</label>
+            <input type="text" class="form-control" id="cHospital" placeholder="Nombre del hospital">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Responsable</label>
+            <select id="cResponsable" class="form-select">
+                <option value="Emiliano">Emiliano</option>
+
+                <option value="Mauricio">Mauricio</option>
+            </select>
+        </div>
+    </div>
+    <!-- Fila 2: Estado, Paños, Camas -->
+    <div class="row mb-3">
+        <div class="col-4">
+            <label class="form-label">Estado</label>
+            <select id="cEstado" class="form-select">
+                <option value="CLIENTE">CLIENTE</option>
+                <option value="PROSPECTO">PROSPECTO</option>
+            </select>
+        </div>
+        <div class="col-4">
+            <label class="form-label">Paños Est.</label>
+            <input type="number" class="form-control" id="cPanos" placeholder="0">
+        </div>
+        <div class="col-4">
+            <label class="form-label">Camas</label>
+            <input type="number" class="form-control" id="cCamas" placeholder="0">
+        </div>
+    </div>
+    <!-- Fila 3: Zona, Tipo, Potencial, Probabilidad -->
+    <div class="row mb-3">
+        <div class="col-md-3 col-6">
+            <label class="form-label">Zona</label>
+            <select id="cZona" class="form-select">
+                <option value="CABA">CABA</option>
+                <option value="Buenos Aires">Buenos Aires</option>
+                <option value="GBA Norte">GBA Norte</option>
+                <option value="GBA Sur">GBA Sur</option>
+                <option value="GBA Oeste">GBA Oeste</option>
+                <option value="Catamarca">Catamarca</option>
+                <option value="Chaco">Chaco</option>
+                <option value="Chubut">Chubut</option>
+                <option value="Córdoba">Córdoba</option>
+                <option value="Corrientes">Corrientes</option>
+                <option value="Entre Ríos">Entre Ríos</option>
+                <option value="Formosa">Formosa</option>
+                <option value="Jujuy">Jujuy</option>
+                <option value="La Pampa">La Pampa</option>
+                <option value="La Rioja">La Rioja</option>
+                <option value="Mendoza">Mendoza</option>
+                <option value="Misiones">Misiones</option>
+                <option value="Neuquén">Neuquén</option>
+                <option value="Río Negro">Río Negro</option>
+                <option value="Salta">Salta</option>
+                <option value="San Juan">San Juan</option>
+                <option value="San Luis">San Luis</option>
+                <option value="Santa Cruz">Santa Cruz</option>
+                <option value="Santa Fe">Santa Fe</option>
+                <option value="Santiago del Estero">Santiago del Estero</option>
+                <option value="Tierra del Fuego">Tierra del Fuego</option>
+                <option value="Tucumán">Tucumán</option>
+            </select>
+        </div>
+        <div class="col-md-3 col-6">
+            <label class="form-label">Tipo</label>
+            <select id="cTipo" class="form-select">
+                <option value="Privado">Privado</option>
+                <option value="Publico">Público</option>
+            </select>
+        </div>
+        <div class="col-md-3 col-6">
+            <label class="form-label">Potencial</label>
+            <select id="cPotencial" class="form-select">
+                <option value="Alto">Alto</option>
+                <option value="Medio">Medio</option>
+                <option value="Bajo">Bajo</option>
+            </select>
+        </div>
+        <div class="col-md-3 col-6">
+            <label class="form-label">Probabilidad</label>
+            <select id="cProbabilidad" class="form-select">
+                <option value="Alta">Alta</option>
+                <option value="Media-Alta">Media-Alta</option>
+                <option value="Media" selected>Media</option>
+                <option value="Media-Baja">Media-Baja</option>
+                <option value="Baja">Baja</option>
+            </select>
+        </div>
+    </div>
+    <!-- Fila 4: Productos & Info Extra -->
+    <div class="mb-3">
+        <label class="form-label text-success"><i class="bi bi-box-seam me-1"></i>Productos de interés</label>
+        <input type="text" class="form-control" id="cProductos" placeholder="Ej: Cofias, Paños, Incontinencia...">
+    </div>
+    <div class="mb-3">
+        <label class="form-label"><i class="bi bi-geo-alt me-1"></i>Dirección</label>
+        <input type="text" class="form-control" id="cDireccion" placeholder="Ej: Av. Pte. Perón 4190, CABA">
+    </div>
+    <div class="mb-3">
+        <label class="form-label text-info"><i class="bi bi-info-circle me-1"></i>Info Extra</label>
+        <textarea class="form-control" id="cExtra" rows="2" placeholder="Qué usaban antes, notas importantes..."></textarea>
+    </div>
+</form>
+
+<!-- Sección Contactos Inline -->
+<div class="mt-4 pt-3 border-top">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="mb-0 text-secondary"><i class="bi bi-people-fill me-2"></i>Contactos del Hospital</h6>
+        <button type="button" class="btn btn-sm btn-outline-primary" onclick="toggleInlineContactForm()">
+            <i class="bi bi-plus-lg me-1"></i>Agregar Contacto
+        </button>
+    </div>
+    
+    <!-- Mini formulario contacto (oculto por defecto) -->
+    <div id="inlineContactForm" style="display:none; background: #f8fafc; border-radius: 12px; padding: 16px; margin-bottom: 16px; border: 1px dashed #cbd5e1;">
+        <div class="row g-2 mb-2">
+            <div class="col-6"><input type="text" class="form-control form-control-sm" id="icNombre" placeholder="Nombre del contacto"></div>
+            <div class="col-6"><input type="text" class="form-control form-control-sm" id="icPuesto" placeholder="Puesto"></div>
+        </div>
+        <div class="row g-2 mb-2">
+            <div class="col-6"><input type="text" class="form-control form-control-sm" id="icTelefono" placeholder="Teléfono"></div>
+            <div class="col-6"><input type="text" class="form-control form-control-sm" id="icInteres" placeholder="Interés (productos)"></div>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-success btn-sm flex-grow-1" onclick="addInlineContact()"><i class="bi bi-check-lg me-1"></i>Agregar</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="toggleInlineContactForm()"><i class="bi bi-x-lg"></i></button>
+        </div>
+    </div>
+    
+    <!-- Lista de contactos pendientes -->
+    <div id="pendingContactsList"></div>
+    <div id="noContactsMsg" class="text-center text-muted py-3" style="font-size: 13px;">
+        <i class="bi bi-person-plus-fill d-block" style="font-size: 24px; opacity: 0.5;"></i>
+        Podés agregar contactos ahora o después
+    </div>
+</div>
+
+</div><div class="modal-footer"><button class="btn btn-primary w-100" onclick="addClient()"><i class="bi bi-save me-1"></i>Guardar Cliente</button></div></div></div></div>
+
+<div class="modal fade" id="addContactModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-secondary text-white"><h5 class="modal-title">Contacto</h5><button class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><form id="addContactForm"><div class="mb-2"><label class="fw-bold">Hospital</label><input class="form-control" list="hospitalOptionsContact" id="ctHospital" placeholder="Escribe para buscar..."><datalist id="hospitalOptionsContact"></datalist></div><div class="row mb-2"><div class="col"><label>Nombre</label><input type="text" class="form-control" id="ctNombre"></div><div class="col"><label>Puesto</label><input type="text" class="form-control" id="ctPuesto"></div></div><div class="row mb-2"><div class="col"><label>Teléfono</label><input type="text" class="form-control" id="ctDatos" placeholder="Ej: 11-1234-5678"></div><div class="col"><label>Email</label><input type="email" class="form-control" id="ctEmail" placeholder="ejemplo@mail.com"></div></div><div class="mb-2"><label>Interés</label><input type="text" class="form-control" id="ctInteres" placeholder="Qué productos le interesan"></div></form></div><div class="modal-footer"><button class="btn btn-primary w-100" onclick="addContact()">Guardar</button></div></div></div></div>
+
+<!-- Modal Editar Contacto -->
+<div class="modal fade" id="editContactModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius: 16px; overflow: hidden; border: none;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #0f172a 0%, #334155 100%);">
+                <h5 class="modal-title text-white"><i class="bi bi-pencil-square me-2"></i>Editar Contacto</h5>
+                <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body bg-light p-4">
+                <input type="hidden" id="editContactIndex">
+                
+                <div class="mb-3">
+                    <label class="small text-muted fw-bold">Hospital</label>
+                    <input class="form-control" list="hospitalOptionsContactEdit" id="editCtHospital" placeholder="Escribe para buscar...">
+                    <datalist id="hospitalOptionsContactEdit"></datalist>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <label class="small text-muted fw-bold">Nombre</label>
+                        <input type="text" class="form-control" id="editCtNombre">
+                    </div>
+                    <div class="col-6">
+                        <label class="small text-muted fw-bold">Puesto</label>
+                        <input type="text" class="form-control" id="editCtPuesto">
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <label class="small text-muted fw-bold">Teléfono</label>
+                        <input type="text" class="form-control" id="editCtDatos" placeholder="Ej: 11-1234-5678">
+                    </div>
+                    <div class="col-6">
+                        <label class="small text-muted fw-bold">Email</label>
+                        <input type="email" class="form-control" id="editCtEmail" placeholder="ejemplo@mail.com">
+                    </div>
+                </div>
+                
+                <div class="mb-0">
+                    <label class="small text-muted fw-bold">Interés (Productos)</label>
+                    <input type="text" class="form-control" id="editCtInteres" placeholder="Qué productos le interesan">
+                </div>
+            </div>
+            <div class="modal-footer border-0 bg-light p-4 pt-0">
+                <button class="btn btn-danger me-auto" onclick="deleteContact()">
+                    <i class="bi bi-trash me-1"></i>Eliminar
+                </button>
+                <button class="btn btn-primary px-4" onclick="saveContactChanges()">
+                    <i class="bi bi-check-lg me-1"></i>Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Ficha Institucional Completa -->
+<div class="modal fade" id="clientDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 24px; overflow: hidden;">
+            <div class="modal-header bg-primary text-white border-0" style="background: linear-gradient(135deg, #0f172a 0%, #334155 100%) !important; padding: 24px;">
+                <div>
+                    <h5 class="modal-title fw-bold" id="detailModalTitle" style="font-size: 24px;"></h5>
+                    <div class="d-flex align-items-center gap-2 mt-2 flex-wrap">
+                        <span id="detailBadgeStatus"></span>
+                        <span id="detailResponsable" class="badge bg-white text-dark"><i class="bi bi-person-fill me-1"></i></span>
+                        <span id="detailZona" class="badge bg-light text-dark border"></span>
+                        <span id="detailTipo" class="badge bg-light text-dark border"></span>
+                    </div>
+                    <div id="detailDireccion" class="mt-3 text-white" style="display: none; font-size: 15px;"><i class="bi bi-geo-alt-fill me-2"></i><span></span></div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body bg-light p-4">
+                <!-- Métricas Principales -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3">
+                        <div class="p-3 bg-white rounded-4 shadow-sm h-100 text-center border transition-hover">
+                            <i class="bi bi-box-seam fs-2 text-primary mb-2 d-block"></i>
+                            <div class="fw-bold fs-4 text-dark" id="detailPanos"></div>
+                            <small class="text-muted text-uppercase fw-bold" style="font-size: 11px;">Paños Est.</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-white rounded-4 shadow-sm h-100 text-center border transition-hover">
+                            <i class="bi bi-hospital fs-2 text-warning mb-2 d-block"></i>
+                            <div class="fw-bold fs-4 text-dark" id="detailCamas"></div>
+                            <small class="text-muted text-uppercase fw-bold" style="font-size: 11px;">Camas</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-white rounded-4 shadow-sm h-100 text-center border transition-hover">
+                            <i class="bi bi-graph-up-arrow fs-2 text-success mb-2 d-block"></i>
+                            <div class="fw-bold fs-4 text-dark" id="detailProbabilidad"></div>
+                            <small class="text-muted text-uppercase fw-bold" style="font-size: 11px;" id="detailProbabilidadLabel">Estado</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-white rounded-4 shadow-sm h-100 text-center border transition-hover">
+                            <div id="detailPotencialIcon" class="fs-2 mb-2 d-block"></div>
+                            <div class="fw-bold fs-4 text-dark" id="detailPotencial"></div>
+                            <small class="text-muted text-uppercase fw-bold" style="font-size: 11px;">Potencial</small>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="p-3 bg-white rounded-4 shadow-sm border">
+                            <h6 class="text-secondary fw-bold mb-2 small text-uppercase"><i class="bi bi-info-circle me-1"></i>Info Comercial</h6>
+                            <p class="mb-1 small"><strong>Productos:</strong> <span id="detailProducts" class="text-muted"></span></p>
+                            <p class="mb-0 small"><strong>Notas:</strong> <span id="detailExtra" class="text-muted"></span></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Resumen de Productos Vendidos -->
+                    <div class="col-12">
+                        <div class="p-3 bg-white rounded-4 shadow-sm border" id="detailProductsContainer" style="display: none;">
+                            <h6 class="text-primary fw-bold mb-3 small text-uppercase"><i class="bi bi-box-seam me-1"></i>Consumo Estimado</h6>
+                            <div class="row g-2" id="detailProductsSummary">
+                                <!-- Se llena dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <!-- Columna Izquierda: Contactos -->
+                    <div class="col-md-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-people-fill text-primary me-2"></i>Contactos</h6>
+                            <button class="btn btn-sm btn-outline-primary" onclick="goToContactsFiltered()" title="Ver todos los contactos">
+                                <i class="bi bi-arrow-right"></i> Ver todos
+                            </button>
+                        </div>
+                        <div id="detailContactsList" class="d-flex flex-column gap-2">
+                            <!-- Lista de contactos -->
+                        </div>
+                    </div>
+
+                    <!-- Columna Derecha: Historial Visitas -->
+                    <div class="col-md-7">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-clock-history text-success me-2"></i>Últimas Visitas</h6>
+                            <button class="btn btn-sm btn-outline-success" onclick="goToVisitsFiltered()" title="Ver todas las visitas">
+                                <i class="bi bi-arrow-right"></i> Ver todos
+                            </button>
+                        </div>
+                        <div id="detailVisitsList" class="d-flex flex-column gap-3">
+                            <!-- Timeline de visitas -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0 bg-white p-3">
+                <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button class="btn btn-primary" id="btnQuickVisitDetail"><i class="bi bi-journal-plus me-1"></i>Nueva Visita</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editClientModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white" style="background: linear-gradient(135deg, #0f172a 0%, #334155 100%) !important;">
+                <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Editar Ficha Cliente</h5>
+                <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body bg-light">
+                <input type="hidden" id="editHospName">
+                <h4 id="displayHospName" class="text-primary fw-bold mb-4 border-bottom pb-2"></h4>
+                
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-body">
+                        <h6 class="text-secondary fw-bold mb-3">Datos Generales</h6>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="small text-muted fw-bold">Responsable</label>
+                                <select id="editResponsable" class="form-select">
+                                    <option value="Emiliano">Emiliano</option>
+                                    <option value="Mauricio">Mauricio</option>
+                                    <option value="Agustina">Agustina</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small text-muted fw-bold">Estado</label>
+                                <select id="editEstado" class="form-select">
+                                    <option value="CLIENTE">CLIENTE</option>
+                                    <option value="PROSPECTO">PROSPECTO</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="small text-muted fw-bold">Dirección</label>
+                                <input type="text" class="form-control" id="editDireccion" placeholder="Dirección completa">
+                            </div>
+                        </div>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="small text-muted fw-bold">Camas Totales</label>
+                                <input type="number" class="form-control" id="editCamas" placeholder="0">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="small text-muted fw-bold">Zona</label>
+                                <select id="editZonaFicha" class="form-select">
+                                    <option value="CABA">CABA</option><option value="Buenos Aires">Buenos Aires</option><option value="GBA Norte">GBA Norte</option><option value="GBA Sur">GBA Sur</option><option value="GBA Oeste">GBA Oeste</option>
+                                    <option value="Catamarca">Catamarca</option><option value="Chaco">Chaco</option><option value="Chubut">Chubut</option><option value="Córdoba">Córdoba</option><option value="Corrientes">Corrientes</option>
+                                    <option value="Entre Ríos">Entre Ríos</option><option value="Formosa">Formosa</option><option value="Jujuy">Jujuy</option><option value="La Pampa">La Pampa</option><option value="La Rioja">La Rioja</option>
+                                    <option value="Mendoza">Mendoza</option><option value="Misiones">Misiones</option><option value="Neuquén">Neuquén</option><option value="Río Negro">Río Negro</option><option value="Salta">Salta</option>
+                                    <option value="San Juan">San Juan</option><option value="San Luis">San Luis</option><option value="Santa Cruz">Santa Cruz</option><option value="Santa Fe">Santa Fe</option>
+                                    <option value="Santiago del Estero">Santiago del Estero</option><option value="Tierra del Fuego">Tierra del Fuego</option><option value="Tucumán">Tucumán</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="small text-muted fw-bold">Tipo Institución</label>
+                                <select id="editTipoFicha" class="form-select">
+                                    <option value="Privado">Privado</option>
+                                    <option value="Publico">Público</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small text-muted fw-bold">Potencial</label>
+                                <select id="editPotencialFicha" class="form-select">
+                                    <option value="Alto">Alto</option>
+                                    <option value="Medio">Medio</option>
+                                    <option value="Bajo">Bajo</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small text-muted fw-bold">Probabilidad (Prospectos)</label>
+                                <select id="editProbabilidadFicha" class="form-select">
+                                    <option value="Alta">Alta</option>
+                                    <option value="Media-Alta">Media-Alta</option>
+                                    <option value="Media">Media</option>
+                                    <option value="Media-Baja">Media-Baja</option>
+                                    <option value="Baja">Baja</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-body">
+                        <h6 class="text-info fw-bold mb-3"><i class="bi bi-calculator me-2"></i>Estimados Mensuales de Consumo</h6>
+                        <div class="row g-3">
+                            <div class="col-6 col-md-3">
+                                <label class="small text-muted">Paños</label>
+                                <input type="number" class="form-control form-control-sm" id="estPanos" placeholder="0">
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <label class="small text-muted">Cofias</label>
+                                <input type="number" class="form-control form-control-sm" id="estCofias" placeholder="0">
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <label class="small text-muted">Incontinencia</label>
+                                <input type="number" class="form-control form-control-sm" id="estIncont" placeholder="0">
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <label class="small text-muted">Pediátricos</label>
+                                <input type="number" class="form-control form-control-sm" id="estPediat" placeholder="0">
+                            </div>
+                            <div class="col-4">
+                                <label class="small text-muted">Desc. 2L</label>
+                                <input type="number" class="form-control form-control-sm" id="estDesc2L" placeholder="0">
+                            </div>
+                            <div class="col-4">
+                                <label class="small text-muted">Desc. 4L</label>
+                                <input type="number" class="form-control form-control-sm" id="estDesc4L" placeholder="0">
+                            </div>
+                            <div class="col-4">
+                                <label class="small text-muted">Desc. 7L</label>
+                                <input type="number" class="form-control form-control-sm" id="estDesc7L" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="small text-muted fw-bold">Notas de Productos (Texto)</label>
+                            <textarea class="form-control" id="editProds" rows="2" placeholder="Detalles cualitativos..."></textarea>
+                        </div>
+                        <div class="mb-0">
+                            <label class="small text-muted fw-bold">Información Extra</label>
+                            <textarea class="form-control" id="editExtra" rows="2" placeholder="Otras notas..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0 p-4 pt-0 bg-light">
+                <button class="btn btn-primary w-100 shadow-sm" onclick="saveClientChanges()" style="padding: 12px; border-radius: 8px;">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Alerta Personalizado -->
+<div class="modal fade" id="customAlertModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content" style="border-radius: 16px; overflow: hidden; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+            <div class="modal-body text-center p-4">
+                <div id="alertIcon" style="font-size: 48px; margin-bottom: 16px;"></div>
+                <h5 id="alertTitle" class="fw-bold mb-2"></h5>
+                <p id="alertMessage" class="text-muted mb-0" style="font-size: 14px;"></p>
+            </div>
+            <div class="modal-footer border-0 pt-0 pb-4 px-4">
+                <button class="btn btn-primary w-100" data-bs-dismiss="modal" style="border-radius: 10px; padding: 12px;">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // DATOS INICIALES
+    const defaultClients=[["Adventista","Emiliano","CLIENTE",2000],["Alcla","Emiliano","CLIENTE",0],["Alvarez","Emiliano","CLIENTE",0],["Anchorena Recoleta","Emiliano","CLIENTE",0],["Anchorena San Martin","Emiliano","CLIENTE",0],["Austral","Emiliano","CLIENTE",4000],["Bazterrica","Emiliano","CLIENTE",0],["bicentenario","Emiliano","CLIENTE",0],["Britanico","Emiliano","CLIENTE",0],["C. de la Torre","Emiliano","CLIENTE",0],["Cemic","Emiliano","PROSPECTO",0],["Clinica Basilea","Emiliano","CLIENTE",0],["Clinica colegiales","Emiliano","CLIENTE",0],["Clinica de la ciudad","Emiliano","CLIENTE",0],["Clinica Del Sol","Emiliano","CLIENTE",0],["Clinica la independecia","Emiliano","CLIENTE",0],["Clinica Ulme","Emiliano","CLIENTE",2000],["Corporacion San martin","Emiliano","CLIENTE",0],["Cruces","Emiliano","CLIENTE",0],["Durand","Emiliano","PROSPECTO",0],["Español","Emiliano","CLIENTE",0],["español la plata","Emiliano","CLIENTE",0],["Favaloro","Emiliano","CLIENTE",0],["Fernandez","Emiliano","CLIENTE",0],["Finoccieto","Emiliano","CLIENTE",0],["FLEMING","Emiliano","CLIENTE",0],["Fleni","Emiliano","CLIENTE",0],["Fundacion Hospitalaria","Emiliano","CLIENTE",0],["Fundaleu","Emiliano","CLIENTE",0],["Garrahan","Emiliano","CLIENTE",0],["gutierrez","Emiliano","CLIENTE",0],["Hospital Español","Emiliano","CLIENTE",0],["Htal Aleman","Emiliano","CLIENTE",0],["Htal Militar","Emiliano","CLIENTE",0],["IADT","Emiliano","CLIENTE",0],["ICBA","Emiliano","CLIENTE",0],["IMAC","Emiliano","CLIENTE",0],["Italiano","Emiliano","CLIENTE",0],["Juncal","Emiliano","CLIENTE",0],["Mater Dei","Emiliano","CLIENTE",0],["Materno inf tigre","Emiliano","CLIENTE",0],["Mod Priv Lanus","Emiliano","CLIENTE",0],["Monte Grande","Emiliano","PROSPECTO",0],["Omint","Emiliano","CLIENTE",0],["Penna","Emiliano","CLIENTE",0],["Ramos Mejia","Emiliano","CLIENTE",0],["San Camilo","Emiliano","CLIENTE",0],["San Jose","Emiliano","PROSPECTO",0],["San Lucas","Emiliano","CLIENTE",0],["Sanatorio del oeste","Emiliano","CLIENTE",0],["Santa Isabel","Emiliano","CLIENTE",0],["SWISS","Emiliano","CLIENTE",0],["SWISS Los Arcos","Emiliano","CLIENTE",0],["Zubizarreta","Emiliano","CLIENTE",0]];
+    const defaultContacts=[["Adventista","PRIVADO","CLIENTE","Romina","Enfermería","11 5877-7206","PROTOCOLO"],["Alcla","PRIVADO","CLIENTE","Ana","Enfermería","+54 9 11 2790-9223","COFIAS"],["Alvarez","PUBLICO","CLIENTE","Paola Mariani","Farmacia","11-674-444-28",""],["Anchorena Recoleta","PRIVADO","CLIENTE","Laura Leone","Compras","11-451-683-83","INSUMOS"],["Austral","PRIVADO","CLIENTE","Marisa Bazzano","Farmacia","11-654-492-66","PROTOCOLO"],["Bazterrica","PRIVADO","CLIENTE","Maria Marta","","11-362-500-17","DESCARTADORES"],["Britanico","PRIVADO","CLIENTE","Eliza Herrera","Neo","11-265-680-99","COFIAS"],["Clinica Colegiales","PRIVADO","CLIENTE","Noelia","Capacitaciones","","INCONTINENCIA"],["Favaloro","PRIVADO","CLIENTE","Lara","Compras","","VARIOS"],["Fernandez","PUBLICO","CLIENTE","Escalante","Jefa Dpto","11-566-261-16",""],["Finochietto","PRIVADO","CLIENTE","Analia","Compras","11-224-093-84",""],["Garrahan","PUBLICO","CLIENTE","Analia","Enfermería","11 3058-0479","PAÑOS"],["Hospital Italiano","PRIVADO","CLIENTE","Sandra Arevalo","Jefa Pediatria","","VARIOS"],["Mater Dei","PRIVADO","CLIENTE","Santiago","Compras","",""],["Swiss Medical","PRIVADO","CLIENTE","Juan Carlos","Enfermería","",""]];
+    const defaultVisits=[["2025-09-18","Emiliano","ALVAREZ","Próximo mes: Cofias protocolo por 6, paños e incontinencia",""],["2025-09-24","Emiliano","ALVAREZ","HOSPITAL ÁLVAREZ Fui a recorrer el hospital para presentar los productos y conocer los sectores...","Hacer seguimiento"],["2025-10-21","Emiliano","ALVAREZ","Hablé con la gente de los sectores para explicarles el circuito correcto...",""],["2025-10-13","Emiliano","ANCHORENA RECOLETA","Visita por licitación. Aprobación de paquetes por 4...","Seguimiento"],["2025-10-13","Emiliano","IADT","Dejé sándwiches de miga",""],["2025-10-13","Emiliano","MEDICUS","Reunión con Claudia Oviedo (ECI).","Esperar coordinación"],["2025-10-14","Emiliano","HOSPITAL DE TIGRE","Visita Zona Norte con Agustina...",""],["2025-10-14","Emiliano","CLÍNICA DEL ESTE","Dejamos productos para prueba.","Seguimiento"],["2025-10-14","Emiliano","SANATORIO SAN PABLO","Dejamos productos para prueba.","Seguimiento"],["2025-10-15","Emiliano","CORPORACIÓN MÉDICA SAN MARTÍN","Gestión participación en licitaciones",""],["2025-10-15","Emiliano","ANCHORENA SAN MARTÍN","Dejé cofias y paños incontinencia para prueba.","Seguimiento"],["2025-10-15","Emiliano","FUNDACIÓN HOSPITALARIA","Diego de vacaciones, regresa esta semana.","Contactar cuando regrese"],["2025-10-16","Emiliano","CLÍNICA DEL ESTE","Dejamos descartadores",""],["2025-10-16","Emiliano","SANATORIO SAN PABLO","Dejamos descartadores",""],["2025-10-16","Emiliano","HOSPITAL DE TIGRE","Evento 10 años del hospital...",""],["2025-10-17","Emiliano","HOSPITAL FINOCHIETTO","Aviso demoras entregas. Ana de licencia...","Esperar respuesta Rocío"],["2025-10-17","Emiliano","IADT","Aviso demoras entregas",""],["2025-10-17","Emiliano","ADVENTISTA","Aprobaron cofias.","Jueves próximo reunión con compras"],["2025-10-27","Emiliano","ANCHORENA RECOLETA","Gestión pagos atrasados. Esperé 2-3h...",""],["2025-10-27","Emiliano","HOSPITAL GUTIÉRREZ","Seguimiento prueba productos...",""],["2025-10-27","Emiliano","INEVA","Primera visita. No atendieron, piden volver miércoles",""],["2025-10-28","Emiliano","CORPORACIÓN MÉDICA SAN MARTÍN","Confirmación inclusión en próximas licitaciones",""],["2025-10-28","Emiliano","ANCHORENA SAN MARTÍN","Dejé productos prueba (Unión Personal)...",""],["2025-10-28","Emiliano","FUNDACIÓN HOSPITALARIA","Hablé con Diego. Necesita mensaje Cirlia...","Seguimiento con Cirlia"],["2025-10-29","Emiliano","HOSPITAL ALEMÁN","Sector Pagos por pagos atrasados...",""],["2025-10-29","Emiliano","INEVA","Segunda visita. Dejamos descartadores y productos...",""],["2025-10-29","Emiliano","HOSPITAL MÉNDEZ","Reunión con Agustina. Dejamos productos...",""],["2025-10-30","Emiliano","IMAC","Consulta necesidades. Tienen stock, consumo chico",""],["2025-10-30","Emiliano","HOSPITAL ITALIANO","Seguimiento prueba pediatría...",""],["2025-10-30","Emiliano","HOSPITAL CÉSAR MILSTEIN","Seguimiento (Marilyn semana anterior)...","Marilyn confirma visita"],["2025-10-31","Emiliano","HOSPITAL FERNÁNDEZ","Aprobación productos. Hablé con Gloria (ECI).","Pasar lunes o martes para data aprobación"],["2025-10-31","Emiliano","HOSPITAL ÁLVAREZ","Verificación pedido correcto por circuito Farmacia",""],["2025-11-03","Emiliano","SWISS MEDICAL (LAS LOMAS)","Reunión con Agustina por aprobación descartadores...",""],["2025-11-03","Emiliano","VICENTE LÓPEZ","Consulta licitación. Estará disponible diciembre",""],["2025-11-04","Emiliano","HOSPITAL FERNÁNDEZ","Vi enfermera control infecciones...","Volver para devolución"],["2025-11-04","Emiliano","HOSPITAL GARRAHAN","Hablé con Fran sobre pedido paños secos...",""],["2025-11-05","Emiliano","HOSPITAL ITALIANO","Reunión con Jefa Médica Infectología...",""],["2025-11-05","Emiliano","PASTELEROS","Reclamar pago",""],["2025-11-05","Emiliano","INEBA","Seguimiento descartadores dejados semana anterior",""],["2025-11-06","Emiliano","HOSPITAL DE CLÍNICAS","Charla (conseguida por Agustina). Muy buena...",""],["2025-11-06","Emiliano","CLÍNICA FRANCHÍN","Dejamos descartadores para aprobación.","Seguimiento prueba"],["2025-11-06","Emiliano","HOSPITAL GARRAHAN","Entregué paños secos",""],["2025-11-07","Emiliano","HOSPITAL DE CLÍNICAS","Post-charla: hablamos con farmacéutica...",""],["2025-11-07","Emiliano","MEDICUS","Con Agustina a ver Claudia Oviedo (ECI), nos dejó plantados.","Reprogramar"],["2025-11-07","Emiliano","HOSPITAL ALEMÁN","Seguimiento prueba productos.","Volver en 3 semanas"]];
+    const defaultMeta={"ADVENTISTA":{camas:250,productos:"Protocolo, Cofias",extra:""},"ANCHORENA RECOLETA":{camas:193,productos:"",extra:""},"ANCHORENA SAN MARTIN":{camas:193,productos:"",extra:"Primera compra"},"AUSTRAL":{camas:261,productos:"Protocolo",extra:"Dejar muestras"},"CLINICA ULME":{camas:200,productos:"Protocolo",extra:"90 dias plazo"},"FAVALORO":{camas:170,productos:"",extra:""},"GARRAHAN":{camas:543,productos:"",extra:""},"HTAL ALEMAN":{camas:264,productos:"",extra:""},"ITALIANO":{camas:785,productos:"",extra:""}};
+
+    let clientsData, contactsData, hospitalMeta, visitsData;
+    let tables = {};
+    let charts = {};
+
+    function showAlert(title, message, type = 'error') {
+        const icons = {
+            'error': '<i class="bi bi-x-circle-fill text-danger"></i>',
+            'success': '<i class="bi bi-check-circle-fill text-success"></i>',
+            'warning': '<i class="bi bi-exclamation-triangle-fill text-warning"></i>',
+            'info': '<i class="bi bi-info-circle-fill text-info"></i>'
+        };
+        
+        $('#alertIcon').html(icons[type] || icons['info']);
+        $('#alertTitle').text(title);
+        $('#alertMessage').text(message);
+        
+        new bootstrap.Modal(document.getElementById('customAlertModal')).show();
+    }
+
+    let isInitializing = true;
+    let previousUser = 'Gerencia';
+
+    $(document).ready(async function() {
+        // Cargar datos del servidor (archivo JSON central)
+        await loadDataFromServer();
+        
+        initTables();
+        initCharts();
+        updateHospitalList();
+        showSaveReminder(); // Mostrar recordatorio de guardado
+
+        // Sincronizar selectores de usuario
+        const savedUser = localStorage.getItem('sigma_last_user') || 'Emiliano';
+        syncUserSelector(savedUser);
+        previousUser = savedUser; // Set initial previous user
+        isInitializing = false; // Done initializing
+        
+        applyFilters();
+        updateCharts();
+        
+        // Renderizar todas las vistas de tarjetas
+        renderClientsCards();
+        renderVisitsCards();
+        renderContactsCards();
+        
+        // Actualizar todos los KPIs
+        updateClientsKPIs();
+        updateVisitsKPIs();
+        updateContactsKPIs();
+        
+        console.log('🚀 CRM inicializado - Datos cargados de servidor');
+    });
+
+    function syncUserSelector(val) {
+        // Auth deshabilitado temporalmente - sin claves
+        if (!isInitializing && val !== previousUser) {
+            previousUser = val;
+        }
+
+        $('#currentUserDesktop').val(val);
+        $('#currentUserMobile').val(val);
+        $('#visitVendorName').text(val);
+        localStorage.setItem('sigma_last_user', val);
+        applyFilters();
+        updateCharts();
+        
+        // Re-renderizar todas las tarjetas al cambiar usuario
+        renderClientsCards();
+        renderVisitsCards();
+        
+        // Actualizar KPIs
+        updateClientsKPIs();
+        updateVisitsKPIs();
+        
+        if(val === 'Gerencia') $('#visitsUserLabelMobile').text("Todos");
+        else $('#visitsUserLabelMobile').text(val);
+    }
+
+    // === CARGA DE DATOS DESDE SERVIDOR (archivo JSON central) ===
+    async function loadDataFromServer() {
+        try {
+            const response = await fetch('/api/data');
+            if (!response.ok) throw new Error('Error cargando datos');
+            
+            const data = await response.json();
+            
+            // Cargar datos del servidor
+            clientsData = data.clientes || [];
+            contactsData = data.contactos || [];
+            visitsData = data.visitas || [];
+            hospitalMeta = data.meta || {};
+            
+            console.log('✅ Datos cargados del servidor:', {
+                clientes: clientsData.length,
+                contactos: contactsData.length,
+                visitas: visitsData.length
+            });
+            
+            // Migración de campos si es necesario
+            if(clientsData && Array.isArray(clientsData)) {
+                clientsData.forEach(c => {
+                    if (c[4] === undefined) c[4] = 'CABA';
+                    if (c[5] === undefined) c[5] = 'Privado';
+                    if (c[6] === undefined) c[6] = 'Medio';
+                    if (c[7] === undefined) c[7] = 'Media';
+                    if (c[8] === undefined) c[8] = '';
+                });
+            }
+            
+            // Normalizar contactos para que siempre tengan 8 columnas (email)
+            if(contactsData && Array.isArray(contactsData)) {
+                contactsData.forEach(c => {
+                    if (c[7] === undefined) c[7] = '';
+                });
+            }
+            
+            return true;
+        } catch(e) {
+            console.warn('⚠️ No se pudo cargar del servidor, intentando datos embebidos...', e);
+            // Intentar cargar datos embebidos primero
+            if (loadEmbeddedData()) {
+                return true;
+            }
+            // Fallback a localStorage
+            loadDataFromLocal();
+            return false;
+        }
+    }
+    
+    
+    // === CARGAR DATOS EMBEBIDOS EN EL HTML ===
+    function loadEmbeddedData() {
+        try {
+            const embeddedScript = document.getElementById('embeddedData');
+            if (embeddedScript) {
+                const data = JSON.parse(embeddedScript.textContent);
+                clientsData = data.clients || [];
+                visitsData = data.visits || [];
+                contactsData = data.contacts || [];
+                hospitalMeta = data.meta || {};
+                
+                contactsData.forEach(c => {
+                    if (c[7] === undefined) c[7] = '';
+                });
+                
+                console.log('✅ Datos cargados del HTML embebido:', {
+                    clientes: clientsData.length,
+                    contactos: contactsData.length,
+                    visitas: visitsData.length,
+                    guardado: data.savedAt
+                });
+                return true;
+            }
+            return false;
+        } catch(e) {
+            console.warn('⚠️ Error cargando datos embebidos:', e);
+            return false;
+        }
+    }
+
+    // === FALLBACK: Cargar de localStorage ===
+    function loadDataFromLocal() {
+        try {
+            clientsData = JSON.parse(localStorage.getItem('sigma_clients')) || JSON.parse(JSON.stringify(defaultClients));
+            contactsData = JSON.parse(localStorage.getItem('sigma_contacts')) || JSON.parse(JSON.stringify(defaultContacts));
+            hospitalMeta = JSON.parse(localStorage.getItem('sigma_meta')) || JSON.parse(JSON.stringify(defaultMeta));
+            visitsData = JSON.parse(localStorage.getItem('sigma_visits')) || JSON.parse(JSON.stringify(defaultVisits));
+        } catch(e) {
+            clientsData = JSON.parse(JSON.stringify(defaultClients));
+            contactsData = JSON.parse(JSON.stringify(defaultContacts));
+            hospitalMeta = JSON.parse(JSON.stringify(defaultMeta));
+            visitsData = JSON.parse(JSON.stringify(defaultVisits));
+        }
+        
+        // Normalizar contactos para que siempre tengan 8 columnas (email)
+        if(contactsData && Array.isArray(contactsData)) {
+            contactsData.forEach(c => {
+                if (c[7] === undefined) c[7] = '';
+            });
+        }
+    }
+    
+    // === GUARDAR DATOS AL SERVIDOR (archivo JSON central) ===
+    function saveDataToLocal() {
+        // Guardar localmente como backup
+        try {
+            localStorage.setItem('sigma_clients', JSON.stringify(clientsData));
+            localStorage.setItem('sigma_contacts', JSON.stringify(contactsData));
+            localStorage.setItem('sigma_meta', JSON.stringify(hospitalMeta));
+            localStorage.setItem('sigma_visits', JSON.stringify(visitsData));
+        } catch(e) { console.warn('Error guardando local:', e); }
+        
+        // Guardar al servidor (archivo JSON central)
+        saveDataToServer();
+    }
+    
+    async function saveDataToServer() {
+        try {
+            const data = {
+                clientes: clientsData,
+                contactos: contactsData,
+                visitas: visitsData,
+                meta: hospitalMeta
+            };
+            
+            const response = await fetch('/api/data', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            
+            if (!response.ok) throw new Error('Error guardando');
+            
+            console.log('💾 Datos guardados en servidor');
+            
+            // Mostrar indicador
+            const toastEl = document.getElementById('saveIndicator');
+            if(toastEl && window.bootstrap && typeof bootstrap.Toast !== 'undefined') {
+                toastEl.classList.remove('hide');
+                const toast = new bootstrap.Toast(toastEl);
+                toast.show();
+            } else {
+                $('#saveIndicator').fadeIn().delay(2000).fadeOut();
+            }
+            
+            // Sincronizar con Google Sheets automáticamente
+            syncToGoogleSheets();
+            
+        } catch(e) {
+            console.error('❌ Error guardando en servidor:', e);
+        }
+    }
+    
+    // === GOOGLE SHEETS SYNC ===
+    // URL de la Web App de Google Sheets (configurar después de publicar)
+    const GOOGLE_SHEETS_URL = localStorage.getItem('sigma_sheets_url') || '';
+    
+    async function syncToGoogleSheets() {
+        // Si no hay URL configurada, salir silenciosamente
+        if (!GOOGLE_SHEETS_URL) {
+            console.log('⚠️ Google Sheets URL no configurada');
+            return;
+        }
+        
+        try {
+            updateSyncIndicator('syncing');
+            
+            const data = {
+                clients: clientsData,
+                visits: visitsData,
+                contacts: contactsData,
+                meta: hospitalMeta
+            };
+            
+            const response = await fetch(GOOGLE_SHEETS_URL, {
+                method: 'POST',
+                mode: 'no-cors', // Google Apps Script requiere esto
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            
+            console.log('☁️ Datos sincronizados con Google Sheets');
+            updateSyncIndicator('synced');
+            
+        } catch(e) {
+            console.error('❌ Error sincronizando con Google Sheets:', e);
+            updateSyncIndicator('error');
+        }
+    }
+    
+    function updateSyncIndicator(status) {
+        const indicator = $('#cloudSyncIndicator');
+        if (!indicator.length) return;
+        
+        indicator.removeClass('syncing synced error');
+        
+        if (status === 'syncing') {
+            indicator.addClass('syncing').attr('title', 'Sincronizando...');
+            indicator.html('<i class="bi bi-cloud-arrow-up"></i>');
+        } else if (status === 'synced') {
+            indicator.addClass('synced').attr('title', 'Sincronizado con Google Sheets');
+            indicator.html('<i class="bi bi-cloud-check"></i>');
+            // Volver a estado normal después de 3 segundos
+            setTimeout(() => indicator.removeClass('synced'), 3000);
+        } else if (status === 'error') {
+            indicator.addClass('error').attr('title', 'Error de sincronización');
+            indicator.html('<i class="bi bi-cloud-slash"></i>');
+        }
+    }
+    
+    async function manualSyncToSheets() {
+        const url = localStorage.getItem('sigma_sheets_url');
+        
+        if (!url) {
+            showAlert('No Configurado', 'Primero configurá la URL de Google Sheets haciendo clic en "Configurar Google Sheets"', 'warning');
+            return;
+        }
+        
+        try {
+            updateSyncIndicator('syncing');
+            
+            const data = {
+                clients: clientsData,
+                visits: visitsData,
+                contacts: contactsData,
+                meta: hospitalMeta
+            };
+            
+            // Usar text/plain para que funcione con no-cors
+            // Apps Script parseará el JSON desde el body
+            await fetch(url, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(data)
+            });
+            
+            updateSyncIndicator('synced');
+            showAlert('¡Sincronizado!', 'Los datos se enviaron a Google Sheets. Revisá tu hoja de cálculo.', 'success');
+            console.log('☁️ Sync manual completado');
+            
+        } catch(e) {
+            updateSyncIndicator('error');
+            showAlert('Error', 'No se pudo sincronizar: ' + e.message, 'danger');
+            console.error('❌ Error en sync manual:', e);
+        }
+    }
+    
+    function configureGoogleSheets() {
+        const currentUrl = localStorage.getItem('sigma_sheets_url') || '';
+        const newUrl = prompt(
+            "Pegá la URL de tu Google Sheets Web App:\n\n" +
+            "(Dejá vacío para desactivar la sincronización)",
+            currentUrl
+        );
+        
+        if (newUrl === null) return; // Cancelado
+        
+        if (newUrl.trim()) {
+            localStorage.setItem('sigma_sheets_url', newUrl.trim());
+            showAlert('Google Sheets Configurado', 'La sincronización automática está activada. Los datos se guardarán en la nube.', 'success');
+            // Recargar para aplicar la nueva URL
+            location.reload();
+        } else {
+            localStorage.removeItem('sigma_sheets_url');
+            showAlert('Sincronización Desactivada', 'Los datos ya no se sincronizarán con Google Sheets.', 'warning');
+            location.reload();
+        }
+    }
+
+
+    // === BACKUP SYSTEM ===
+    function downloadBackup() {
+        const backup = {
+            version: "3.5",
+            date: new Date().toISOString(),
+            clients: clientsData,
+            visits: visitsData,
+            contacts: contactsData,
+            meta: hospitalMeta
+        };
+        
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backup));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        const fileName = "sigmaline_backup_" + new Date().toISOString().slice(0,10) + ".json";
+        downloadAnchorNode.setAttribute("download", fileName);
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+        
+        showAlert('Backup Creado', 'El archivo de seguridad se ha descargado correctamente.', 'success');
+    }
+    function downloadHTMLPortable() {
+        try {
+            let htmlContent = document.documentElement.outerHTML;
+            
+            const embeddedData = {
+                clients: clientsData,
+                visits: visitsData,
+                contacts: contactsData,
+                meta: hospitalMeta,
+                savedAt: new Date().toISOString()
+            };
+            
+            const dataScript = '<scr' + 'ipt id="embeddedData" type="application/json">' + JSON.stringify(embeddedData) + '</scr' + 'ipt>';
+            
+            if (htmlContent.includes('<script id="embeddedData" type="application/json">
+{"clients": [["Hospital Central San Isidro", "Emiliano", "CLIENTE", 2500, "CABA", "Privado", "Bajo", "Baja", "Av. Rivadavia 2876, CABA"], ["Hospital Argerich", "Emiliano", "CLIENTE", 4000, "CABA", "Publico", "Medio", "Alta", "Av. Córdoba 1111, CABA"], ["Clínica San Camilo", "Emiliano", "CLIENTE", 500, "CABA", "Publico", "Medio", "Media", "Av. Santa Fe 532, CABA"], ["Sanatorio Norte", "Emiliano", "CLIENTE", 1500, "CABA", "Privado", "Bajo", "Media-Alta", "Av. Juan B. Justo 4163, CABA"], ["Sanatorio Las Lomas", "Emiliano", "CLIENTE", 5000, "CABA", "Privado", "Bajo", "Media", "Av. Rivadavia 2301, CABA"], ["Hospital Italiano", "Emiliano", "CLIENTE", 800, "CABA", "Privado", "Alto", "Media-Alta", "Av. del Libertador 2850, CABA"], ["Sanatorio Otamendi", "Emiliano", "CLIENTE", 1000, "CABA", "Publico", "Alto", "Media", "Av. Las Heras 2874, CABA"], ["Fundación Favaloro", "Emiliano", "CLIENTE", 2000, "CABA", "Publico", "Alto", "Media-Alta", "Av. Pueyrredón 535, CABA"], ["Clínica del Sol CABA", "Emiliano", "PROSPECTO", 0, "CABA", "Privado", "Alto", "Media", "Av. Rivadavia 4383, CABA"], ["Hospital Fernández", "Emiliano", "CLIENTE", 4000, "CABA", "Privado", "Bajo", "Baja", "Av. Corrientes 3587, CABA"], ["Hospital Alemán", "Emiliano", "CLIENTE", 2500, "CABA", "Publico", "Medio", "Alta", "Av. Santa Fe 599, CABA"], ["Sanatorio San Lucas", "Emiliano", "CLIENTE", 4000, "CABA", "Privado", "Alto", "Media-Baja", "Av. Juan B. Justo 1899, CABA"], ["Clínica Bazterrica", "Emiliano", "CLIENTE", 2500, "CABA", "Privado", "Bajo", "Media-Alta", "Av. Rivadavia 129, CABA"], ["CEMIC", "Emiliano", "CLIENTE", 800, "CABA", "Publico", "Bajo", "Alta", "Av. Corrientes 1285, CABA"], ["Sanatorio Güemes", "Emiliano", "CLIENTE", 4000, "CABA", "Privado", "Bajo", "Media", "Av. Santa Fe 3964, CABA"], ["Hospital Rivadavia", "Emiliano", "CLIENTE", 2500, "CABA", "Privado", "Alto", "Media-Alta", "Av. Entre Ríos 4089, CABA"], ["Hospital Pirovano", "Emiliano", "CLIENTE", 0, "CABA", "Publico", "Medio", "Media-Alta", "Av. del Libertador 1045, CABA"], ["Hospital de Clínicas", "Emiliano", "CLIENTE", 0, "CABA", "Privado", "Alto", "Media", "Av. Córdoba 1256, CABA"], ["Hospital de Tigre", "Emiliano", "CLIENTE", 1500, "CABA", "Publico", "Bajo", "Baja", "Av. Entre Ríos 1466, CABA"], ["Hospital Durand", "Emiliano", "CLIENTE", 3000, "CABA", "Publico", "Alto", "Alta", "Av. Córdoba 835, CABA"], ["Hospital Garrahan", "Emiliano", "PROSPECTO", 0, "CABA", "Publico", "Medio", "Media", "Av. Entre Ríos 3985, CABA"], ["Clínica del Sol Olivos", "Emiliano", "CLIENTE", 500, "CABA", "Publico", "Alto", "Media-Baja", "Av. Las Heras 2065, CABA"], ["Clínica Olivos", "Emiliano", "CLIENTE", 3000, "CABA", "Publico", "Alto", "Media", "Av. Rivadavia 1762, CABA"], ["Hospital Austral Pilar", "Emiliano", "CLIENTE", 4000, "CABA", "Publico", "Alto", "Baja", "Av. Juan B. Justo 2664, CABA"], ["Hospital Británico", "Emiliano", "CLIENTE", 0, "CABA", "Publico", "Bajo", "Media", "Av. Pueyrredón 4828, CABA"], ["Hospital Austral", "Emiliano", "PROSPECTO", 0, "CABA", "Privado", "Bajo", "Baja", "Av. Córdoba 1813, CABA"], ["Sanatorio Mater Dei", "Emiliano", "CLIENTE", 0, "CABA", "Publico", "Medio", "Media-Alta", "Av. Santa Fe 3151, CABA"], ["Sanatorio Anchorena", "Emiliano", "CLIENTE", 0, "CABA", "Publico", "Bajo", "Media", "Av. Entre Ríos 1879, CABA"], ["Hospital de Vicente López", "Emiliano", "CLIENTE", 2500, "CABA", "Publico", "Medio", "Baja", "Av. Entre Ríos 1064, CABA"], ["Hospital Santa Isabel", "Emiliano", "CLIENTE", 500, "CABA", "Privado", "Medio", "Media", "Av. Corrientes 3589, CABA"], ["Sanatorio Mater Dei", "Agustina", "CLIENTE", 0, "CABA", "Publico", "Alto", "Media-Baja", "Av. Juan B. Justo 3581, CABA"], ["Hospital Argerich", "Agustina", "CLIENTE", 1500, "CABA", "Privado", "Alto", "Media", "Av. Córdoba 1737, CABA"], ["Sanatorio Colegiales", "Agustina", "CLIENTE", 4000, "CABA", "Privado", "Bajo", "Baja", "Av. Corrientes 4337, CABA"], ["Clínica del Sol CABA", "Agustina", "CLIENTE", 3000, "CABA", "Privado", "Alto", "Media-Baja", "Av. Corrientes 2891, CABA"], ["Sanatorio Finochietto", "Agustina", "CLIENTE", 1000, "CABA", "Publico", "Bajo", "Media-Baja", "CABA"], ["Hospital Santojanni", "Agustina", "PROSPECTO", 0, "CABA", "Publico", "Medio", "Alta", "Av. Córdoba 1934, CABA"], ["Hospital de Merlo", "Agustina", "CLIENTE", 1000, "CABA", "Publico", "Bajo", "Baja", "Av. Juan B. Justo 1661, CABA"], ["Fundación Favaloro", "Agustina", "CLIENTE", 3000, "CABA", "Publico", "Bajo", "Media-Alta", "Av. Las Heras 4324, CABA"], ["Hospital Muñiz", "Agustina", "CLIENTE", 3000, "CABA", "Publico", "Alto", "Alta", "CABA"], ["IADT", "Agustina", "CLIENTE", 1500, "CABA", "Privado", "Alto", "Media-Alta", "Av. Juan B. Justo 3372, CABA"], ["Hospital Evita Pueblo", "Agustina", "CLIENTE", 3000, "CABA", "Privado", "Bajo", "Media-Baja", "Av. Rivadavia 4350, CABA"], ["Hospital Narciso López", "Agustina", "CLIENTE", 3000, "CABA", "Publico", "Medio", "Alta", "Av. Entre Ríos 4208, CABA"], ["ICBA", "Agustina", "CLIENTE", 2500, "CABA", "Privado", "Bajo", "Media-Baja", "Av. Córdoba 2514, CABA"], ["CEMIC", "Agustina", "CLIENTE", 3000, "CABA", "Privado", "Alto", "Media-Baja", "Av. Pueyrredón 2888, CABA"], ["Hospital de Moreno", "Agustina", "CLIENTE", 4000, "CABA", "Privado", "Alto", "Alta", "Av. Córdoba 1397, CABA"], ["Hospital Posadas", "Agustina", "PROSPECTO", 0, "CABA", "Publico", "Alto", "Baja", "Gran Buenos Aires"], ["Hospital Cuenca Alta", "Agustina", "CLIENTE", 1000, "CABA", "Publico", "Bajo", "Baja", "Av. Callao 2789, CABA"], ["Hospital Elizalde", "Agustina", "PROSPECTO", 0, "CABA", "Publico", "Bajo", "Media", "CABA"], ["Hospital Británico", "Agustina", "CLIENTE", 2500, "CABA", "Privado", "Bajo", "Media-Alta", "Av. Rivadavia 1647, CABA"], ["Hospital de La Matanza", "Agustina", "CLIENTE", 1000, "CABA", "Publico", "Bajo", "Alta", "Av. Rivadavia 2351, CABA"], ["Sanatorio Oeste", "Agustina", "CLIENTE", 1000, "CABA", "Privado", "Alto", "Media", "Av. del Libertador 2653, CABA"], ["Hospital Santa Isabel", "Agustina", "CLIENTE", 2000, "CABA", "Publico", "Medio", "Media-Baja", "Av. Entre Ríos 2095, CABA"], ["Hospital de Clínicas", "Agustina", "CLIENTE", 1500, "CABA", "Privado", "Bajo", "Media", "Av. del Libertador 2480, CABA"], ["Clínica Modelo Morón", "Agustina", "CLIENTE", 1000, "CABA", "Publico", "Alto", "Media-Baja", "Av. Callao 2726, CABA"], ["Clínica La Pequeña Familia", "Agustina", "CLIENTE", 2500, "CABA", "Privado", "Medio", "Alta", "Av. Pueyrredón 3311, CABA"], ["Hospital Paroissien", "Agustina", "CLIENTE", 5000, "CABA", "Publico", "Medio", "Baja", "Av. Juan B. Justo 1876, CABA"], ["Hospital Durand", "Agustina", "CLIENTE", 800, "CABA", "Publico", "Medio", "Alta", "Av. Corrientes 4422, CABA"], ["Clínica Bazterrica Oeste", "Agustina", "CLIENTE", 2500, "CABA", "Publico", "Medio", "Baja", "Av. Callao 442, CABA"], ["Hospital Tornú", "Agustina", "CLIENTE", 1500, "CABA", "Privado", "Medio", "Media", "CABA"], ["Hospital Udaondo", "Agustina", "CLIENTE", 2500, "CABA", "Privado", "Alto", "Media-Baja", "Av. Juan B. Justo 1747, CABA"], ["Sanatorio Norte", "Mauricio", "CLIENTE", 5000, "GBA Norte", "Publico", "Medio", "Media", "Av. Córdoba 3086, GBA Norte"], ["Sanatorio Las Lomas", "Mauricio", "CLIENTE", 0, "GBA Norte", "Publico", "Bajo", "Alta", "Av. Rivadavia 2304, GBA Norte"], ["Clínica del Sur", "Mauricio", "CLIENTE", 5000, "GBA Norte", "Privado", "Bajo", "Baja", "Av. Las Heras 1940, GBA Norte"], ["Clínica San Jorge", "Mauricio", "CLIENTE", 1500, "GBA Norte", "Privado", "Medio", "Baja", "Av. Juan B. Justo 4647, GBA Norte"], ["Clínica Olivos", "Mauricio", "CLIENTE", 0, "GBA Norte", "Publico", "Medio", "Media-Alta", "Av. Rivadavia 2629, GBA Norte"], ["Hospital Arturo Oñativia", "Mauricio", "CLIENTE", 2000, "GBA Norte", "Privado", "Medio", "Alta", "Av. Rivadavia 4343, GBA Norte"], ["Sanatorio Sur", "Mauricio", "CLIENTE", 2000, "GBA Norte", "Privado", "Bajo", "Media", "Av. Corrientes 1658, GBA Norte"], ["Hospital Zubizarreta Norte", "Mauricio", "PROSPECTO", 0, "GBA Norte", "Publico", "Medio", "Media-Baja", "Av. Corrientes 4172, GBA Norte"], ["Hospital Municipal de San Martín", "Mauricio", "CLIENTE", 5000, "GBA Norte", "Privado", "Bajo", "Media-Baja", "Av. Callao 968, GBA Norte"], ["Clínica San Pablo", "Mauricio", "CLIENTE", 0, "GBA Norte", "Privado", "Alto", "Media-Baja", "Av. Córdoba 1560, GBA Norte"], ["Sanatorio San Lucas", "Mauricio", "CLIENTE", 1000, "GBA Norte", "Privado", "Medio", "Alta", "Av. Pueyrredón 4553, GBA Norte"], ["Clínica San Camilo", "Mauricio", "CLIENTE", 2500, "GBA Norte", "Publico", "Alto", "Media-Baja", "Av. Rivadavia 1733, GBA Norte"], ["Hospital Central San Isidro", "Mauricio", "CLIENTE", 2500, "GBA Norte", "Privado", "Bajo", "Baja", "Av. Callao 3248, GBA Norte"], ["Hospital de Quilmes", "Mauricio", "CLIENTE", 2000, "GBA Norte", "Publico", "Medio", "Alta", "Av. del Libertador 4510, GBA Norte"], ["Hospital de Berazategui", "Mauricio", "PROSPECTO", 0, "GBA Norte", "Publico", "Medio", "Alta", "Av. Corrientes 2541, GBA Norte"], ["Hospital Gandulfo", "Mauricio", "PROSPECTO", 0, "GBA Norte", "Publico", "Medio", "Media-Baja", "Av. del Libertador 2789, GBA Norte"], ["Hospital de San Fernando", "Mauricio", "PROSPECTO", 0, "GBA Norte", "Publico", "Alto", "Media", "Av. Entre Ríos 2787, GBA Norte"], ["Hospital de Tigre", "Mauricio", "CLIENTE", 5000, "GBA Norte", "Publico", "Bajo", "Media", "Av. Rivadavia 2890, GBA Norte"], ["Hospital Fiorito", "Mauricio", "CLIENTE", 0, "GBA Norte", "Publico", "Alto", "Media-Alta", "Av. Pueyrredón 2438, GBA Norte"], ["Hospital de Florencio Varela", "Mauricio", "CLIENTE", 3000, "GBA Norte", "Privado", "Bajo", "Media", "Av. Juan B. Justo 1710, GBA Norte"], ["Hospital de Vicente López", "Mauricio", "PROSPECTO", 0, "GBA Norte", "Privado", "Alto", "Alta", "Av. Pueyrredón 4958, GBA Norte"], ["Sanatorio Dr. Julio Méndez", "Mauricio", "CLIENTE", 800, "GBA Norte", "Publico", "Bajo", "Baja", "Av. Callao 4287, GBA Norte"], ["Hospital Evita Lanús", "Mauricio", "CLIENTE", 4000, "GBA Norte", "Privado", "Bajo", "Media", "Av. Entre Ríos 2628, GBA Norte"], ["Sanatorio Modelo Caseros", "Mauricio", "CLIENTE", 1000, "GBA Norte", "Privado", "Bajo", "Baja", "Av. Corrientes 3216, GBA Norte"], ["Clínica del Sol Olivos", "Mauricio", "CLIENTE", 4000, "GBA Norte", "Publico", "Bajo", "Baja", "Av. Juan B. Justo 233, GBA Norte"], ["Hospital Austral Pilar", "Mauricio", "CLIENTE", 1000, "GBA Norte", "Privado", "Alto", "Baja", "Av. Rivadavia 1618, GBA Norte"], ["Sanatorio Modelo Quilmes", "Mauricio", "CLIENTE", 2500, "GBA Norte", "Privado", "Bajo", "Media", "Av. Juan B. Justo 4318, GBA Norte"], ["Hospital de Lomas de Zamora", "Mauricio", "CLIENTE", 800, "GBA Norte", "Privado", "Alto", "Media-Alta", "Av. del Libertador 1598, GBA Norte"], ["HOSPITAL TEST GUARDADO", "Emiliano", "CLIENTE", 0, "CABA", "Privado", "Alto", "Media", ""], ["TEST Hospital Verificacion", "Emiliano", "CLIENTE", 500, "CABA", "Privado", "Medio", "Media", "Calle Test 123"], ["oedro", "Emiliano", "CLIENTE", 0, "CABA", "Privado", "Medio", "Media-Baja", ""], ["sergio", "Emiliano", "PROSPECTO", 40000, "CABA", "Privado", "Medio", "Media-Alta", ""], ["emi", "Emiliano", "CLIENTE", 0, "CABA", "Privado", "Alto", "Media", ""], ["Hospital San Isidro", "Emiliano", "PROSPECTO", 0, "San Isidro", "Publico", "Alto", "Media", "San Isidro"], ["Hospital Gutiérrez", "Emiliano", "PROSPECTO", 0, "CABA", "Publico", "Alto", "Alta", "CABA"], ["Hospital San Cayetano", "Emiliano", "PROSPECTO", 0, "Tigre", "Publico", "Medio", "Media", "Tigre"], ["Clínica Pasteleros", "Emiliano", "CLIENTE", 0, "CABA", "Privado", "Medio", "Alta", "Av. Corrientes 4180, CABA"], ["Sanatorio Franchin", "Emiliano", "PROSPECTO", 0, "CABA", "Privado", "Medio", "Media", "CABA"], ["Hospital Roffo", "Emiliano", "PROSPECTO", 0, "CABA", "Publico", "Medio", "Media", "CABA"], ["Hospital Pediátrico Tigre", "Emiliano", "PROSPECTO", 0, "Tigre", "Publico", "Medio", "Alta", "Tigre"], ["Hospital Ferrer", "Emiliano", "PROSPECTO", 0, "CABA", "Publico", "Medio", "Media", "CABA"], ["Hospital Zubizarreta", "Emiliano", "CLIENTE", 0, "CABA", "Publico", "Medio", "Media", "CABA"], ["Hospital Bicentenario", "Emiliano", "PROSPECTO", 0, "Tucumán", "Publico", "Medio", "Media", "Tucumán"]], "visits": [], "contacts": [["Hospital Central San Isidro", "PRIVADO", "CLIENTE", "Noelia Morales", "Control Infecciones", "11-7482-1917", "INCONTINENCIA"], ["Hospital Argerich", "PUBLICO", "CLIENTE", "Noelia García", "Administración", "11-6652-7563", "INSUMOS"], ["Clínica San Camilo", "PUBLICO", "CLIENTE", "Ana Ríos", "Jefa de Sector", "11-4053-7638", "COFIAS"], ["Clínica San Camilo", "PUBLICO", "CLIENTE", "Daniela Pérez", "Control Infecciones", "", "INCONTINENCIA"], ["Sanatorio Norte", "PRIVADO", "CLIENTE", "Roberto Torres", "Jefa de Sector", "", "PAÑOS"], ["Sanatorio Norte", "PRIVADO", "CLIENTE", "Andrea Sánchez", "Administración", "", "PAÑOS"], ["Sanatorio Norte", "PRIVADO", "CLIENTE", "Eduardo Hernández", "Jefa de Sector", "11-3748-7649", "INCONTINENCIA"], ["Sanatorio Las Lomas", "PRIVADO", "CLIENTE", "Martín Sánchez", "Enfermería", "11-2933-8606", "COFIAS"], ["Sanatorio Las Lomas", "PRIVADO", "CLIENTE", "Ricardo López", "Compras", "11-5724-8176", "INSUMOS"], ["Hospital Italiano", "PRIVADO", "CLIENTE", "Alejandro López", "Jefa de Sector", "", "COFIAS"], ["Sanatorio Otamendi", "PUBLICO", "CLIENTE", "Daniela Castro", "Director Médico", "11-8611-4566", "PROTOCOLO"], ["Sanatorio Otamendi", "PUBLICO", "CLIENTE", "María Fernández", "Farmacia", "11-8179-5619", "PROTOCOLO"], ["Fundación Favaloro", "PUBLICO", "CLIENTE", "Alejandro Díaz", "Director Médico", "11-5961-2143", "INSUMOS"], ["Fundación Favaloro", "PUBLICO", "CLIENTE", "Alejandro Alvarez", "Jefa de Sector", "11-9783-8484", "INSUMOS"], ["Clínica del Sol CABA", "PRIVADO", "PROSPECTO", "Pablo Mendoza", "Control Infecciones", "", "INCONTINENCIA"], ["Clínica del Sol CABA", "PRIVADO", "PROSPECTO", "María Rodríguez", "Administración", "11-5088-3715", "COFIAS"], ["Clínica del Sol CABA", "PRIVADO", "PROSPECTO", "Alejandro Ortiz", "Compras", "11-3697-2439", "INCONTINENCIA"], ["Hospital Fernández", "PRIVADO", "CLIENTE", "Diego Romero", "Director Médico", "11-7747-3530", "INCONTINENCIA"], ["Hospital Alemán", "PUBLICO", "CLIENTE", "Claudia Díaz", "Director Médico", "11-3728-7859", "INCONTINENCIA"], ["Hospital Alemán", "PUBLICO", "CLIENTE", "Martín Romero", "Administración", "", "INCONTINENCIA"], ["Sanatorio San Lucas", "PRIVADO", "CLIENTE", "Ricardo Sánchez", "Compras", "11-9423-5995", "PAÑOS"], ["Sanatorio San Lucas", "PRIVADO", "CLIENTE", "Sergio Jiménez", "Administración", "", "INSUMOS"], ["Clínica Bazterrica", "PRIVADO", "CLIENTE", "Alejandro Castro", "Control Infecciones", "11-5683-9987", "VARIOS"], ["Clínica Bazterrica", "PRIVADO", "CLIENTE", "Romina González", "Jefa de Sector", "11-9688-7404", "DESCARTADORES"], ["Clínica Bazterrica", "PRIVADO", "CLIENTE", "Juan García", "Farmacia", "", "PAÑOS"], ["CEMIC", "PUBLICO", "CLIENTE", "Ricardo García", "Jefa de Sector", "11-4032-8791", "COFIAS"], ["CEMIC", "PUBLICO", "CLIENTE", "Roberto", "Director Médico", "11-5182-5214", "PROTOCOLO"], ["CEMIC", "PUBLICO", "CLIENTE", "Claudia García", "Administración", "11-5296-5533", "PROTOCOLO"], ["Sanatorio Güemes", "PRIVADO", "CLIENTE", "Fernando López", "Compras", "", "DESCARTADORES"], ["Hospital Rivadavia", "PRIVADO", "CLIENTE", "Fernando Morales", "Director Médico", "11-3104-1952", "DESCARTADORES"], ["Hospital Rivadavia", "PRIVADO", "CLIENTE", "María González", "Director Médico", "", "PAÑOS"], ["Hospital Rivadavia", "PRIVADO", "CLIENTE", "Andrea Morales", "Control Infecciones", "11-5378-3639", "COFIAS"], ["Hospital Pirovano", "PUBLICO", "CLIENTE", "Roberto Ruiz", "Administración", "11-8967-1249", "INCONTINENCIA"], ["Hospital Pirovano", "PUBLICO", "CLIENTE", "Noelia Pérez", "Enfermería", "11-3860-8782", "COFIAS"], ["Hospital de Clínicas", "PRIVADO", "CLIENTE", "Eduardo Ruiz", "Farmacia", "11-6065-3107", "INSUMOS"], ["Hospital de Clínicas", "PRIVADO", "CLIENTE", "Eduardo Torres", "Control Infecciones", "", "PROTOCOLO"], ["Hospital de Clínicas", "PRIVADO", "CLIENTE", "Romina Mendoza", "Farmacia", "11-4277-3551", "INCONTINENCIA"], ["Hospital de Tigre", "PUBLICO", "CLIENTE", "Verónica Pérez", "Farmacia", "", "PAÑOS"], ["Hospital Durand", "PUBLICO", "CLIENTE", "Fernando Pérez", "Director Médico", "11-5088-3994", "DESCARTADORES"], ["Hospital Garrahan", "PUBLICO", "PROSPECTO", "Juan Alvarez", "Director Médico", "11-4391-6769", "COFIAS"], ["Hospital Garrahan", "PUBLICO", "PROSPECTO", "Daniela Morales", "Farmacia", "", "PROTOCOLO"], ["Clínica del Sol Olivos", "PUBLICO", "CLIENTE", "Noelia Ortiz", "Enfermería", "11-5445-9246", "PAÑOS"], ["Clínica del Sol Olivos", "PUBLICO", "CLIENTE", "Gabriela Rodríguez", "Farmacia", "11-2315-5309", "INCONTINENCIA"], ["Clínica del Sol Olivos", "PUBLICO", "CLIENTE", "María Jiménez", "Enfermería", "11-9658-4410", "DESCARTADORES"], ["Clínica Olivos", "PUBLICO", "CLIENTE", "Romina Ruiz", "Administración", "", "INCONTINENCIA"], ["Clínica Olivos", "PUBLICO", "CLIENTE", "Romina Ortiz", "Compras", "11-7888-8648", "COFIAS"], ["Hospital Austral Pilar", "PUBLICO", "CLIENTE", "Carlos Ruiz", "Compras", "", "VARIOS"], ["Hospital Austral Pilar", "PUBLICO", "CLIENTE", "Eduardo Mendoza", "Enfermería", "11-7770-8238", "PAÑOS"], ["Hospital Británico", "PUBLICO", "CLIENTE", "Ana González", "Compras", "11-8191-2637", "DESCARTADORES"], ["Hospital Austral", "PRIVADO", "PROSPECTO", "Diego Ortiz", "Control Infecciones", "11-5023-9160", "PROTOCOLO"], ["Hospital Austral", "PRIVADO", "PROSPECTO", "Noelia Rodríguez", "Jefa de Sector", "", "INSUMOS"], ["Sanatorio Mater Dei", "PUBLICO", "CLIENTE", "Patricia Jiménez", "Enfermería", "11-6303-8062", "INSUMOS"], ["Sanatorio Mater Dei", "PUBLICO", "CLIENTE", "Claudia González", "Director Médico", "11-6215-5823", ""], ["Sanatorio Anchorena", "PUBLICO", "CLIENTE", "Alejandro Díaz", "Administración", "11-7624-2409", "PROTOCOLO"], ["Sanatorio Anchorena", "PUBLICO", "CLIENTE", "Gabriela Martínez", "Control Infecciones", "11-5710-6515", "PAÑOS"], ["Hospital de Vicente López", "PUBLICO", "CLIENTE", "Pablo Pérez", "Control Infecciones", "", "DESCARTADORES"], ["Hospital de Vicente López", "PUBLICO", "CLIENTE", "Sergio Mendoza", "Farmacia", "11-9047-1990", "COFIAS"], ["Hospital Santa Isabel", "PRIVADO", "CLIENTE", "Pablo Ruiz", "Compras", "11-4211-9836", "PAÑOS"], ["Sanatorio Mater Dei", "PUBLICO", "CLIENTE", "Pablo Castro", "Jefa de Sector", "11-4491-8855", "PROTOCOLO"], ["Hospital Argerich", "PRIVADO", "CLIENTE", "Ricardo Rodríguez", "Farmacia", "11-9000-2114", ""], ["Hospital Argerich", "PRIVADO", "CLIENTE", "Roberto Pérez", "Administración", "11-2649-4115", "COFIAS"], ["Hospital Argerich", "PRIVADO", "CLIENTE", "Pablo Díaz", "Administración", "11-8506-9153", "COFIAS"], ["Sanatorio Colegiales", "PRIVADO", "CLIENTE", "Diego Rodríguez", "Jefa de Sector", "", ""], ["Sanatorio Colegiales", "PRIVADO", "CLIENTE", "Diego García", "Jefa de Sector", "11-3060-3629", "PAÑOS"], ["Sanatorio Colegiales", "PRIVADO", "CLIENTE", "Claudia Castro", "Compras", "11-3233-6385", "PROTOCOLO"], ["Clínica del Sol CABA", "PRIVADO", "CLIENTE", "Juan González", "Farmacia", "11-6293-9021", "INCONTINENCIA"], ["Clínica del Sol CABA", "PRIVADO", "CLIENTE", "Verónica Díaz", "Farmacia", "", "VARIOS"], ["Clínica del Sol CABA", "PRIVADO", "CLIENTE", "Ana Morales", "Control Infecciones", "11-3984-8220", ""], ["Sanatorio Finochietto", "PUBLICO", "CLIENTE", "Ricardo Ruiz", "Enfermería", "11-9337-8118", "INSUMOS"], ["Sanatorio Finochietto", "PUBLICO", "CLIENTE", "Silvia Vargas", "Enfermería", "", ""], ["Sanatorio Finochietto", "PUBLICO", "CLIENTE", "Fernando Ruiz", "Control Infecciones", "11-5398-1029", "INCONTINENCIA"], ["Hospital Santojanni", "PUBLICO", "PROSPECTO", "Alejandro Díaz", "Jefa de Sector", "", "DESCARTADORES"], ["Hospital Santojanni", "PUBLICO", "PROSPECTO", "Ricardo Pérez", "Enfermería", "", "DESCARTADORES"], ["Hospital de Merlo", "PUBLICO", "CLIENTE", "Gabriela Mendoza", "Administración", "11-6632-2461", "VARIOS"], ["Hospital de Merlo", "PUBLICO", "CLIENTE", "Silvia Mendoza", "Farmacia", "11-3414-8714", "PAÑOS"], ["Fundación Favaloro", "PUBLICO", "CLIENTE", "Patricia Ramírez", "Compras", "", "INSUMOS"], ["Fundación Favaloro", "PUBLICO", "CLIENTE", "Silvia Vargas", "Compras", "", ""], ["Fundación Favaloro", "PUBLICO", "CLIENTE", "Ricardo Mendoza", "Control Infecciones", "11-6240-3834", "PAÑOS"], ["Hospital Muñiz", "PUBLICO", "CLIENTE", "Pablo Díaz", "Administración", "11-6305-5378", ""], ["Hospital Muñiz", "PUBLICO", "CLIENTE", "Pablo Martínez", "Administración", "11-9608-1182", ""], ["Hospital Muñiz", "PUBLICO", "CLIENTE", "Daniela Ramírez", "Administración", "11-7505-3532", ""], ["IADT", "PRIVADO", "CLIENTE", "Diego Díaz", "Enfermería", "11-2591-2922", "VARIOS"], ["IADT", "PRIVADO", "CLIENTE", "Daniela Ramírez", "Control Infecciones", "11-7578-5849", ""], ["Hospital Evita Pueblo", "PRIVADO", "CLIENTE", "Gabriela Morales", "Farmacia", "", ""], ["Hospital Narciso López", "PUBLICO", "CLIENTE", "Ricardo Romero", "Administración", "", ""], ["Hospital Narciso López", "PUBLICO", "CLIENTE", "Patricia Rodríguez", "Jefa de Sector", "11-4028-4261", "COFIAS"], ["Hospital Narciso López", "PUBLICO", "CLIENTE", "Laura López", "Director Médico", "11-7462-7620", "PAÑOS"], ["ICBA", "PRIVADO", "CLIENTE", "Laura Romero", "Enfermería", "11-5433-7318", "INSUMOS"], ["ICBA", "PRIVADO", "CLIENTE", "Roberto Torres", "Jefa de Sector", "11-9970-3064", "PROTOCOLO"], ["CEMIC", "PRIVADO", "CLIENTE", "Noelia Fernández", "Administración", "", ""], ["Hospital de Moreno", "PRIVADO", "CLIENTE", "Andrea Ortiz", "Enfermería", "11-6388-1104", ""], ["Hospital de Moreno", "PRIVADO", "CLIENTE", "Carlos Alvarez", "Farmacia", "11-4927-8805", "VARIOS"], ["Hospital Posadas", "PUBLICO", "PROSPECTO", "Claudia Rodríguez", "Jefa de Sector", "11-5636-8283", "PAÑOS"], ["Hospital Cuenca Alta", "PUBLICO", "CLIENTE", "Daniela Ortiz", "Control Infecciones", "11-8179-6361", "DESCARTADORES"], ["Hospital Cuenca Alta", "PUBLICO", "CLIENTE", "Gabriela Torres", "Administración", "11-6950-5668", ""], ["Hospital Elizalde", "PUBLICO", "PROSPECTO", "Andrea Díaz", "Enfermería", "11-2385-6658", "DESCARTADORES"], ["Hospital Elizalde", "PUBLICO", "PROSPECTO", "Verónica Ortiz", "Director Médico", "", "INCONTINENCIA"], ["Hospital Británico", "PRIVADO", "CLIENTE", "Juan Alvarez", "Director Médico", "11-9863-4491", "COFIAS"], ["Hospital de La Matanza", "PUBLICO", "CLIENTE", "Roberto Castro", "Director Médico", "11-4964-9441", ""], ["Hospital de La Matanza", "PUBLICO", "CLIENTE", "Andrea Vargas", "Compras", "11-6396-9223", "PAÑOS"], ["Sanatorio Oeste", "PRIVADO", "CLIENTE", "Martín Romero", "Enfermería", "", "PAÑOS"], ["Sanatorio Oeste", "PRIVADO", "CLIENTE", "Ana García", "Control Infecciones", "11-3920-7101", ""], ["Sanatorio Oeste", "PRIVADO", "CLIENTE", "Carlos Castro", "Farmacia", "", ""], ["Hospital Santa Isabel", "PUBLICO", "CLIENTE", "Roberto Pérez", "Enfermería", "11-5453-4029", ""], ["Hospital Santa Isabel", "PUBLICO", "CLIENTE", "Ricardo Ruiz", "Compras", "11-5191-7924", "DESCARTADORES"], ["Hospital Santa Isabel", "PUBLICO", "CLIENTE", "Diego Pérez", "Jefa de Sector", "11-9290-8614", ""], ["Hospital de Clínicas", "PRIVADO", "CLIENTE", "Patricia Ruiz", "Compras", "11-9877-3485", "DESCARTADORES"], ["Clínica Modelo Morón", "PUBLICO", "CLIENTE", "Alejandro Mendoza", "Director Médico", "11-6155-6516", "PROTOCOLO"], ["Clínica Modelo Morón", "PUBLICO", "CLIENTE", "Fernando Torres", "Director Médico", "", "PAÑOS"], ["Clínica La Pequeña Familia", "PRIVADO", "CLIENTE", "Juan Fernández", "Control Infecciones", "11-2605-9403", ""], ["Clínica La Pequeña Familia", "PRIVADO", "CLIENTE", "Claudia Sánchez", "Compras", "11-5392-7195", "INCONTINENCIA"], ["Clínica La Pequeña Familia", "PRIVADO", "CLIENTE", "Fernando López", "Jefa de Sector", "11-7450-4110", "PROTOCOLO"], ["Hospital Paroissien", "PUBLICO", "CLIENTE", "Eduardo Torres", "Compras", "", "COFIAS"], ["Hospital Durand", "PUBLICO", "CLIENTE", "Diego Mendoza", "Jefa de Sector", "11-5979-4903", "PAÑOS"], ["Hospital Durand", "PUBLICO", "CLIENTE", "Martín Sánchez", "Administración", "11-9126-7169", "VARIOS"], ["Hospital Durand", "PUBLICO", "CLIENTE", "Romina Ruiz", "Compras", "11-7280-6195", "PROTOCOLO"], ["Clínica Bazterrica Oeste", "PUBLICO", "CLIENTE", "Pablo López", "Compras", "11-3694-9306", "PROTOCOLO"], ["Hospital Tornú", "PRIVADO", "CLIENTE", "Andrea Morales", "Administración", "11-6110-3971", "INSUMOS"], ["Hospital Tornú", "PRIVADO", "CLIENTE", "Claudia González", "Control Infecciones", "11-8912-3523", "VARIOS"], ["Hospital Tornú", "PRIVADO", "CLIENTE", "Carlos Pérez", "Compras", "11-5196-4773", ""], ["Hospital Udaondo", "PRIVADO", "CLIENTE", "Verónica Ruiz", "Farmacia", "11-7331-1263", "VARIOS"], ["Sanatorio Norte", "PUBLICO", "CLIENTE", "Verónica Vargas", "Enfermería", "", "VARIOS"], ["Sanatorio Las Lomas", "PUBLICO", "CLIENTE", "Sergio Alvarez", "Farmacia", "", "PAÑOS"], ["Sanatorio Las Lomas", "PUBLICO", "CLIENTE", "Romina Rodríguez", "Control Infecciones", "11-7622-2071", ""], ["Sanatorio Las Lomas", "PUBLICO", "CLIENTE", "Pablo Martínez", "Compras", "11-3604-2099", "COFIAS"], ["Clínica del Sur", "PRIVADO", "CLIENTE", "Romina Alvarez", "Farmacia", "11-4804-8377", "PAÑOS"], ["Clínica del Sur", "PRIVADO", "CLIENTE", "Sergio Castro", "Administración", "11-3719-4995", "INCONTINENCIA"], ["Clínica del Sur", "PRIVADO", "CLIENTE", "Noelia Fernández", "Control Infecciones", "11-6930-4956", "PROTOCOLO"], ["Clínica San Jorge", "PRIVADO", "CLIENTE", "María Ortiz", "Control Infecciones", "", "DESCARTADORES"], ["Clínica San Jorge", "PRIVADO", "CLIENTE", "Martín Díaz", "Administración", "11-4838-7591", "PROTOCOLO"], ["Clínica Olivos", "PUBLICO", "CLIENTE", "Ana Ortiz", "Control Infecciones", "11-3413-8955", "PROTOCOLO"], ["Clínica Olivos", "PUBLICO", "CLIENTE", "Noelia Ríos", "Farmacia", "11-2653-2197", "VARIOS"], ["Clínica Olivos", "PUBLICO", "CLIENTE", "Patricia Fernández", "Director Médico", "11-6556-3274", ""], ["Hospital Arturo Oñativia", "PRIVADO", "CLIENTE", "Diego Hernández", "Enfermería", "", "PAÑOS"], ["Hospital Arturo Oñativia", "PRIVADO", "CLIENTE", "Daniela Vargas", "Control Infecciones", "11-6803-3048", "PROTOCOLO"], ["Sanatorio Sur", "PRIVADO", "CLIENTE", "Gabriela García", "Director Médico", "11-8444-4638", "DESCARTADORES"], ["Sanatorio Sur", "PRIVADO", "CLIENTE", "Verónica Jiménez", "Compras", "11-9665-9122", "VARIOS"], ["Hospital Zubizarreta Norte", "PUBLICO", "PROSPECTO", "Daniela Mendoza", "Enfermería", "11-9471-7173", "INCONTINENCIA"], ["Hospital Zubizarreta Norte", "PUBLICO", "PROSPECTO", "Silvia Jiménez", "Enfermería", "11-2495-1981", "VARIOS"], ["Hospital Municipal de San Martín", "PRIVADO", "CLIENTE", "Martín Pérez", "Control Infecciones", "11-3402-4855", "INCONTINENCIA"], ["Hospital Municipal de San Martín", "PRIVADO", "CLIENTE", "Diego Mendoza", "Administración", "11-8785-1504", ""], ["Clínica San Pablo", "PRIVADO", "CLIENTE", "Alejandro Morales", "Administración", "11-7196-9692", "DESCARTADORES"], ["Clínica San Pablo", "PRIVADO", "CLIENTE", "Gabriela Díaz", "Enfermería", "11-5323-9228", "COFIAS"], ["Sanatorio San Lucas", "PRIVADO", "CLIENTE", "Patricia Hernández", "Control Infecciones", "", "PAÑOS"], ["Sanatorio San Lucas", "PRIVADO", "CLIENTE", "Eduardo Ríos", "Control Infecciones", "11-2211-1721", ""], ["Clínica San Camilo", "PUBLICO", "CLIENTE", "Noelia Vargas", "Director Médico", "", "DESCARTADORES"], ["Clínica San Camilo", "PUBLICO", "CLIENTE", "Romina Sánchez", "Director Médico", "", "VARIOS"], ["Clínica San Camilo", "PUBLICO", "CLIENTE", "Alejandro Castro", "Enfermería", "", ""], ["Hospital Central San Isidro", "PRIVADO", "CLIENTE", "Ricardo Romero", "Compras", "11-7040-1853", "INSUMOS"], ["Hospital Central San Isidro", "PRIVADO", "CLIENTE", "Laura Vargas", "Compras", "11-5941-7880", "COFIAS"], ["Hospital Central San Isidro", "PRIVADO", "CLIENTE", "Romina Díaz", "Farmacia", "11-3419-6800", "DESCARTADORES"], ["Hospital de Quilmes", "PUBLICO", "CLIENTE", "Laura Hernández", "Farmacia", "11-6953-8440", "DESCARTADORES"], ["Hospital de Quilmes", "PUBLICO", "CLIENTE", "Verónica Morales", "Jefa de Sector", "11-7498-4099", "VARIOS"], ["Hospital de Quilmes", "PUBLICO", "CLIENTE", "Patricia Morales", "Farmacia", "", "PROTOCOLO"], ["Hospital de Berazategui", "PUBLICO", "PROSPECTO", "Patricia Alvarez", "Farmacia", "", "PAÑOS"], ["Hospital Gandulfo", "PUBLICO", "PROSPECTO", "Ana Sánchez", "Control Infecciones", "11-5110-5892", "PAÑOS"], ["Hospital de San Fernando", "PUBLICO", "PROSPECTO", "Silvia García", "Director Médico", "11-9211-4864", "VARIOS"], ["Hospital de Tigre", "PUBLICO", "CLIENTE", "Patricia Vargas", "Director Médico", "11-4561-3189", ""], ["Hospital Fiorito", "PUBLICO", "CLIENTE", "Alejandro Pérez", "Compras", "", ""], ["Hospital Fiorito", "PUBLICO", "CLIENTE", "Juan López", "Farmacia", "11-4679-2889", "INCONTINENCIA"], ["Hospital de Florencio Varela", "PRIVADO", "CLIENTE", "Andrea Fernández", "Enfermería", "11-5977-9086", "INCONTINENCIA"], ["Hospital de Vicente López", "PRIVADO", "PROSPECTO", "Sergio Hernández", "Control Infecciones", "", "DESCARTADORES"], ["Hospital de Vicente López", "PRIVADO", "PROSPECTO", "Noelia Morales", "Administración", "11-7912-1410", "PAÑOS"], ["Sanatorio Dr. Julio Méndez", "PUBLICO", "CLIENTE", "Ricardo Ortiz", "Director Médico", "11-8771-9057", "PROTOCOLO"], ["Sanatorio Dr. Julio Méndez", "PUBLICO", "CLIENTE", "Silvia Ruiz", "Enfermería", "11-8673-5245", "COFIAS"], ["Sanatorio Dr. Julio Méndez", "PUBLICO", "CLIENTE", "Laura López", "Director Médico", "11-7666-6449", ""], ["Hospital Evita Lanús", "PRIVADO", "CLIENTE", "Juan Ruiz", "Administración", "11-3678-6114", "INSUMOS"], ["Sanatorio Modelo Caseros", "PRIVADO", "CLIENTE", "Alejandro Pérez", "Director Médico", "11-3419-9699", "COFIAS"], ["Sanatorio Modelo Caseros", "PRIVADO", "CLIENTE", "Juan Hernández", "Administración", "11-9583-2770", "INCONTINENCIA"], ["Sanatorio Modelo Caseros", "PRIVADO", "CLIENTE", "Claudia Mendoza", "Control Infecciones", "11-9728-7636", "PAÑOS"], ["Clínica del Sol Olivos", "PUBLICO", "CLIENTE", "Juan Martínez", "Compras", "11-6062-6338", "DESCARTADORES"], ["Hospital Austral Pilar", "PRIVADO", "CLIENTE", "Eduardo Torres", "Enfermería", "11-2352-2649", "COFIAS"], ["Hospital Austral Pilar", "PRIVADO", "CLIENTE", "Juan López", "Jefa de Sector", "11-3205-9999", "VARIOS"], ["Sanatorio Modelo Quilmes", "PRIVADO", "CLIENTE", "Martín Morales", "Administración", "11-8842-7784", "INSUMOS"], ["Sanatorio Modelo Quilmes", "PRIVADO", "CLIENTE", "Andrea Ramírez", "Farmacia", "11-9096-6154", "INCONTINENCIA"], ["Hospital de Lomas de Zamora", "PRIVADO", "CLIENTE", "Pablo Ortiz", "Jefa de Sector", "11-3489-8765", "PAÑOS"], ["Hospital de Lomas de Zamora", "PRIVADO", "CLIENTE", "Sergio Ortiz", "Compras", "11-9126-4214", "DESCARTADORES"], ["Hospital de Lomas de Zamora", "PRIVADO", "CLIENTE", "Andrea Martínez", "Control Infecciones", "", ""], ["CEMIC", "PUBLICO", "CLIENTE", "emiliano", "Director Médico", "111111111", "cofias"], ["Hospital Tornú", "PRIVADO", "CLIENTE", "Lic. Mariana Turci", "Oficina de Compras", "", "Cofias, Incontinencia", "tornu_compras@buenosaires.gob.ar"], ["Hospital Tornú", "PRIVADO", "CLIENTE", "Federico Busello", "Jefe Comité Médico / Capacitación", "", "", ""], ["Hospital Tornú", "PRIVADO", "CLIENTE", "Lic. Claudia Lanfranco", "Jefa de Enfermería", "11-68138455", "", ""], ["Hospital Elizalde", "PRIVADO", "CLIENTE", "Vanessa Roldán", "ECI", "11-56046820", "Paños Pediátricos, Cofias, Incontinencia", ""], ["Hospital Elizalde", "PRIVADO", "CLIENTE", "Cinthia", "Jefa Terapia Intensiva", "11-51569197", "", ""], ["Hospital Muñiz", "PRIVADO", "CLIENTE", "Lic. Walter Bertoldi", "Gerente Operativo", "4304-2925", "Incontinencia, Cofias", "muñiz_wbertoldi@buenosaires.gob.ar"], ["Hospital Muñiz", "PRIVADO", "CLIENTE", "Lic. Sandra Gagliardo", "Subgte de Enfermería", "11-6801-5364", "", ""], ["Hospital Muñiz", "PRIVADO", "CLIENTE", "Lic. Hector Almonacid", "Jefe División Enfermería", "", "", ""], ["Hospital Posadas", "PRIVADO", "CLIENTE", "Mariana Calderon", "Coordinadora ECI / Enfermera Neonatóloga", "", "Clorhex Secos, Paños Pediátricos", ""], ["Hospital San Isidro", "PRIVADO", "CLIENTE", "Lic. Karuchek", "Jefa Enfermería (Htal. Central)", "11-49721064", "Paños Clorhexidina, Pediátricos", ""], ["Hospital San Isidro", "PRIVADO", "CLIENTE", "Dra. Tesaire", "Jefa Terapia Infantil (Materno Infantil)", "", "Paños Pediátricos", ""], ["Hospital San Isidro", "PRIVADO", "CLIENTE", "Dr. Campi", "Htal. Central", "", "", ""], ["Hospital Gutiérrez", "PRIVADO", "CLIENTE", "Laura", "Coordinadora de Terapia Intensiva", "11-38997484", "Incontinencia, Cofias", ""], ["Hospital Gutiérrez", "PRIVADO", "CLIENTE", "Dr. Gatari", "Contacto Inicial", "", "", ""], ["Hospital San Cayetano", "PRIVADO", "CLIENTE", "Laura Cardoso", "ECI", "11-23087482", "", ""], ["Sanatorio Finochietto", "PRIVADO", "CLIENTE", "Patricia Estevez", "Jefa de Logística", "3752-8000 int. 8773", "", "pestevez@sanatoriofinochietto.com"], ["Sanatorio Finochietto", "PRIVADO", "CLIENTE", "Analia Aguirre", "Compras Médicas", "", "", "aaguirre@ase.com.ar"], ["Sanatorio Finochietto", "PRIVADO", "CLIENTE", "Patricio Nanzo", "Coordinador de Logística", "3752-8000 int. 8774", "", ""], ["Sanatorio Finochietto", "PRIVADO", "CLIENTE", "Jonathan Damian Husto", "Administración / Pagos", "11-2884-0010", "", ""], ["Clínica Pasteleros", "PRIVADO", "CLIENTE", "Johanna Coro", "Dpto. de Compras", "3985-6500 Int. 6547", "Clorhexidina, Manzanilla", "compras1@clinica.pasteleros.org.ar"], ["CEMIC", "PRIVADO", "CLIENTE", "Maria Gomez", "Pagos/Administración", "", "", "mgomez@cemic.edu.ar"], ["Sanatorio Anchorena", "PRIVADO", "CLIENTE", "Pagos Anchorena", "Administración", "", "", "pagos@sanatorio-anchorena.com.ar"], ["Sanatorio Las Lomas", "PRIVADO", "CLIENTE", "Micaela Arzamendia Lagunas", "Compras Descartables", "", "", "micaela.arzamendia@swissmedical.com.ar"], ["Sanatorio Las Lomas", "PRIVADO", "CLIENTE", "Santiago Nicolas Romanowicz", "Swiss Medical", "", "", ""], ["Sanatorio Las Lomas", "PRIVADO", "CLIENTE", "Yanina Vanesa Marengo", "Swiss Medical", "", "", ""], ["Sanatorio Franchin", "PRIVADO", "CLIENTE", "Reyna del Vicci", "ECI", "11-67125700", "", ""], ["Clínica Bazterrica", "PRIVADO", "CLIENTE", "Lic. Panihuara", "Jefa Enf/ECI", "11-39386963", "", ""], ["Clínica Bazterrica", "PRIVADO", "CLIENTE", "Luna Romero", "Farmacia", "", "", ""], ["Hospital Roffo", "PRIVADO", "CLIENTE", "Elba Gonzales", "Jefa Operativa", "11-37679823", "", ""], ["Hospital Roffo", "PRIVADO", "CLIENTE", "Sabrina Ideal", "ECI", "11-66902439", "", ""], ["Hospital Británico", "PRIVADO", "CLIENTE", "Gustavo", "Gestión Reingreso", "", "", ""], ["Hospital Pediátrico Tigre", "PRIVADO", "CLIENTE", "Lic. Ambrosio", "Jefa Farmacia", "", "", ""], ["Hospital Rivadavia", "PRIVADO", "CLIENTE", "Supervisora de Enfermería", "Supervisora", "", "Paños Pediátricos", ""], ["Hospital Rivadavia", "PRIVADO", "CLIENTE", "Jefe de Enfermería (Cesis)", "Jefe de Enfermería", "", "Paños Pediátricos", ""], ["Hospital Ferrer", "PRIVADO", "CLIENTE", "Lic. Marco Fidalgo", "Gerente Operativo", "", "", ""], ["Hospital Ferrer", "PRIVADO", "CLIENTE", "Farmac. Laura Benzal", "Farmacia", "", "", ""], ["Hospital Zubizarreta", "PRIVADO", "CLIENTE", "Liliana", "Contacto Capacitaciones", "", "", ""], ["Hospital Bicentenario", "PRIVADO", "CLIENTE", "Rosa Mayan", "Jefa de Enfermería y Depósito", "11-66638942", "", ""]], "meta": {"HOSPITAL CENTRAL SAN ISIDRO": {"camas": 800, "productos": "Descartadores, Guantes, Protocolo, Paños", "extra": ""}, "HOSPITAL ARGERICH": {"camas": 100, "productos": "Insumos, Cofias, Protocolo, Incontinencia", "extra": ""}, "CLÍNICA SAN CAMILO": {"camas": 500, "productos": "Cofias, Insumos, Paños", "extra": ""}, "SANATORIO NORTE": {"camas": 200, "productos": "Descartadores, Incontinencia, Guantes, Insumos", "extra": ""}, "SANATORIO LAS LOMAS": {"camas": 400, "productos": "Guantes, Insumos, Paños", "extra": ""}, "HOSPITAL ITALIANO": {"camas": 600, "productos": "Incontinencia, Protocolo", "extra": ""}, "SANATORIO OTAMENDI": {"camas": 250, "productos": "Paños, Cofias", "extra": ""}, "FUNDACIÓN FAVALORO": {"camas": 300, "productos": "Insumos", "extra": ""}, "CLÍNICA DEL SOL CABA": {"camas": 600, "productos": "Guantes, Incontinencia, Insumos", "extra": ""}, "HOSPITAL FERNÁNDEZ": {"camas": 200, "productos": "Cofias, Descartadores, Incontinencia, Insumos", "extra": ""}, "HOSPITAL ALEMÁN": {"camas": 300, "productos": "Protocolo, Paños", "extra": ""}, "SANATORIO SAN LUCAS": {"camas": 400, "productos": "Paños, Protocolo, Cofias", "extra": ""}, "CLÍNICA BAZTERRICA": {"camas": 500, "productos": "Cofias, Insumos", "extra": ""}, "CEMIC": {"camas": 250, "productos": "Protocolo, Incontinencia", "extra": ""}, "SANATORIO GÜEMES": {"camas": 500, "productos": "Incontinencia, Guantes, Cofias", "extra": ""}, "HOSPITAL RIVADAVIA": {"camas": 150, "productos": "Cofias, Descartadores, Protocolo", "extra": ""}, "HOSPITAL PIROVANO": {"camas": 200, "productos": "Cofias, Paños", "extra": ""}, "HOSPITAL DE CLÍNICAS": {"camas": 800, "productos": "Descartadores, Cofias, Paños", "extra": ""}, "HOSPITAL DE TIGRE": {"camas": 250, "productos": "Guantes, Protocolo", "extra": ""}, "HOSPITAL DURAND": {"camas": 300, "productos": "Insumos", "extra": ""}, "HOSPITAL GARRAHAN": {"camas": 500, "productos": "", "extra": ""}, "CLÍNICA DEL SOL OLIVOS": {"camas": 600, "productos": "Insumos, Paños, Descartadores, Guantes", "extra": ""}, "CLÍNICA OLIVOS": {"camas": 100, "productos": "Cofias", "extra": ""}, "HOSPITAL AUSTRAL PILAR": {"camas": 100, "productos": "Guantes", "extra": ""}, "HOSPITAL BRITÁNICO": {"camas": 250, "productos": "Protocolo", "extra": ""}, "HOSPITAL AUSTRAL": {"camas": 150, "productos": "", "extra": ""}, "SANATORIO MATER DEI": {"camas": 600, "productos": "Paños", "extra": ""}, "SANATORIO ANCHORENA": {"camas": 800, "productos": "Guantes, Incontinencia, Descartadores", "extra": ""}, "HOSPITAL DE VICENTE LÓPEZ": {"camas": 100, "productos": "", "extra": ""}, "HOSPITAL SANTA ISABEL": {"camas": 100, "productos": "Paños, Cofias, Descartadores", "extra": ""}, "SANATORIO COLEGIALES": {"camas": 200, "productos": "Guantes, Descartadores, Protocolo", "extra": ""}, "SANATORIO FINOCHIETTO": {"camas": 500, "productos": "Protocolo, Incontinencia", "extra": ""}, "HOSPITAL SANTOJANNI": {"camas": 100, "productos": "", "extra": ""}, "HOSPITAL DE MERLO": {"camas": 100, "productos": "Descartadores, Paños", "extra": ""}, "HOSPITAL MUÑIZ": {"camas": 600, "productos": "Protocolo", "extra": ""}, "IADT": {"camas": 500, "productos": "Guantes, Cofias", "extra": ""}, "HOSPITAL EVITA PUEBLO": {"camas": 500, "productos": "Descartadores, Insumos, Protocolo", "extra": ""}, "HOSPITAL NARCISO LÓPEZ": {"camas": 300, "productos": "Descartadores", "extra": ""}, "ICBA": {"camas": 100, "productos": "Guantes, Insumos, Descartadores", "extra": ""}, "HOSPITAL DE MORENO": {"camas": 400, "productos": "Insumos", "extra": ""}, "HOSPITAL POSADAS": {"camas": 500, "productos": "", "extra": ""}, "HOSPITAL CUENCA ALTA": {"camas": 500, "productos": "Guantes", "extra": ""}, "HOSPITAL ELIZALDE": {"camas": 300, "productos": "", "extra": ""}, "HOSPITAL DE LA MATANZA": {"camas": 250, "productos": "Paños, Incontinencia, Cofias, Insumos", "extra": ""}, "SANATORIO OESTE": {"camas": 150, "productos": "Protocolo, Incontinencia, Insumos", "extra": ""}, "CLÍNICA MODELO MORÓN": {"camas": 400, "productos": "Cofias, Paños, Insumos, Protocolo", "extra": ""}, "CLÍNICA LA PEQUEÑA FAMILIA": {"camas": 400, "productos": "Cofias", "extra": ""}, "HOSPITAL PAROISSIEN": {"camas": 200, "productos": "Guantes, Cofias, Insumos", "extra": ""}, "CLÍNICA BAZTERRICA OESTE": {"camas": 400, "productos": "Protocolo, Descartadores", "extra": ""}, "HOSPITAL TORNÚ": {"camas": 500, "productos": "Guantes, Paños, Incontinencia, Insumos", "extra": ""}, "HOSPITAL UDAONDO": {"camas": 250, "productos": "Protocolo, Guantes, Descartadores, Insumos", "extra": ""}, "CLÍNICA DEL SUR": {"camas": 100, "productos": "Guantes, Insumos, Paños, Protocolo", "extra": ""}, "CLÍNICA SAN JORGE": {"camas": 600, "productos": "Paños", "extra": ""}, "HOSPITAL ARTURO OÑATIVIA": {"camas": 150, "productos": "Guantes, Paños, Cofias", "extra": ""}, "SANATORIO SUR": {"camas": 250, "productos": "Protocolo, Guantes, Incontinencia, Paños", "extra": ""}, "HOSPITAL ZUBIZARRETA NORTE": {"camas": 500, "productos": "", "extra": ""}, "HOSPITAL MUNICIPAL DE SAN MARTÍN": {"camas": 100, "productos": "Insumos, Incontinencia", "extra": ""}, "CLÍNICA SAN PABLO": {"camas": 100, "productos": "Paños", "extra": ""}, "HOSPITAL DE QUILMES": {"camas": 600, "productos": "Incontinencia", "extra": ""}, "HOSPITAL DE BERAZATEGUI": {"camas": 800, "productos": "", "extra": ""}, "HOSPITAL GANDULFO": {"camas": 400, "productos": "", "extra": ""}, "HOSPITAL DE SAN FERNANDO": {"camas": 600, "productos": "", "extra": ""}, "HOSPITAL FIORITO": {"camas": 150, "productos": "Incontinencia, Insumos, Paños", "extra": ""}, "HOSPITAL DE FLORENCIO VARELA": {"camas": 400, "productos": "Incontinencia", "extra": ""}, "SANATORIO DR. JULIO MÉNDEZ": {"camas": 600, "productos": "Descartadores, Incontinencia, Guantes, Insumos", "extra": ""}, "HOSPITAL EVITA LANÚS": {"camas": 250, "productos": "Incontinencia, Guantes, Cofias, Descartadores", "extra": ""}, "SANATORIO MODELO CASEROS": {"camas": 800, "productos": "Guantes", "extra": ""}, "SANATORIO MODELO QUILMES": {"camas": 200, "productos": "Guantes, Insumos", "extra": ""}, "HOSPITAL DE LOMAS DE ZAMORA": {"camas": 600, "productos": "Insumos, Guantes, Descartadores", "extra": ""}, "HOSPITAL TEST GUARDADO": {"camas": 0, "productos": "", "extra": ""}, "TEST HOSPITAL VERIFICACION": {"camas": 0, "productos": "", "extra": ""}, "Sanatorio Las Lomas": {"camas": "400", "productos": "Guantes, Insumos, Paños", "extra": "", "estimados": "{\"panos\":5000}"}, "OEDRO": {"camas": 0, "productos": "", "extra": ""}, "oedro": {"camas": "", "productos": "", "extra": "", "estimados": ""}, "SERGIO": {"camas": 200, "productos": "", "extra": ""}, "Hospital Fernández": {"camas": "200", "productos": "Cofias, Descartadores, Incontinencia, Insumos", "extra": "", "estimados": "{\"panos\":4000,\"cofias\":1}"}, "EMI": {"camas": 0, "productos": "", "extra": ""}}, "savedAt": "2026-02-03T16:31:00"}
+</script>
+</body>
+</html>
