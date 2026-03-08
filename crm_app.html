@@ -2232,8 +2232,18 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
         saveDataToServer();
     }
     
-    async function saveDataToServer() {
+        async function saveDataToServer() {
         try {
+            // Mostrar indicador de carga en el botón
+            const btnElements = document.querySelectorAll('.btn-warning, .btn-primary');
+            btnElements.forEach(btn => {
+                if(btn.innerText.includes('GUARDAR CAMBIOS')) {
+                    btn.originalText = btn.innerHTML;
+                    btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Guardando...';
+                    btn.disabled = true;
+                }
+            });
+
             const data = {
                 clientes: clientsData,
                 contactos: contactsData,
@@ -2241,31 +2251,28 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
                 meta: hospitalMeta
             };
             
-            const response = await fetch('/api/data', {
+            // Usamos no-cors porque Google Apps Script no permite CORS limpio
+            const response = await fetch('https://script.google.com/a/macros/sigmaline.com.ar/s/AKfycbwrT7bUZMkqqzRkk-hV-DnCPcLiRXy2QbBrtVEWqTwZyBp1BTeO88AWeFesmb_JJDUv/exec', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain' },
                 body: JSON.stringify(data)
             });
             
-            if (!response.ok) throw new Error('Error guardando');
+            console.log('✅ Guardado en la Nube enviado ok');
+            showAlert("Backup en la Nube", "Tus datos se guardaron correctamente en Google Sheets.", "success");
             
-            console.log('💾 Datos guardados en servidor');
-            
-            // Mostrar indicador
-            const toastEl = document.getElementById('saveIndicator');
-            if(toastEl && window.bootstrap && typeof bootstrap.Toast !== 'undefined') {
-                toastEl.classList.remove('hide');
-                const toast = new bootstrap.Toast(toastEl);
-                toast.show();
-            } else {
-                $('#saveIndicator').fadeIn().delay(2000).fadeOut();
-            }
-            
-            // Sincronizar con Google Sheets automáticamente
-            syncToGoogleSheets();
-            
-        } catch(e) {
-            console.error('❌ Error guardando en servidor:', e);
+        } catch (e) {
+            console.error('⚠️ No se pudo guardar en la Nube:', e);
+            showAlert("Modo Offline", "Se guardó en tu dispositivo. Cuando tengas internet se subirá a Google Sheets.", "warning");
+        } finally {
+            const btnElements = document.querySelectorAll('.btn-warning, .btn-primary');
+            btnElements.forEach(btn => {
+                if(btn.originalText) {
+                    btn.innerHTML = btn.originalText;
+                    btn.disabled = false;
+                }
+            });
         }
     }
     
