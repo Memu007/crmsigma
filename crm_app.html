@@ -2908,7 +2908,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
                             </div>
                         </div>
                     </div>
-                    ${client[8] ? `<div class="d-flex align-items-center text-muted small mb-3"><i class="bi bi-geo-alt me-2"></i>${client[8]}</div>` : ''}
+                    ${client[8] ? `<div class="d-flex align-items-center text-muted small mb-3"><a href="https://maps.google.com/?q=${encodeURIComponent(client[8] + ', Argentina')}" target="_blank" class="text-decoration-none text-muted" title="Abrir en Google Maps"><i class="bi bi-geo-alt me-2 text-danger"></i>${client[8]}</a></div>` : ''}
                     <div class="client-last-visit ${visitClass}">
                         ${visitContent}
                     </div>
@@ -3535,7 +3535,9 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
                     <div class="client-metric mb-2">
                         <div class="client-metric-icon" style="background: #dcfce7; color: #16a34a;"><i class="bi bi-telephone-fill"></i></div>
                         <div>
-                            <div class="client-metric-value" style="font-size: 13px;">${datos || 'Sin teléfono'}</div>
+                            <div class="client-metric-value" style="font-size: 13px;">
+                                ${datos ? '<a class="text-decoration-none text-dark" href="https://wa.me/' + datos.replace(/[^0-9]/g, '') + '" target="_blank" title="Enviar WhatsApp">' + datos + ' <i class="bi bi-whatsapp text-success ms-1"></i></a>' : 'Sin teléfono'}
+                            </div>
                             <div class="client-metric-label">Teléfono</div>
                         </div>
                     </div>
