@@ -3177,7 +3177,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
         
         // Aplicar filtro de búsqueda por texto
         if (clientSearchTerm) {
-            filtered = filtered.filter(c => c[0].toLowerCase().includes(clientSearchTerm));
+            filtered = filtered.filter(c => removeAccents(c[0].toLowerCase()).includes(removeAccents(clientSearchTerm)));
             
             // También filtrar en tabla si hay término de búsqueda
             if (tables['clients']) {
@@ -3408,7 +3408,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
             
             // Aplicar filtro de búsqueda por texto
             if (visitSearchTerm) {
-                filtered = filtered.filter(v => v[2] && v[2].toLowerCase().includes(visitSearchTerm));
+                filtered = filtered.filter(v => v[2] && removeAccents(v[2].toLowerCase()).includes(removeAccents(visitSearchTerm)));
             }
             
             // Ordenar por fecha descendente
