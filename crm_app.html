@@ -2144,6 +2144,27 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
             visitsData = data.visitas || [];
             hospitalMeta = data.meta || {};
             
+            // Rescue mechanism for lost commercial summaries
+            const localMetaStr = localStorage.getItem('sigma_meta');
+            if (localMetaStr) {
+                try {
+                    const localMeta = JSON.parse(localMetaStr);
+                    let hasMoreText = false;
+                    for (let k in localMeta) {
+                        if (localMeta[k].extra) {
+                            hasMoreText = true;
+                            break;
+                        }
+                    }
+                    if (hasMoreText) {
+                        console.warn("Rescatando info comercial desde LocalStorage y subiendo a la nube!");
+                        Object.assign(hospitalMeta, localMeta);
+                        // Trigger async backup to backend immediately
+                        setTimeout(() => saveDataToServer(), 2000);
+                    }
+                } catch(e) {}
+            }
+            
             console.log('✅ Datos cargados del servidor:', {
                 clientes: clientsData.length,
                 contactos: contactsData.length,
