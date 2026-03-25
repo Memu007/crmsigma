@@ -2243,7 +2243,46 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
         saveDataToServer();
     }
     
-        async function saveDataToServer() {
+        function deleteClient(hospital) {
+        if(confirm('¿Seguro que deseas eliminar al cliente ' + hospital + ' y TODOS sus contactos y visitas?')) {
+            clientsData = clientsData.filter(c => c[0] !== hospital);
+            visitsData = visitsData.filter(v => v[2] !== hospital);
+            contactsData = contactsData.filter(c => c[0] !== hospital);
+            saveDataToLocal();
+            saveDataToServer();
+            initTables();
+            renderClientsCards();
+            renderVisitsCards();
+            renderContactsCards();
+            updateClientsKPIs();
+            alert('Cliente eliminado correctamente.');
+            window.location.reload();
+        }
+    }
+
+    function deleteContact(contactoId) {
+        if(confirm('¿Seguro que deseas eliminar este contacto?')) {
+            contactsData.splice(contactoId, 1);
+            saveDataToLocal();
+            saveDataToServer();
+            initTables();
+            renderContactsCards();
+            alert('Contacto eliminado.');
+        }
+    }
+
+    function deleteVisit(visitIndex) {
+        if(confirm('¿Seguro que deseas eliminar esta visita?')) {
+            visitsData.splice(visitIndex, 1);
+            saveDataToLocal();
+            saveDataToServer();
+            initTables();
+            renderVisitsCards();
+            alert('Visita eliminada.');
+        }
+    }
+
+    async function saveDataToServer() {
         try {
             // Mostrar indicador de carga en el botón
             const btnElements = document.querySelectorAll('.btn-warning, .btn-primary');
@@ -2746,6 +2785,9 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
                 </button>
                 <button class="btn btn-sm btn-outline-info" onclick="viewClientFicha('${hospitalName}')" title="Ver historial">
                     <i class="bi bi-eye"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteClient('${hospitalName}')" title="Eliminar cliente">
+                    <i class="bi bi-trash"></i>
                 </button>
             </div>`;
     }
@@ -3348,9 +3390,12 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
                         </div>` : ''}
                     </div>
                 </div>
-                <div class="client-card-footer">
+                <div class="client-card-footer d-flex gap-2">
                     <button class="btn btn-outline-secondary w-100" onclick="viewVisitDetailsFromCard('${fecha}', '${hospital}')" title="Ver detalle completo">
                         <i class="bi bi-eye me-2"></i>Ver Detalle Completo
+                    </button>
+                    <button class="btn btn-outline-danger px-3 py-0" onclick="deleteVisit(${visitsData.indexOf(visit)})" title="Eliminar visita">
+                        <i class="bi bi-trash"></i>
                     </button>
                 </div>
             </div>
@@ -3552,11 +3597,14 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
                         <div class="client-last-visit-title"><i class="bi bi-box-seam me-1"></i>${interes || 'Sin interés definido'}</div>
                     </div>
                 </div>
-                <div class="client-card-footer">
+                <div class="client-card-footer d-flex gap-2">
                     <button class="btn btn-outline-secondary" onclick="openEditContact(${contactsData.indexOf(contact)})" title="Editar">
                         <i class="bi bi-pencil-square"></i>
                     </button>
                     ${datos ? `<a href="tel:${datos.replace(/[^0-9+]/g, '')}" class="btn btn-success" title="Llamar"><i class="bi bi-telephone-fill"></i> Llamar</a>` : '<button class="btn btn-outline-secondary" disabled><i class="bi bi-telephone-x"></i></button>'}
+                    <button class="btn btn-outline-danger" onclick="deleteContact(${contactsData.indexOf(contact)})" title="Eliminar">
+                        <i class="bi bi-trash"></i>
+                    </button>
                 </div>
             </div>
         `;
