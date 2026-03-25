@@ -72,7 +72,7 @@ def init_db():
 
 @app.route('/')
 def index():
-    return send_from_directory('.', 'programa.html')
+    return send_from_directory('.', 'index.html')
 
 @app.route('/api/data', methods=['GET'])
 def get_data():
