@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ["python312", "gcc"]
+
+[phases.install]
+cmds = ["python -m venv /opt/venv", ". /opt/venv/bin/activate", "pip install --no-cache-dir -r requirements.txt"]
+
+[start]
+cmd = ". /opt/venv/bin/activate && gunicorn app:app -b 0.0.0.0:$PORT"
