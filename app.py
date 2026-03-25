@@ -1,112 +1,147 @@
 import os
 import json
+import sqlite3
+import psycopg2
 from flask import Flask, request, jsonify, send_from_directory
-from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from urllib.parse import urlparse
 
 app = Flask(__name__, static_url_path='', static_folder='.')
 CORS(app)
 
-# Configuration for Database
-# Railway provides DATABASE_URL. If running locally without it, fallback to SQLite.
 database_url = os.environ.get('DATABASE_URL')
-if database_url and database_url.startswith("postgres://"):
-    database_url = database_url.replace("postgres://", "postgresql://", 1)
 
-if not database_url:
-    # Ensure data directory exists for local testing
-    os.makedirs(os.path.join(app.root_path, 'data'), exist_ok=True)
-    database_url = f"sqlite:///{os.path.join(app.root_path, 'data', 'database.db')}"
-
-app.config['SQLALCHEMY_DATABASE_URI'] = database_url
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db = SQLAlchemy(app)
-
-class AppData(db.Model):
-    __tablename__ = 'app_data'
-    id = db.Column(db.Integer, primary_key=True)
-    # Storing the entire JSON payload in a single row
-    data = db.Column(db.JSON, nullable=False)
+def get_db_connection():
+    if database_url:
+        # Postgres connection
+        conn = psycopg2.connect(database_url)
+        return conn, 'postgres'
+    else:
+        # SQLite local fallback
+        os.makedirs(os.path.join(app.root_path, 'data'), exist_ok=True)
+        db_path = os.path.join(app.root_path, 'data', 'database.db')
+        conn = sqlite3.connect(db_path)
+        return conn, 'sqlite'
 
 def init_db():
-    with app.app_context():
-        # Create tables
-        db.create_all()
+    conn, db_type = get_db_connection()
+    cursor = conn.cursor()
+    
+    try:
+        if db_type == 'postgres':
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS app_data (
+                    id INTEGER PRIMARY KEY,
+                    data JSONB NOT NULL
+                )
+            """)
+        else:
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS app_data (
+                    id INTEGER PRIMARY KEY,
+                    data TEXT NOT NULL
+                )
+            """)
         
         # Check if database is empty
-        record = AppData.query.first()
+        cursor.execute("SELECT data FROM app_data WHERE id = 1")
+        record = cursor.fetchone()
+        
         if not record:
-            # Check if there is a local database.json to migrate
+            data = {"clientes":[], "contactos":[], "visitas":[], "meta":{}}
+            # Migrate local database.json if exists
             old_db_path = os.path.join(app.root_path, 'data', 'database.json')
             if os.path.exists(old_db_path):
-                print(f"Migrating existing data from {old_db_path} to database...")
+                print(f"Migrating existing data from {old_db_path}...")
                 with open(old_db_path, 'r', encoding='utf-8') as f:
                     try:
                         data = json.load(f)
                     except json.JSONDecodeError:
-                        data = {"clientes":[], "contactos":[], "visitas":[], "meta":{}}
-            else:
-                print("Initializing empty database...")
-                data = {"clientes":[], "contactos":[], "visitas":[], "meta":{}}
+                        pass
             
             # Insert initial data
-            new_record = AppData(id=1, data=data)
-            db.session.add(new_record)
-            db.session.commit()
+            if db_type == 'postgres':
+                cursor.execute("INSERT INTO app_data (id, data) VALUES (1, %s)", (json.dumps(data),))
+            else:
+                cursor.execute("INSERT INTO app_data (id, data) VALUES (1, ?)", (json.dumps(data),))
+            
+            conn.commit()
             print("Database initialized successfully.")
+    finally:
+        cursor.close()
+        conn.close()
 
-# Main index redirect
 @app.route('/')
 def index():
     return send_from_directory('.', 'programa.html')
 
-# API Endpoints matching previous server.py
 @app.route('/api/data', methods=['GET'])
 def get_data():
-    record = AppData.query.first()
-    if record and record.data:
-        return jsonify(record.data)
+    conn, db_type = get_db_connection()
+    try:
+        cursor = conn.cursor()
+        cursor.execute("SELECT data FROM app_data WHERE id = 1")
+        record = cursor.fetchone()
+        
+        if record:
+            raw_data = record[0]
+            if isinstance(raw_data, dict):
+                return jsonify(raw_data)
+            return jsonify(json.loads(raw_data))
+            
+    except Exception as e:
+        print("Error reading database:", e)
+    finally:
+        cursor.close()
+        conn.close()
+        
     return jsonify({"clientes":[], "contactos":[], "visitas":[], "meta":{}})
 
 @app.route('/api/data', methods=['POST'])
 def save_data():
+    conn, db_type = get_db_connection()
     try:
         data = request.get_json()
         if not data:
             return jsonify({"error": "Invalid or missing JSON"}), 400
             
-        record = AppData.query.first()
-        if record:
-            record.data = data
+        cursor = conn.cursor()
+        
+        if db_type == 'postgres':
+            cursor.execute("UPDATE app_data SET data = %s WHERE id = 1", (json.dumps(data),))
+            if cursor.rowcount == 0:
+                cursor.execute("INSERT INTO app_data (id, data) VALUES (1, %s)", (json.dumps(data),))
         else:
-            record = AppData(id=1, data=data)
-            db.session.add(record)
-            
-        db.session.commit()
+            cursor.execute("UPDATE app_data SET data = ? WHERE id = 1", (json.dumps(data),))
+            if cursor.rowcount == 0:
+                cursor.execute("INSERT INTO app_data (id, data) VALUES (1, ?)", (json.dumps(data),))
+                
+        conn.commit()
         return jsonify({"success": True})
     except Exception as e:
-        db.session.rollback()
+        conn.rollback()
+        print("Error saving database:", e)
         return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
+        conn.close()
 
-# Keep the backup endpoint to return empty to not break the frontend if it's there
 @app.route('/api/backups', methods=['GET'])
 def get_backups():
-    # Backups managed by Railway database now, returning empty list
     return jsonify([])
 
 @app.route('/api/backup', methods=['POST'])
 def create_backup():
     return jsonify({"success": True, "message": "Backups are automatically managed by the database."})
 
-# Catch-all for static files
 @app.route('/<path:path>')
 def send_static(path):
     return send_from_directory('.', path)
 
-# Initialize database
-init_db()
+# Only initialize DB locally safely, Railway config allows this block to run fine.
+try:
+    init_db()
+except Exception as e:
+    print("Database init warning (ok if first run):", e)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8000))
