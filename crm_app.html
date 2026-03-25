@@ -2248,33 +2248,33 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
         saveDataToServer();
     }
     
-        function deleteClient(hospital) {
+        async function deleteClient(hospital) {
         if(confirm('¿Seguro que deseas eliminar al cliente ' + hospital + ' y TODOS sus contactos y visitas?')) {
             clientsData = clientsData.filter(c => c[0] !== hospital);
             visitsData = visitsData.filter(v => v[2] !== hospital);
             contactsData = contactsData.filter(c => c[0] !== hospital);
             saveDataToLocal();
-            saveDataToServer();
+            await saveDataToServer();
             alert('Cliente eliminado correctamente.');
             window.location.reload();
         }
     }
 
-    function deleteContact(contactoId) {
+    async function deleteContact(contactoId) {
         if(confirm('¿Seguro que deseas eliminar este contacto?')) {
             contactsData.splice(contactoId, 1);
             saveDataToLocal();
-            saveDataToServer();
+            await saveDataToServer();
             alert('Contacto eliminado.');
             window.location.reload();
         }
     }
 
-    function deleteVisit(visitIndex) {
+    async function deleteVisit(visitIndex) {
         if(confirm('¿Seguro que deseas eliminar esta visita?')) {
             visitsData.splice(visitIndex, 1);
             saveDataToLocal();
-            saveDataToServer();
+            await saveDataToServer();
             alert('Visita eliminada.');
             window.location.reload();
         }
