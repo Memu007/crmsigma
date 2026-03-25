@@ -2955,15 +2955,18 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
                         ${visitContent}
                     </div>
                 </div>
-                <div class="client-card-footer">
-                    <button class="btn btn-outline-secondary" onclick="openEditClient('${hospital}')" title="Editar">
-                        <i class="bi bi-pencil-square"></i>Editar
+                <div class="client-card-footer d-flex gap-2">
+                    <button class="btn btn-outline-secondary flex-grow-1 px-1" onclick="openEditClient('${hospital}')" title="Editar">
+                        <i class="bi bi-pencil-square me-1"></i>Editar
                     </button>
-                    <button class="btn btn-primary" onclick="quickLogVisit('${hospital}')" title="Nueva visita">
-                        <i class="bi bi-journal-plus"></i>Visita
+                    <button class="btn btn-primary flex-grow-1 px-1" onclick="quickLogVisit('${hospital}')" title="Nueva visita">
+                        <i class="bi bi-journal-plus me-1"></i>Visita
                     </button>
-                    <button class="btn btn-outline-info" onclick="viewClientFicha('${hospital}')" title="Ver historial">
+                    <button class="btn btn-outline-info px-2" onclick="viewClientFicha('${hospital}')" title="Ver historial">
                         <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-outline-danger px-2" onclick="deleteClient('${hospital}')" title="Eliminar cliente">
+                        <i class="bi bi-trash"></i>
                     </button>
                 </div>
             </div>
