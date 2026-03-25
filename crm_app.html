@@ -1855,9 +1855,14 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
                     </div>
                 </div>
             </div>
-            <div class="modal-footer border-0 bg-white p-3">
-                <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button class="btn btn-primary" id="btnQuickVisitDetail"><i class="bi bi-journal-plus me-1"></i>Nueva Visita</button>
+            <div class="modal-footer border-0 bg-white p-3 d-flex justify-content-between w-100">
+                <button class="btn btn-outline-danger" onclick="deleteClient(window.currentDetailHospital)">
+                    <i class="bi bi-trash me-1"></i>Eliminar
+                </button>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button class="btn btn-primary" id="btnQuickVisitDetail"><i class="bi bi-journal-plus me-1"></i>Nueva Visita</button>
+                </div>
             </div>
         </div>
     </div>
