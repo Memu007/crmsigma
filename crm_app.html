@@ -2255,11 +2255,6 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
             contactsData = contactsData.filter(c => c[0] !== hospital);
             saveDataToLocal();
             saveDataToServer();
-            initTables();
-            renderClientsCards();
-            renderVisitsCards();
-            renderContactsCards();
-            updateClientsKPIs();
             alert('Cliente eliminado correctamente.');
             window.location.reload();
         }
@@ -2270,9 +2265,8 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
             contactsData.splice(contactoId, 1);
             saveDataToLocal();
             saveDataToServer();
-            initTables();
-            renderContactsCards();
             alert('Contacto eliminado.');
+            window.location.reload();
         }
     }
 
@@ -2281,9 +2275,8 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
             visitsData.splice(visitIndex, 1);
             saveDataToLocal();
             saveDataToServer();
-            initTables();
-            renderVisitsCards();
             alert('Visita eliminada.');
+            window.location.reload();
         }
     }
 
