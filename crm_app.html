@@ -2282,10 +2282,9 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
 
     async function saveDataToServer() {
         try {
-            // Mostrar indicador de carga en el botón
             const btnElements = document.querySelectorAll('.btn-warning, .btn-primary');
             btnElements.forEach(btn => {
-                if(btn.innerText.includes('GUARDAR CAMBIOS')) {
+                if(!btn.originalText && btn.innerHTML.indexOf('spinner') === -1) {
                     btn.originalText = btn.innerHTML;
                     btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Guardando...';
                     btn.disabled = true;
@@ -2299,25 +2298,28 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
                 meta: hospitalMeta
             };
             
-            // Usamos no-cors porque Google Apps Script no permite CORS limpio
-            const response = await fetch('https://script.google.com/a/macros/sigmaline.com.ar/s/AKfycbwrT7bUZMkqqzRkk-hV-DnCPcLiRXy2QbBrtVEWqTwZyBp1BTeO88AWeFesmb_JJDUv/exec', {
+            const response = await fetch('/api/data', {
                 method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain' },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
             
-            console.log('✅ Guardado en la Nube enviado ok');
-            showAlert("Backup en la Nube", "Tus datos se guardaron correctamente en Google Sheets.", "success");
+            if (!response.ok) throw new Error('Error guardando');
+            console.log('✅ Guardado en la base de datos completado');
+            showAlert("Guardado", "Tus datos se guardaron correctamente en la base de datos.", "success");
+            
+            // Sincronizar con Google Sheets automáticamente como respaldo si está configurado
+            syncToGoogleSheets();
             
         } catch (e) {
-            console.error('⚠️ No se pudo guardar en la Nube:', e);
-            showAlert("Modo Offline", "Se guardó en tu dispositivo. Cuando tengas internet se subirá a Google Sheets.", "warning");
+            console.error('⚠️ No se pudo guardar en el servidor:', e);
+            showAlert("Offline", "Error conectando con la base de datos.", "error");
         } finally {
             const btnElements = document.querySelectorAll('.btn-warning, .btn-primary');
             btnElements.forEach(btn => {
                 if(btn.originalText) {
                     btn.innerHTML = btn.originalText;
+                    delete btn.originalText;
                     btn.disabled = false;
                 }
             });
