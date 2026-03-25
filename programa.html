@@ -1,0 +1,3230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SigmaLine - App Comercial</title>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SheetJS para Excel Real -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- DataTables CSS Base -->
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <!-- DataTables Responsive CSS -->
+    <link href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css" rel="stylesheet">
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- CSS Externo -->
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+
+<div id="saveIndicator" class="toast align-items-center text-white bg-success border-0 show shadow" role="alert">
+  <div class="d-flex"><div class="toast-body"><i class="bi bi-cloud-check-fill me-2"></i> Guardado</div></div>
+</div>
+
+<!-- BARRA SUPERIOR MÓVIL -->
+<div class="mobile-top-bar">
+    <div class="d-flex align-items-center">
+        <!-- LOGO UNIDO -->
+        <span class="mobile-brand me-2">SIGMALINE</span>
+        <i class="bi bi-hospital-fill text-white-50"></i>
+    </div>
+    <div class="user-selector-mobile">
+        <select id="currentUserMobile" onchange="syncUserSelector(this.value)">
+            <option value="Emiliano">Emiliano</option>
+
+            <option value="Mauricio">Mauricio</option>
+            <option value="Gerencia">👔 Gerencia</option>
+        </select>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        
+        <!-- SIDEBAR -->
+        <div class="col-md-2 sidebar p-4 d-flex flex-column d-none d-md-flex">
+            <div class="mb-5 text-center">
+                <!-- LOGO UNIDO -->
+                <div class="brand-logo">SIGMALINE</div>
+                <small class="text-white-50">ARGENTINA</small>
+            </div>
+            
+            <div class="user-selector-desktop">
+                <label class="mb-2 text-white-50 text-uppercase small fw-bold">Perfil Activo</label>
+                <select id="currentUserDesktop" class="form-select form-select-sm shadow-sm" onchange="syncUserSelector(this.value)">
+                    <option value="Emiliano">Emiliano</option>
+
+                    <option value="Mauricio">Mauricio</option>
+                    <option value="Gerencia" class="fw-bold text-primary">👔 Gerencia (Ver Todos)</option>
+                </select>
+            </div>
+
+            <!-- BOTÓN GUARDAR CAMBIOS (AMARILLO) -->
+            <button id="btnGuardarCambios" class="btn w-100 mb-3" onclick="downloadBackup()" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border: none; color: white; font-weight: 700; padding: 14px 16px; border-radius: 12px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);">
+                <i class="bi bi-download me-2"></i>GUARDAR CAMBIOS
+            </button>
+            
+            <div class="nav flex-column gap-2">
+                <a onclick="switchView('clients')" id="nav-desk-clients" class="nav-link-desktop active"><i class="bi bi-briefcase-fill"></i> Clientes</a>
+
+                <a onclick="switchView('visits')" id="nav-desk-visits" class="nav-link-desktop"><i class="bi bi-journal-text"></i> Visitas</a>
+                <a onclick="switchView('contacts')" id="nav-desk-contacts" class="nav-link-desktop"><i class="bi bi-people-fill"></i> Contactos</a>
+                <a onclick="switchView('reports')" id="nav-desk-reports" class="nav-link-desktop"><i class="bi bi-bar-chart-fill"></i> Stats</a>
+            </div>
+            
+            <!-- Exportar y Sync -->
+            <div class="mt-4 pt-3 border-top border-secondary">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-sm btn-success" onclick="exportToExcel()"><i class="bi bi-file-earmark-excel"></i> Exportar Excel</button>
+                    <button class="btn btn-sm btn-info" onclick="manualSyncToSheets()">
+                        <span id="cloudSyncIndicator" class="me-1"><i class="bi bi-cloud-arrow-up"></i></span>
+                        Sincronizar Nube
+                    </button>
+                    <button class="btn btn-sm btn-outline-light" onclick="triggerRestore()"><i class="bi bi-cloud-upload"></i> Restaurar</button>
+                    <input type="file" id="restoreFile" style="display: none;" onchange="restoreBackup(this)" accept=".json,.csv">
+                    <button class="btn btn-sm btn-outline-secondary" onclick="configureGoogleSheets()" style="font-size: 0.7rem;">
+                        <i class="bi bi-gear me-1"></i>Configurar Nube
+                    </button>
+                </div>
+            </div>
+            
+            <div class="mt-auto">
+                <p class="text-white-50 small text-center mb-0">v3.5</p>
+            </div>
+        </div>
+
+        <!-- BARRA INFERIOR MÓVIL -->
+        <nav class="mobile-bottom-nav">
+            <a onclick="switchView('clients')" id="nav-mob-clients" class="mobile-nav-item active"><i class="bi bi-briefcase-fill"></i> Clientes</a>
+            <a onclick="switchView('visits')" id="nav-mob-visits" class="mobile-nav-item"><i class="bi bi-journal-plus"></i> Visitas</a>
+
+            <a onclick="switchView('contacts')" id="nav-mob-contacts" class="mobile-nav-item"><i class="bi bi-people"></i> Contactos</a>
+            <a onclick="switchView('reports')" id="nav-mob-reports" class="mobile-nav-item"><i class="bi bi-bar-chart"></i> Stats</a>
+        </nav>
+
+        <!-- CONTENIDO -->
+        <div class="col-12 col-md-10 main-content">
+
+            <!-- VISTA: CARTERA -->
+            <div id="view-clients">
+                <!-- KPIs Mini -->
+                <div class="clients-kpi-row">
+                    <div class="clients-kpi-mini">
+                        <div class="kpi-icon total"><i class="bi bi-building"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-number" id="kpiClientsTotal">0</div>
+                            <div class="kpi-label">Total</div>
+                        </div>
+                    </div>
+                    <div class="clients-kpi-mini">
+                        <div class="kpi-icon clientes"><i class="bi bi-check-circle-fill"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-number" id="kpiClientsActive">0</div>
+                            <div class="kpi-label">Clientes</div>
+                        </div>
+                    </div>
+                    <div class="clients-kpi-mini">
+                        <div class="kpi-icon prospectos"><i class="bi bi-bullseye"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-number" id="kpiClientsProspect">0</div>
+                            <div class="kpi-label">Prospectos</div>
+                        </div>
+                    </div>
+                    <div class="clients-kpi-mini">
+                        <div class="kpi-icon panos"><i class="bi bi-box-seam"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-number" id="kpiClientsPanos">0</div>
+                            <div class="kpi-label">Paños Est.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Header con filtros -->
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                        <div class="input-group" style="max-width: 250px;">
+                            <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                            <input type="text" class="form-control" id="clientSearchInput" placeholder="Buscar hospital..." oninput="filterClientsSearch()">
+                        </div>
+                        <div class="d-flex gap-2">
+                            <!-- Filtros Avanzados -->
+                            <select class="form-select form-select-sm" id="filterZone" style="width: auto;" onchange="renderClientsCards()">
+                                <option value="all">Zona: Todas</option>
+                                <option value="CABA">CABA</option>
+                                <option value="Buenos Aires">Buenos Aires</option>
+                                <option value="GBA Norte">GBA Norte</option>
+                                <option value="GBA Sur">GBA Sur</option>
+                                <option value="GBA Oeste">GBA Oeste</option>
+                                <option value="Catamarca">Catamarca</option>
+                                <option value="Chaco">Chaco</option>
+                                <option value="Chubut">Chubut</option>
+                                <option value="Córdoba">Córdoba</option>
+                                <option value="Corrientes">Corrientes</option>
+                                <option value="Entre Ríos">Entre Ríos</option>
+                                <option value="Formosa">Formosa</option>
+                                <option value="Jujuy">Jujuy</option>
+                                <option value="La Pampa">La Pampa</option>
+                                <option value="La Rioja">La Rioja</option>
+                                <option value="Mendoza">Mendoza</option>
+                                <option value="Misiones">Misiones</option>
+                                <option value="Neuquén">Neuquén</option>
+                                <option value="Río Negro">Río Negro</option>
+                                <option value="Salta">Salta</option>
+                                <option value="San Juan">San Juan</option>
+                                <option value="San Luis">San Luis</option>
+                                <option value="Santa Cruz">Santa Cruz</option>
+                                <option value="Santa Fe">Santa Fe</option>
+                                <option value="Santiago del Estero">Santiago del Estero</option>
+                                <option value="Tierra del Fuego">Tierra del Fuego</option>
+                                <option value="Tucumán">Tucumán</option>
+                            </select>
+                            <select class="form-select form-select-sm" id="filterType" style="width: auto;" onchange="renderClientsCards()">
+                                <option value="all">Tipo: Todos</option>
+                                <option value="Privado">Privado</option>
+                                <option value="Publico">Público</option>
+                            </select>
+                            <select class="form-select form-select-sm" id="filterPotential" style="width: auto;" onchange="renderClientsCards()">
+                                <option value="all">Potencial: Todos</option>
+                                <option value="Alto">Alto</option>
+                                <option value="Medio">Medio</option>
+                                <option value="Bajo">Bajo</option>
+                            </select>
+                            <select class="form-select form-select-sm" id="filterStatus" style="width: auto;" onchange="renderClientsCards()">
+                                <option value="all">Estado: Todos</option>
+                                <option value="CLIENTE">Clientes</option>
+                                <option value="PROSPECTO">Prospectos</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2 align-items-center">
+                        <div class="view-toggle d-none d-md-flex">
+                            <button class="btn btn-sm btn-outline-secondary active" id="viewCards" onclick="setViewMode('cards')" title="Vista tarjetas">
+                                <i class="bi bi-grid-3x2-gap"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary" id="viewTable" onclick="setViewMode('table')" title="Vista tabla">
+                                <i class="bi bi-list-ul"></i>
+                            </button>
+                        </div>
+                        <button class="btn btn-primary btn-sm shadow-sm rounded-pill px-3" onclick="openAddClientModal()" title="Agregar nuevo cliente">
+                            <i class="bi bi-plus-lg me-1"></i>Nuevo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Vista Tarjetas -->
+                <div id="clientsCardsView" class="clients-grid"></div>
+
+                <!-- Vista Tabla (oculta por defecto) -->
+                <div id="clientsTableView" class="card p-0" style="display: none;">
+                    <div class="card-body p-2 p-md-4">
+                        <table id="clientsTable" class="table table-hover align-middle w-100 dt-responsive nowrap">
+                            <thead>
+                                <tr>
+                                    <th>Hospital</th>
+                                    <th>Volumen</th>
+                                    <th>Zona</th>
+                                    <th>Tipo</th>
+                                    <th>Potencial</th>
+                                    <th>Última Visita</th>
+                                    <th>Estado</th>
+                                    <th>Responsable</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- VISTA: VISITAS -->
+            <div id="view-visits" style="display:none;">
+                <!-- KPIs de Visitas -->
+                <div class="clients-kpi-row">
+                    <div class="clients-kpi-mini">
+                        <div class="kpi-icon total"><i class="bi bi-journal-text"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-number" id="kpiVisitsTotal">0</div>
+                            <div class="kpi-label">Total</div>
+                        </div>
+                    </div>
+                    <div class="clients-kpi-mini">
+                        <div class="kpi-icon clientes"><i class="bi bi-calendar-check"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-number" id="kpiVisitsMonth">0</div>
+                            <div class="kpi-label">Este Mes</div>
+                        </div>
+                    </div>
+                    <div class="clients-kpi-mini">
+                        <div class="kpi-icon prospectos"><i class="bi bi-arrow-right-circle"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-number" id="kpiVisitsPending">0</div>
+                            <div class="kpi-label">Con Seguimiento</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filtros y acciones -->
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <div class="d-flex gap-2 align-items-center flex-wrap">
+                        <div class="input-group" style="max-width: 200px;">
+                            <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                            <input type="text" class="form-control" id="visitSearchInput" placeholder="Buscar hospital..." oninput="filterVisitsSearch()">
+                        </div>
+                        <div class="d-flex gap-1 flex-wrap">
+                            <span class="date-filter-chip" data-date="today" onclick="filterVisitsDate('today')">Hoy</span>
+                            <span class="date-filter-chip" data-date="week" onclick="filterVisitsDate('week')">Semana</span>
+                            <span class="date-filter-chip" data-date="month" onclick="filterVisitsDate('month')">Mes</span>
+                            <span class="date-filter-chip" data-date="3months" onclick="filterVisitsDate('3months')">3 Meses</span>
+                            <span class="date-filter-chip" data-date="6months" onclick="filterVisitsDate('6months')">6 Meses</span>
+                            <span class="date-filter-chip active" data-date="all" onclick="filterVisitsDate('all')">Todas</span>
+                        </div>
+                        <small class="text-muted d-none d-md-block">Filtro: <span id="visitsUserLabelDesktop">Todos</span></small>
+                    </div>
+                    <div class="d-flex gap-2 align-items-center">
+                        <div class="view-toggle d-none d-md-flex">
+                            <button class="btn btn-sm btn-outline-secondary active" id="viewVisitsCards" onclick="setVisitsViewMode('cards')" title="Vista tarjetas">
+                                <i class="bi bi-grid-3x2-gap"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary" id="viewVisitsTable" onclick="setVisitsViewMode('table')" title="Vista tabla">
+                                <i class="bi bi-list-ul"></i>
+                            </button>
+                        </div>
+                        <button class="btn btn-outline-success btn-sm" onclick="exportTableToCSV('#visitsTable', 'Reporte.csv')" title="Exportar CSV">
+                            <i class="bi bi-download"></i>
+                        </button>
+                        <button class="btn btn-primary btn-sm shadow-sm rounded-pill px-3" onclick="openVisitModal()" title="Cargar visita">
+                            <i class="bi bi-pen-fill me-1"></i>Cargar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Vista Tarjetas -->
+                <div id="visitsCardsView" class="visits-grid"></div>
+
+                <!-- Vista Tabla -->
+                <div id="visitsTableView" class="card p-0" style="display: none;">
+                    <div class="card-body p-2 p-md-4">
+                        <table id="visitsTable" class="table table-striped align-middle w-100 dt-responsive nowrap">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Hospital</th>
+                                    <th>Gestión</th>
+                                    <th>Vendedor</th>
+                                    <th>Próximo</th>
+                                    <th>Ver</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VISTA: FICHAS -->
+            <div id="view-hospitals" style="display:none;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-primary fw-bold mb-0">Fichas</h4>
+                    <button class="btn btn-outline-dark btn-sm rounded-pill" onclick="exportTableToCSV('#hospitalsTable', 'Sigma_Fichas.csv')"><i class="bi bi-download"></i></button>
+                </div>
+                <div class="card p-0">
+                    <div class="card-body p-2 p-md-4">
+                        <table id="hospitalsTable" class="table table-hover align-middle w-100 dt-responsive nowrap">
+                            <thead>
+                                <tr>
+                                    <th>Hospital</th>
+                                    <th>Próximo Paso</th>
+                                    <th>Productos</th>
+                                    <th>Camas</th>
+                                    <th>Extra</th>
+                                    <th>Edit</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- VISTA: CONTACTOS -->
+            <div id="view-contacts" style="display:none;">
+                <!-- KPIs de Contactos -->
+                <div class="clients-kpi-row">
+                    <div class="clients-kpi-mini">
+                        <div class="kpi-icon total"><i class="bi bi-people-fill"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-number" id="kpiContactsTotal">0</div>
+                            <div class="kpi-label">Total</div>
+                        </div>
+                    </div>
+                    <div class="clients-kpi-mini">
+                        <div class="kpi-icon clientes"><i class="bi bi-telephone-fill"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-number" id="kpiContactsWithPhone">0</div>
+                            <div class="kpi-label">Con Teléfono</div>
+                        </div>
+                    </div>
+                    <div class="clients-kpi-mini">
+                        <div class="kpi-icon panos"><i class="bi bi-hospital"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-number" id="kpiContactsHospitals">0</div>
+                            <div class="kpi-label">Hospitales</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filtros y acciones -->
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <div class="d-flex gap-2 align-items-center">
+                        <input type="text" class="form-control form-control-sm" placeholder="Buscar contacto..." id="contactSearchInput" style="max-width: 200px;" oninput="filterContactsSearch()">
+                    </div>
+                    <div class="d-flex gap-2 align-items-center">
+                        <div class="view-toggle d-none d-md-flex">
+                            <button class="btn btn-sm btn-outline-secondary active" id="viewContactsCards" onclick="setContactsViewMode('cards')" title="Vista tarjetas">
+                                <i class="bi bi-grid-3x2-gap"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary" id="viewContactsTable" onclick="setContactsViewMode('table')" title="Vista tabla">
+                                <i class="bi bi-list-ul"></i>
+                            </button>
+                        </div>
+                        <button class="btn btn-primary btn-sm shadow-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#addContactModal" title="Nuevo contacto">
+                            <i class="bi bi-plus-lg me-1"></i>Nuevo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Vista Tarjetas -->
+                <div id="contactsCardsView" class="contacts-grid"></div>
+
+                <!-- Vista Tabla -->
+                <div id="contactsTableView" class="card p-0" style="display: none;">
+                    <div class="card-body p-2 p-md-4">
+                        <table id="mainTable" class="table table-hover align-middle w-100 dt-responsive nowrap">
+                            <thead>
+                                <tr>
+                                    <th>Hospital</th>
+                                    <th>Nombre</th>
+                                    <th>Puesto</th>
+                                    <th>Datos</th>
+                                    <th>Estado</th>
+                                    <th>Interés</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VISTA: REPORTES -->
+            <div id="view-reports" style="display:none;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-primary fw-bold mb-0">Estadísticas</h4>
+                    <span class="badge bg-white text-secondary border" id="statsBadge">Datos de: <span id="statsUserLabel">Todos</span></span>
+                </div>
+                
+                <!-- KPIs principales -->
+                <div class="row g-3 mb-4">
+                    <div class="col-6 col-md-3">
+                        <div class="card kpi-card p-3 h-100 text-center">
+                            <div class="kpi-value text-primary" id="statsVisitasTotal">0</div>
+                            <div class="text-muted small text-uppercase">Visitas Totales</div>
+                            <small class="text-success" id="statsVisitasTrend">—</small>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="card kpi-card p-3 h-100 text-center" style="border-color: #28a745;">
+                            <div class="kpi-value text-success" id="statsClientesActivos">0</div>
+                            <div class="text-muted small text-uppercase">Clientes Activos</div>
+                            <small class="text-muted" id="statsClientesPct">—</small>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="card kpi-card p-3 h-100 text-center" style="border-color: #17a2b8;">
+                            <div class="kpi-value text-info" id="statsProspectos">0</div>
+                            <div class="text-muted small text-uppercase">Prospectos</div>
+                            <small class="text-muted">En pipeline</small>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="card kpi-card p-3 h-100 text-center" style="border-color: #ffc107;">
+                            <div class="kpi-value text-warning" id="statsPanosTotal">0</div>
+                            <div class="text-muted small text-uppercase">Paños Est.</div>
+                            <small class="text-muted">mensual</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Gráficos y tablas -->
+                <div class="row g-3 mb-4">
+                    <!-- Actividad mensual -->
+                    <div class="col-12 col-md-6">
+                        <div class="card h-100 p-3">
+                            <h6 class="card-title text-secondary mb-3">
+                                <i class="bi bi-graph-up me-2"></i>Actividad Mensual
+                            </h6>
+                            <div style="height: 200px;">
+                                <canvas id="chartActivityMonthly"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Distribución por estado -->
+                    <div class="col-12 col-md-6">
+                        <div class="card h-100 p-3">
+                            <h6 class="card-title text-secondary mb-3">
+                                <i class="bi bi-pie-chart me-2"></i>Pipeline
+                            </h6>
+                            <div style="height: 200px;">
+                                <canvas id="chartPipeline"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row g-3">
+                    <!-- Top 5 Clientes -->
+                    <div class="col-12 col-md-6">
+                        <div class="card h-100 p-3">
+                            <h6 class="card-title text-secondary mb-3">
+                                <i class="bi bi-trophy me-2"></i>Top 5 Clientes (por paños)
+                            </h6>
+                            <ul class="list-group list-group-flush" id="statsTopClientes">
+                                <li class="list-group-item text-muted">Cargando...</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Distribución por zona -->
+                    <div class="col-12 col-md-6">
+                        <div class="card h-100 p-3">
+                            <h6 class="card-title text-secondary mb-3">
+                                <i class="bi bi-geo-alt me-2"></i>Clientes por Zona
+                            </h6>
+                            <ul class="list-group list-group-flush" id="statsZonas">
+                                <li class="list-group-item text-muted">Cargando...</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- MODALES -->
+
+<div class="modal fade" id="viewVisitModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 20px; overflow: hidden; border: none; box-shadow: 0 25px 50px rgba(0,0,0,0.15);">
+            <div class="modal-header border-0 pb-0" style="background: linear-gradient(135deg, #0f172a 0%, #334155 100%); padding: 1.5rem;">
+                <div class="w-100">
+                    <span class="badge bg-white text-dark rounded-pill px-3 py-2 mb-2 shadow-sm">
+                        <i class="bi bi-calendar3 me-1"></i><span id="viewVisitDate">-</span>
+                    </span>
+                    <h4 class="modal-title text-white fw-bold mb-0" id="viewVisitHospital">-</h4>
+                </div>
+                <button type="button" class="btn-close btn-close-white position-absolute" style="top: 1rem; right: 1rem;" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="mb-4">
+                    <h6 class="text-primary fw-bold mb-2 text-uppercase small">
+                        <i class="bi bi-chat-left-text me-2"></i>Reporte de Visita
+                    </h6>
+                    <div class="p-3 bg-light rounded-3 border" id="viewVisitDetail" style="white-space: pre-line; min-height: 80px; font-size: 0.95rem; line-height: 1.6;"></div>
+                </div>
+                
+                <div class="p-3 rounded-3 border-start border-4 border-success bg-success-subtle" id="viewVisitNextContainer">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3" style="width: 36px; height: 36px;">
+                            <i class="bi bi-arrow-right-circle-fill"></i>
+                        </div>
+                        <div>
+                            <small class="text-success-emphasis fw-bold text-uppercase" style="font-size: 0.7rem;">Próximo Paso</small>
+                            <div class="text-dark fw-medium" id="viewVisitNext">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0 p-4 pt-0">
+                <button class="btn btn-outline-secondary w-100 rounded-pill py-2" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg me-2"></i>Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addVisitModal" tabindex="-1">
+    <div class="modal-dialog modal-fullscreen-sm-down modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Nueva Visita</h5>
+                <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addVisitForm">
+                    <div class="mb-2 text-center">
+                        <span class="badge bg-light text-dark">Usuario: <span id="visitVendorName"></span></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="fw-bold">Fecha</label>
+                            <input type="date" class="form-control" id="vFecha">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="fw-bold">Hospital</label>
+                            <input class="form-control" list="hospitalOptions" id="vHospital" placeholder="Escribe para buscar..." required>
+                            <datalist id="hospitalOptions"></datalist>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="fw-bold text-success">Título de la Reunión</label>
+                        <input type="text" class="form-control" id="vTitulo" placeholder="Ej: Presentación cofias, Seguimiento pedido..." maxlength="100">
+                        <small class="text-muted">Este título aparecerá en la tarjeta del cliente</small>
+                    </div>
+
+                    <!-- SECCIÓN PRODUCTOS -->
+                    <div class="card mb-3 bg-light border-0">
+                        <div class="card-body py-2">
+                            <h6 class="fw-bold text-primary mb-2"><i class="bi bi-box-seam me-2"></i>Productos Entregados / Vendidos</h6>
+                            <div class="row g-2">
+                                <div class="col-6 col-md-3">
+                                    <label class="small text-muted">Paños</label>
+                                    <input type="number" class="form-control form-control-sm" id="prodPanos" placeholder="0">
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <label class="small text-muted">Cofias</label>
+                                    <input type="number" class="form-control form-control-sm" id="prodCofias" placeholder="0">
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <label class="small text-muted">Incontinencia</label>
+                                    <input type="number" class="form-control form-control-sm" id="prodIncont" placeholder="0">
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <label class="small text-muted">Pediátricos</label>
+                                    <input type="number" class="form-control form-control-sm" id="prodPediat" placeholder="0">
+                                </div>
+                                <div class="col-4">
+                                    <label class="small text-muted">Desc. 2L</label>
+                                    <input type="number" class="form-control form-control-sm" id="prodDesc2L" placeholder="0">
+                                </div>
+                                <div class="col-4">
+                                    <label class="small text-muted">Desc. 4L</label>
+                                    <input type="number" class="form-control form-control-sm" id="prodDesc4L" placeholder="0">
+                                </div>
+                                <div class="col-4">
+                                    <label class="small text-muted">Desc. 7L</label>
+                                    <input type="number" class="form-control form-control-sm" id="prodDesc7L" placeholder="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="fw-bold">Detalle</label>
+                        <textarea class="form-control" id="vDetalle" rows="4" placeholder="¿Qué pasó en la visita?"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="fw-bold text-primary">Próximo Paso</label>
+                        <input type="text" class="form-control" id="vNext" placeholder="Ej: Volver el lunes">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success w-100" onclick="addVisit()">Guardar Reporte</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addClientModal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header bg-dark text-white"><h5 class="modal-title"><i class="bi bi-building me-2"></i>Nuevo Cliente / Hospital</h5><button class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body">
+<form id="addClientForm">
+    <!-- Fila 1: Hospital & Responsable -->
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <label class="form-label fw-bold">Hospital / Institución</label>
+            <input type="text" class="form-control" id="cHospital" placeholder="Nombre del hospital">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Responsable</label>
+            <select id="cResponsable" class="form-select">
+                <option value="Emiliano">Emiliano</option>
+
+                <option value="Mauricio">Mauricio</option>
+            </select>
+        </div>
+    </div>
+    <!-- Fila 2: Estado, Paños, Camas -->
+    <div class="row mb-3">
+        <div class="col-4">
+            <label class="form-label">Estado</label>
+            <select id="cEstado" class="form-select">
+                <option value="CLIENTE">CLIENTE</option>
+                <option value="PROSPECTO">PROSPECTO</option>
+            </select>
+        </div>
+        <div class="col-4">
+            <label class="form-label">Paños Est.</label>
+            <input type="number" class="form-control" id="cPanos" placeholder="0">
+        </div>
+        <div class="col-4">
+            <label class="form-label">Camas</label>
+            <input type="number" class="form-control" id="cCamas" placeholder="0">
+        </div>
+    </div>
+    <!-- Fila 3: Zona, Tipo, Potencial, Probabilidad -->
+    <div class="row mb-3">
+        <div class="col-md-3 col-6">
+            <label class="form-label">Zona</label>
+            <select id="cZona" class="form-select">
+                <option value="CABA">CABA</option>
+                <option value="Buenos Aires">Buenos Aires</option>
+                <option value="GBA Norte">GBA Norte</option>
+                <option value="GBA Sur">GBA Sur</option>
+                <option value="GBA Oeste">GBA Oeste</option>
+                <option value="Catamarca">Catamarca</option>
+                <option value="Chaco">Chaco</option>
+                <option value="Chubut">Chubut</option>
+                <option value="Córdoba">Córdoba</option>
+                <option value="Corrientes">Corrientes</option>
+                <option value="Entre Ríos">Entre Ríos</option>
+                <option value="Formosa">Formosa</option>
+                <option value="Jujuy">Jujuy</option>
+                <option value="La Pampa">La Pampa</option>
+                <option value="La Rioja">La Rioja</option>
+                <option value="Mendoza">Mendoza</option>
+                <option value="Misiones">Misiones</option>
+                <option value="Neuquén">Neuquén</option>
+                <option value="Río Negro">Río Negro</option>
+                <option value="Salta">Salta</option>
+                <option value="San Juan">San Juan</option>
+                <option value="San Luis">San Luis</option>
+                <option value="Santa Cruz">Santa Cruz</option>
+                <option value="Santa Fe">Santa Fe</option>
+                <option value="Santiago del Estero">Santiago del Estero</option>
+                <option value="Tierra del Fuego">Tierra del Fuego</option>
+                <option value="Tucumán">Tucumán</option>
+            </select>
+        </div>
+        <div class="col-md-3 col-6">
+            <label class="form-label">Tipo</label>
+            <select id="cTipo" class="form-select">
+                <option value="Privado">Privado</option>
+                <option value="Publico">Público</option>
+            </select>
+        </div>
+        <div class="col-md-3 col-6">
+            <label class="form-label">Potencial</label>
+            <select id="cPotencial" class="form-select">
+                <option value="Alto">Alto</option>
+                <option value="Medio">Medio</option>
+                <option value="Bajo">Bajo</option>
+            </select>
+        </div>
+        <div class="col-md-3 col-6">
+            <label class="form-label">Probabilidad</label>
+            <select id="cProbabilidad" class="form-select">
+                <option value="Alta">Alta</option>
+                <option value="Media-Alta">Media-Alta</option>
+                <option value="Media" selected>Media</option>
+                <option value="Media-Baja">Media-Baja</option>
+                <option value="Baja">Baja</option>
+            </select>
+        </div>
+    </div>
+    <!-- Fila 4: Productos & Info Extra -->
+    <div class="mb-3">
+        <label class="form-label text-success"><i class="bi bi-box-seam me-1"></i>Productos de interés</label>
+        <input type="text" class="form-control" id="cProductos" placeholder="Ej: Cofias, Paños, Incontinencia...">
+    </div>
+    <div class="mb-3">
+        <label class="form-label"><i class="bi bi-geo-alt me-1"></i>Dirección</label>
+        <input type="text" class="form-control" id="cDireccion" placeholder="Ej: Av. Pte. Perón 4190, CABA">
+    </div>
+    <div class="mb-3">
+        <label class="form-label text-info"><i class="bi bi-info-circle me-1"></i>Info Extra</label>
+        <textarea class="form-control" id="cExtra" rows="2" placeholder="Qué usaban antes, notas importantes..."></textarea>
+    </div>
+</form>
+
+<!-- Sección Contactos Inline -->
+<div class="mt-4 pt-3 border-top">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="mb-0 text-secondary"><i class="bi bi-people-fill me-2"></i>Contactos del Hospital</h6>
+        <button type="button" class="btn btn-sm btn-outline-primary" onclick="toggleInlineContactForm()">
+            <i class="bi bi-plus-lg me-1"></i>Agregar Contacto
+        </button>
+    </div>
+    
+    <!-- Mini formulario contacto (oculto por defecto) -->
+    <div id="inlineContactForm" style="display:none; background: #f8fafc; border-radius: 12px; padding: 16px; margin-bottom: 16px; border: 1px dashed #cbd5e1;">
+        <div class="row g-2 mb-2">
+            <div class="col-6"><input type="text" class="form-control form-control-sm" id="icNombre" placeholder="Nombre del contacto"></div>
+            <div class="col-6"><input type="text" class="form-control form-control-sm" id="icPuesto" placeholder="Puesto"></div>
+        </div>
+        <div class="row g-2 mb-2">
+            <div class="col-6"><input type="text" class="form-control form-control-sm" id="icTelefono" placeholder="Teléfono"></div>
+            <div class="col-6"><input type="text" class="form-control form-control-sm" id="icInteres" placeholder="Interés (productos)"></div>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-success btn-sm flex-grow-1" onclick="addInlineContact()"><i class="bi bi-check-lg me-1"></i>Agregar</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="toggleInlineContactForm()"><i class="bi bi-x-lg"></i></button>
+        </div>
+    </div>
+    
+    <!-- Lista de contactos pendientes -->
+    <div id="pendingContactsList"></div>
+    <div id="noContactsMsg" class="text-center text-muted py-3" style="font-size: 13px;">
+        <i class="bi bi-person-plus-fill d-block" style="font-size: 24px; opacity: 0.5;"></i>
+        Podés agregar contactos ahora o después
+    </div>
+</div>
+
+</div><div class="modal-footer"><button class="btn btn-primary w-100" onclick="addClient()"><i class="bi bi-save me-1"></i>Guardar Cliente</button></div></div></div></div>
+
+<div class="modal fade" id="addContactModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-secondary text-white"><h5 class="modal-title">Contacto</h5><button class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><form id="addContactForm"><div class="mb-2"><label class="fw-bold">Hospital</label><input class="form-control" list="hospitalOptionsContact" id="ctHospital" placeholder="Escribe para buscar..."><datalist id="hospitalOptionsContact"></datalist></div><div class="row mb-2"><div class="col"><label>Nombre</label><input type="text" class="form-control" id="ctNombre"></div><div class="col"><label>Puesto</label><input type="text" class="form-control" id="ctPuesto"></div></div><div class="row mb-2"><div class="col"><label>Teléfono</label><input type="text" class="form-control" id="ctDatos" placeholder="Ej: 11-1234-5678"></div><div class="col"><label>Email</label><input type="email" class="form-control" id="ctEmail" placeholder="ejemplo@mail.com"></div></div><div class="mb-2"><label>Interés</label><input type="text" class="form-control" id="ctInteres" placeholder="Qué productos le interesan"></div></form></div><div class="modal-footer"><button class="btn btn-primary w-100" onclick="addContact()">Guardar</button></div></div></div></div>
+
+<!-- Modal Editar Contacto -->
+<div class="modal fade" id="editContactModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius: 16px; overflow: hidden; border: none;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #0f172a 0%, #334155 100%);">
+                <h5 class="modal-title text-white"><i class="bi bi-pencil-square me-2"></i>Editar Contacto</h5>
+                <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body bg-light p-4">
+                <input type="hidden" id="editContactIndex">
+                
+                <div class="mb-3">
+                    <label class="small text-muted fw-bold">Hospital</label>
+                    <input class="form-control" list="hospitalOptionsContactEdit" id="editCtHospital" placeholder="Escribe para buscar...">
+                    <datalist id="hospitalOptionsContactEdit"></datalist>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <label class="small text-muted fw-bold">Nombre</label>
+                        <input type="text" class="form-control" id="editCtNombre">
+                    </div>
+                    <div class="col-6">
+                        <label class="small text-muted fw-bold">Puesto</label>
+                        <input type="text" class="form-control" id="editCtPuesto">
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <label class="small text-muted fw-bold">Teléfono</label>
+                        <input type="text" class="form-control" id="editCtDatos" placeholder="Ej: 11-1234-5678">
+                    </div>
+                    <div class="col-6">
+                        <label class="small text-muted fw-bold">Email</label>
+                        <input type="email" class="form-control" id="editCtEmail" placeholder="ejemplo@mail.com">
+                    </div>
+                </div>
+                
+                <div class="mb-0">
+                    <label class="small text-muted fw-bold">Interés (Productos)</label>
+                    <input type="text" class="form-control" id="editCtInteres" placeholder="Qué productos le interesan">
+                </div>
+            </div>
+            <div class="modal-footer border-0 bg-light p-4 pt-0">
+                <button class="btn btn-danger me-auto" onclick="deleteContact()">
+                    <i class="bi bi-trash me-1"></i>Eliminar
+                </button>
+                <button class="btn btn-primary px-4" onclick="saveContactChanges()">
+                    <i class="bi bi-check-lg me-1"></i>Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Ficha Institucional Completa -->
+<div class="modal fade" id="clientDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 24px; overflow: hidden;">
+            <div class="modal-header bg-primary text-white border-0" style="background: linear-gradient(135deg, #0f172a 0%, #334155 100%) !important; padding: 24px;">
+                <div>
+                    <h5 class="modal-title fw-bold" id="detailModalTitle" style="font-size: 24px;"></h5>
+                    <div class="d-flex align-items-center gap-2 mt-2 flex-wrap">
+                        <span id="detailBadgeStatus"></span>
+                        <span id="detailResponsable" class="badge bg-white text-dark"><i class="bi bi-person-fill me-1"></i></span>
+                        <span id="detailZona" class="badge bg-light text-dark border"></span>
+                        <span id="detailTipo" class="badge bg-light text-dark border"></span>
+                    </div>
+                    <div id="detailDireccion" class="mt-3 text-white" style="display: none; font-size: 15px;"><i class="bi bi-geo-alt-fill me-2"></i><span></span></div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body bg-light p-4">
+                <!-- Métricas Principales -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3">
+                        <div class="p-3 bg-white rounded-4 shadow-sm h-100 text-center border transition-hover">
+                            <i class="bi bi-box-seam fs-2 text-primary mb-2 d-block"></i>
+                            <div class="fw-bold fs-4 text-dark" id="detailPanos"></div>
+                            <small class="text-muted text-uppercase fw-bold" style="font-size: 11px;">Paños Est.</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-white rounded-4 shadow-sm h-100 text-center border transition-hover">
+                            <i class="bi bi-hospital fs-2 text-warning mb-2 d-block"></i>
+                            <div class="fw-bold fs-4 text-dark" id="detailCamas"></div>
+                            <small class="text-muted text-uppercase fw-bold" style="font-size: 11px;">Camas</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-white rounded-4 shadow-sm h-100 text-center border transition-hover">
+                            <i class="bi bi-graph-up-arrow fs-2 text-success mb-2 d-block"></i>
+                            <div class="fw-bold fs-4 text-dark" id="detailProbabilidad"></div>
+                            <small class="text-muted text-uppercase fw-bold" style="font-size: 11px;" id="detailProbabilidadLabel">Estado</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-white rounded-4 shadow-sm h-100 text-center border transition-hover">
+                            <div id="detailPotencialIcon" class="fs-2 mb-2 d-block"></div>
+                            <div class="fw-bold fs-4 text-dark" id="detailPotencial"></div>
+                            <small class="text-muted text-uppercase fw-bold" style="font-size: 11px;">Potencial</small>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="p-3 bg-white rounded-4 shadow-sm border">
+                            <h6 class="text-secondary fw-bold mb-2 small text-uppercase"><i class="bi bi-info-circle me-1"></i>Info Comercial</h6>
+                            <p class="mb-1 small"><strong>Productos:</strong> <span id="detailProducts" class="text-muted"></span></p>
+                            <p class="mb-0 small"><strong>Notas:</strong> <span id="detailExtra" class="text-muted"></span></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Resumen de Productos Vendidos -->
+                    <div class="col-12">
+                        <div class="p-3 bg-white rounded-4 shadow-sm border" id="detailProductsContainer" style="display: none;">
+                            <h6 class="text-primary fw-bold mb-3 small text-uppercase"><i class="bi bi-box-seam me-1"></i>Consumo Estimado</h6>
+                            <div class="row g-2" id="detailProductsSummary">
+                                <!-- Se llena dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <!-- Columna Izquierda: Contactos -->
+                    <div class="col-md-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-people-fill text-primary me-2"></i>Contactos</h6>
+                            <button class="btn btn-sm btn-outline-primary" onclick="goToContactsFiltered()" title="Ver todos los contactos">
+                                <i class="bi bi-arrow-right"></i> Ver todos
+                            </button>
+                        </div>
+                        <div id="detailContactsList" class="d-flex flex-column gap-2">
+                            <!-- Lista de contactos -->
+                        </div>
+                    </div>
+
+                    <!-- Columna Derecha: Historial Visitas -->
+                    <div class="col-md-7">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-clock-history text-success me-2"></i>Últimas Visitas</h6>
+                            <button class="btn btn-sm btn-outline-success" onclick="goToVisitsFiltered()" title="Ver todas las visitas">
+                                <i class="bi bi-arrow-right"></i> Ver todos
+                            </button>
+                        </div>
+                        <div id="detailVisitsList" class="d-flex flex-column gap-3">
+                            <!-- Timeline de visitas -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0 bg-white p-3">
+                <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button class="btn btn-primary" id="btnQuickVisitDetail"><i class="bi bi-journal-plus me-1"></i>Nueva Visita</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editClientModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white" style="background: linear-gradient(135deg, #0f172a 0%, #334155 100%) !important;">
+                <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Editar Ficha Cliente</h5>
+                <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body bg-light">
+                <input type="hidden" id="editHospName">
+                <h4 id="displayHospName" class="text-primary fw-bold mb-4 border-bottom pb-2"></h4>
+                
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-body">
+                        <h6 class="text-secondary fw-bold mb-3">Datos Generales</h6>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="small text-muted fw-bold">Responsable</label>
+                                <select id="editResponsable" class="form-select">
+                                    <option value="Emiliano">Emiliano</option>
+                                    <option value="Mauricio">Mauricio</option>
+                                    <option value="Agustina">Agustina</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small text-muted fw-bold">Estado</label>
+                                <select id="editEstado" class="form-select">
+                                    <option value="CLIENTE">CLIENTE</option>
+                                    <option value="PROSPECTO">PROSPECTO</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="small text-muted fw-bold">Dirección</label>
+                                <input type="text" class="form-control" id="editDireccion" placeholder="Dirección completa">
+                            </div>
+                        </div>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="small text-muted fw-bold">Camas Totales</label>
+                                <input type="number" class="form-control" id="editCamas" placeholder="0">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="small text-muted fw-bold">Zona</label>
+                                <select id="editZonaFicha" class="form-select">
+                                    <option value="CABA">CABA</option><option value="Buenos Aires">Buenos Aires</option><option value="GBA Norte">GBA Norte</option><option value="GBA Sur">GBA Sur</option><option value="GBA Oeste">GBA Oeste</option>
+                                    <option value="Catamarca">Catamarca</option><option value="Chaco">Chaco</option><option value="Chubut">Chubut</option><option value="Córdoba">Córdoba</option><option value="Corrientes">Corrientes</option>
+                                    <option value="Entre Ríos">Entre Ríos</option><option value="Formosa">Formosa</option><option value="Jujuy">Jujuy</option><option value="La Pampa">La Pampa</option><option value="La Rioja">La Rioja</option>
+                                    <option value="Mendoza">Mendoza</option><option value="Misiones">Misiones</option><option value="Neuquén">Neuquén</option><option value="Río Negro">Río Negro</option><option value="Salta">Salta</option>
+                                    <option value="San Juan">San Juan</option><option value="San Luis">San Luis</option><option value="Santa Cruz">Santa Cruz</option><option value="Santa Fe">Santa Fe</option>
+                                    <option value="Santiago del Estero">Santiago del Estero</option><option value="Tierra del Fuego">Tierra del Fuego</option><option value="Tucumán">Tucumán</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="small text-muted fw-bold">Tipo Institución</label>
+                                <select id="editTipoFicha" class="form-select">
+                                    <option value="Privado">Privado</option>
+                                    <option value="Publico">Público</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small text-muted fw-bold">Potencial</label>
+                                <select id="editPotencialFicha" class="form-select">
+                                    <option value="Alto">Alto</option>
+                                    <option value="Medio">Medio</option>
+                                    <option value="Bajo">Bajo</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small text-muted fw-bold">Probabilidad (Prospectos)</label>
+                                <select id="editProbabilidadFicha" class="form-select">
+                                    <option value="Alta">Alta</option>
+                                    <option value="Media-Alta">Media-Alta</option>
+                                    <option value="Media">Media</option>
+                                    <option value="Media-Baja">Media-Baja</option>
+                                    <option value="Baja">Baja</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-body">
+                        <h6 class="text-info fw-bold mb-3"><i class="bi bi-calculator me-2"></i>Estimados Mensuales de Consumo</h6>
+                        <div class="row g-3">
+                            <div class="col-6 col-md-3">
+                                <label class="small text-muted">Paños</label>
+                                <input type="number" class="form-control form-control-sm" id="estPanos" placeholder="0">
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <label class="small text-muted">Cofias</label>
+                                <input type="number" class="form-control form-control-sm" id="estCofias" placeholder="0">
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <label class="small text-muted">Incontinencia</label>
+                                <input type="number" class="form-control form-control-sm" id="estIncont" placeholder="0">
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <label class="small text-muted">Pediátricos</label>
+                                <input type="number" class="form-control form-control-sm" id="estPediat" placeholder="0">
+                            </div>
+                            <div class="col-4">
+                                <label class="small text-muted">Desc. 2L</label>
+                                <input type="number" class="form-control form-control-sm" id="estDesc2L" placeholder="0">
+                            </div>
+                            <div class="col-4">
+                                <label class="small text-muted">Desc. 4L</label>
+                                <input type="number" class="form-control form-control-sm" id="estDesc4L" placeholder="0">
+                            </div>
+                            <div class="col-4">
+                                <label class="small text-muted">Desc. 7L</label>
+                                <input type="number" class="form-control form-control-sm" id="estDesc7L" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="small text-muted fw-bold">Notas de Productos (Texto)</label>
+                            <textarea class="form-control" id="editProds" rows="2" placeholder="Detalles cualitativos..."></textarea>
+                        </div>
+                        <div class="mb-0">
+                            <label class="small text-muted fw-bold">Información Extra</label>
+                            <textarea class="form-control" id="editExtra" rows="2" placeholder="Otras notas..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0 p-4 pt-0 bg-light">
+                <button class="btn btn-primary w-100 shadow-sm" onclick="saveClientChanges()" style="padding: 12px; border-radius: 8px;">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Alerta Personalizado -->
+<div class="modal fade" id="customAlertModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content" style="border-radius: 16px; overflow: hidden; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+            <div class="modal-body text-center p-4">
+                <div id="alertIcon" style="font-size: 48px; margin-bottom: 16px;"></div>
+                <h5 id="alertTitle" class="fw-bold mb-2"></h5>
+                <p id="alertMessage" class="text-muted mb-0" style="font-size: 14px;"></p>
+            </div>
+            <div class="modal-footer border-0 pt-0 pb-4 px-4">
+                <button class="btn btn-primary w-100" data-bs-dismiss="modal" style="border-radius: 10px; padding: 12px;">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // DATOS INICIALES
+    const defaultClients=[["Adventista","Emiliano","CLIENTE",2000],["Alcla","Emiliano","CLIENTE",0],["Alvarez","Emiliano","CLIENTE",0],["Anchorena Recoleta","Emiliano","CLIENTE",0],["Anchorena San Martin","Emiliano","CLIENTE",0],["Austral","Emiliano","CLIENTE",4000],["Bazterrica","Emiliano","CLIENTE",0],["bicentenario","Emiliano","CLIENTE",0],["Britanico","Emiliano","CLIENTE",0],["C. de la Torre","Emiliano","CLIENTE",0],["Cemic","Emiliano","PROSPECTO",0],["Clinica Basilea","Emiliano","CLIENTE",0],["Clinica colegiales","Emiliano","CLIENTE",0],["Clinica de la ciudad","Emiliano","CLIENTE",0],["Clinica Del Sol","Emiliano","CLIENTE",0],["Clinica la independecia","Emiliano","CLIENTE",0],["Clinica Ulme","Emiliano","CLIENTE",2000],["Corporacion San martin","Emiliano","CLIENTE",0],["Cruces","Emiliano","CLIENTE",0],["Durand","Emiliano","PROSPECTO",0],["Español","Emiliano","CLIENTE",0],["español la plata","Emiliano","CLIENTE",0],["Favaloro","Emiliano","CLIENTE",0],["Fernandez","Emiliano","CLIENTE",0],["Finoccieto","Emiliano","CLIENTE",0],["FLEMING","Emiliano","CLIENTE",0],["Fleni","Emiliano","CLIENTE",0],["Fundacion Hospitalaria","Emiliano","CLIENTE",0],["Fundaleu","Emiliano","CLIENTE",0],["Garrahan","Emiliano","CLIENTE",0],["gutierrez","Emiliano","CLIENTE",0],["Hospital Español","Emiliano","CLIENTE",0],["Htal Aleman","Emiliano","CLIENTE",0],["Htal Militar","Emiliano","CLIENTE",0],["IADT","Emiliano","CLIENTE",0],["ICBA","Emiliano","CLIENTE",0],["IMAC","Emiliano","CLIENTE",0],["Italiano","Emiliano","CLIENTE",0],["Juncal","Emiliano","CLIENTE",0],["Mater Dei","Emiliano","CLIENTE",0],["Materno inf tigre","Emiliano","CLIENTE",0],["Mod Priv Lanus","Emiliano","CLIENTE",0],["Monte Grande","Emiliano","PROSPECTO",0],["Omint","Emiliano","CLIENTE",0],["Penna","Emiliano","CLIENTE",0],["Ramos Mejia","Emiliano","CLIENTE",0],["San Camilo","Emiliano","CLIENTE",0],["San Jose","Emiliano","PROSPECTO",0],["San Lucas","Emiliano","CLIENTE",0],["Sanatorio del oeste","Emiliano","CLIENTE",0],["Santa Isabel","Emiliano","CLIENTE",0],["SWISS","Emiliano","CLIENTE",0],["SWISS Los Arcos","Emiliano","CLIENTE",0],["Zubizarreta","Emiliano","CLIENTE",0]];
+    const defaultContacts=[["Adventista","PRIVADO","CLIENTE","Romina","Enfermería","11 5877-7206","PROTOCOLO"],["Alcla","PRIVADO","CLIENTE","Ana","Enfermería","+54 9 11 2790-9223","COFIAS"],["Alvarez","PUBLICO","CLIENTE","Paola Mariani","Farmacia","11-674-444-28",""],["Anchorena Recoleta","PRIVADO","CLIENTE","Laura Leone","Compras","11-451-683-83","INSUMOS"],["Austral","PRIVADO","CLIENTE","Marisa Bazzano","Farmacia","11-654-492-66","PROTOCOLO"],["Bazterrica","PRIVADO","CLIENTE","Maria Marta","","11-362-500-17","DESCARTADORES"],["Britanico","PRIVADO","CLIENTE","Eliza Herrera","Neo","11-265-680-99","COFIAS"],["Clinica Colegiales","PRIVADO","CLIENTE","Noelia","Capacitaciones","","INCONTINENCIA"],["Favaloro","PRIVADO","CLIENTE","Lara","Compras","","VARIOS"],["Fernandez","PUBLICO","CLIENTE","Escalante","Jefa Dpto","11-566-261-16",""],["Finochietto","PRIVADO","CLIENTE","Analia","Compras","11-224-093-84",""],["Garrahan","PUBLICO","CLIENTE","Analia","Enfermería","11 3058-0479","PAÑOS"],["Hospital Italiano","PRIVADO","CLIENTE","Sandra Arevalo","Jefa Pediatria","","VARIOS"],["Mater Dei","PRIVADO","CLIENTE","Santiago","Compras","",""],["Swiss Medical","PRIVADO","CLIENTE","Juan Carlos","Enfermería","",""]];
+    const defaultVisits=[["2025-09-18","Emiliano","ALVAREZ","Próximo mes: Cofias protocolo por 6, paños e incontinencia",""],["2025-09-24","Emiliano","ALVAREZ","HOSPITAL ÁLVAREZ Fui a recorrer el hospital para presentar los productos y conocer los sectores...","Hacer seguimiento"],["2025-10-21","Emiliano","ALVAREZ","Hablé con la gente de los sectores para explicarles el circuito correcto...",""],["2025-10-13","Emiliano","ANCHORENA RECOLETA","Visita por licitación. Aprobación de paquetes por 4...","Seguimiento"],["2025-10-13","Emiliano","IADT","Dejé sándwiches de miga",""],["2025-10-13","Emiliano","MEDICUS","Reunión con Claudia Oviedo (ECI).","Esperar coordinación"],["2025-10-14","Emiliano","HOSPITAL DE TIGRE","Visita Zona Norte con Agustina...",""],["2025-10-14","Emiliano","CLÍNICA DEL ESTE","Dejamos productos para prueba.","Seguimiento"],["2025-10-14","Emiliano","SANATORIO SAN PABLO","Dejamos productos para prueba.","Seguimiento"],["2025-10-15","Emiliano","CORPORACIÓN MÉDICA SAN MARTÍN","Gestión participación en licitaciones",""],["2025-10-15","Emiliano","ANCHORENA SAN MARTÍN","Dejé cofias y paños incontinencia para prueba.","Seguimiento"],["2025-10-15","Emiliano","FUNDACIÓN HOSPITALARIA","Diego de vacaciones, regresa esta semana.","Contactar cuando regrese"],["2025-10-16","Emiliano","CLÍNICA DEL ESTE","Dejamos descartadores",""],["2025-10-16","Emiliano","SANATORIO SAN PABLO","Dejamos descartadores",""],["2025-10-16","Emiliano","HOSPITAL DE TIGRE","Evento 10 años del hospital...",""],["2025-10-17","Emiliano","HOSPITAL FINOCHIETTO","Aviso demoras entregas. Ana de licencia...","Esperar respuesta Rocío"],["2025-10-17","Emiliano","IADT","Aviso demoras entregas",""],["2025-10-17","Emiliano","ADVENTISTA","Aprobaron cofias.","Jueves próximo reunión con compras"],["2025-10-27","Emiliano","ANCHORENA RECOLETA","Gestión pagos atrasados. Esperé 2-3h...",""],["2025-10-27","Emiliano","HOSPITAL GUTIÉRREZ","Seguimiento prueba productos...",""],["2025-10-27","Emiliano","INEVA","Primera visita. No atendieron, piden volver miércoles",""],["2025-10-28","Emiliano","CORPORACIÓN MÉDICA SAN MARTÍN","Confirmación inclusión en próximas licitaciones",""],["2025-10-28","Emiliano","ANCHORENA SAN MARTÍN","Dejé productos prueba (Unión Personal)...",""],["2025-10-28","Emiliano","FUNDACIÓN HOSPITALARIA","Hablé con Diego. Necesita mensaje Cirlia...","Seguimiento con Cirlia"],["2025-10-29","Emiliano","HOSPITAL ALEMÁN","Sector Pagos por pagos atrasados...",""],["2025-10-29","Emiliano","INEVA","Segunda visita. Dejamos descartadores y productos...",""],["2025-10-29","Emiliano","HOSPITAL MÉNDEZ","Reunión con Agustina. Dejamos productos...",""],["2025-10-30","Emiliano","IMAC","Consulta necesidades. Tienen stock, consumo chico",""],["2025-10-30","Emiliano","HOSPITAL ITALIANO","Seguimiento prueba pediatría...",""],["2025-10-30","Emiliano","HOSPITAL CÉSAR MILSTEIN","Seguimiento (Marilyn semana anterior)...","Marilyn confirma visita"],["2025-10-31","Emiliano","HOSPITAL FERNÁNDEZ","Aprobación productos. Hablé con Gloria (ECI).","Pasar lunes o martes para data aprobación"],["2025-10-31","Emiliano","HOSPITAL ÁLVAREZ","Verificación pedido correcto por circuito Farmacia",""],["2025-11-03","Emiliano","SWISS MEDICAL (LAS LOMAS)","Reunión con Agustina por aprobación descartadores...",""],["2025-11-03","Emiliano","VICENTE LÓPEZ","Consulta licitación. Estará disponible diciembre",""],["2025-11-04","Emiliano","HOSPITAL FERNÁNDEZ","Vi enfermera control infecciones...","Volver para devolución"],["2025-11-04","Emiliano","HOSPITAL GARRAHAN","Hablé con Fran sobre pedido paños secos...",""],["2025-11-05","Emiliano","HOSPITAL ITALIANO","Reunión con Jefa Médica Infectología...",""],["2025-11-05","Emiliano","PASTELEROS","Reclamar pago",""],["2025-11-05","Emiliano","INEBA","Seguimiento descartadores dejados semana anterior",""],["2025-11-06","Emiliano","HOSPITAL DE CLÍNICAS","Charla (conseguida por Agustina). Muy buena...",""],["2025-11-06","Emiliano","CLÍNICA FRANCHÍN","Dejamos descartadores para aprobación.","Seguimiento prueba"],["2025-11-06","Emiliano","HOSPITAL GARRAHAN","Entregué paños secos",""],["2025-11-07","Emiliano","HOSPITAL DE CLÍNICAS","Post-charla: hablamos con farmacéutica...",""],["2025-11-07","Emiliano","MEDICUS","Con Agustina a ver Claudia Oviedo (ECI), nos dejó plantados.","Reprogramar"],["2025-11-07","Emiliano","HOSPITAL ALEMÁN","Seguimiento prueba productos.","Volver en 3 semanas"]];
+    const defaultMeta={"ADVENTISTA":{camas:250,productos:"Protocolo, Cofias",extra:""},"ANCHORENA RECOLETA":{camas:193,productos:"",extra:""},"ANCHORENA SAN MARTIN":{camas:193,productos:"",extra:"Primera compra"},"AUSTRAL":{camas:261,productos:"Protocolo",extra:"Dejar muestras"},"CLINICA ULME":{camas:200,productos:"Protocolo",extra:"90 dias plazo"},"FAVALORO":{camas:170,productos:"",extra:""},"GARRAHAN":{camas:543,productos:"",extra:""},"HTAL ALEMAN":{camas:264,productos:"",extra:""},"ITALIANO":{camas:785,productos:"",extra:""}};
+
+    let clientsData, contactsData, hospitalMeta, visitsData;
+    let tables = {};
+    let charts = {};
+
+    function showAlert(title, message, type = 'error') {
+        const icons = {
+            'error': '<i class="bi bi-x-circle-fill text-danger"></i>',
+            'success': '<i class="bi bi-check-circle-fill text-success"></i>',
+            'warning': '<i class="bi bi-exclamation-triangle-fill text-warning"></i>',
+            'info': '<i class="bi bi-info-circle-fill text-info"></i>'
+        };
+        
+        $('#alertIcon').html(icons[type] || icons['info']);
+        $('#alertTitle').text(title);
+        $('#alertMessage').text(message);
+        
+        new bootstrap.Modal(document.getElementById('customAlertModal')).show();
+    }
+
+    let isInitializing = true;
+    let previousUser = 'Gerencia';
+
+    $(document).ready(async function() {
+        // Cargar datos del servidor (archivo JSON central)
+        await loadDataFromServer();
+        
+        initTables();
+        initCharts();
+        updateHospitalList();
+
+        // Sincronizar selectores de usuario
+        const savedUser = localStorage.getItem('sigma_last_user') || 'Emiliano';
+        syncUserSelector(savedUser);
+        previousUser = savedUser; // Set initial previous user
+        isInitializing = false; // Done initializing
+        
+        applyFilters();
+        updateCharts();
+        
+        // Renderizar todas las vistas de tarjetas
+        renderClientsCards();
+        renderVisitsCards();
+        renderContactsCards();
+        
+        // Actualizar todos los KPIs
+        updateClientsKPIs();
+        updateVisitsKPIs();
+        updateContactsKPIs();
+        
+        console.log('🚀 CRM inicializado - Datos cargados de servidor');
+    });
+
+    function syncUserSelector(val) {
+        // Auth deshabilitado temporalmente - sin claves
+        if (!isInitializing && val !== previousUser) {
+            previousUser = val;
+        }
+
+        $('#currentUserDesktop').val(val);
+        $('#currentUserMobile').val(val);
+        $('#visitVendorName').text(val);
+        localStorage.setItem('sigma_last_user', val);
+        applyFilters();
+        updateCharts();
+        
+        // Re-renderizar todas las tarjetas al cambiar usuario
+        renderClientsCards();
+        renderVisitsCards();
+        
+        // Actualizar KPIs
+        updateClientsKPIs();
+        updateVisitsKPIs();
+        
+        if(val === 'Gerencia') $('#visitsUserLabelMobile').text("Todos");
+        else $('#visitsUserLabelMobile').text(val);
+    }
+
+    // === CARGA DE DATOS DESDE SERVIDOR (archivo JSON central) ===
+    async function loadDataFromServer() {
+        try {
+            const response = await fetch('/api/data');
+            if (!response.ok) throw new Error('Error cargando datos');
+            
+            const data = await response.json();
+            
+            // Cargar datos del servidor
+            clientsData = data.clientes || [];
+            contactsData = data.contactos || [];
+            visitsData = data.visitas || [];
+            hospitalMeta = data.meta || {};
+            
+            console.log('✅ Datos cargados del servidor:', {
+                clientes: clientsData.length,
+                contactos: contactsData.length,
+                visitas: visitsData.length
+            });
+            
+            // Migración de campos si es necesario
+            if(clientsData && Array.isArray(clientsData)) {
+                clientsData.forEach(c => {
+                    if (c[4] === undefined) c[4] = 'CABA';
+                    if (c[5] === undefined) c[5] = 'Privado';
+                    if (c[6] === undefined) c[6] = 'Medio';
+                    if (c[7] === undefined) c[7] = 'Media';
+                    if (c[8] === undefined) c[8] = '';
+                });
+            }
+            
+            // Normalizar contactos para que siempre tengan 8 columnas (email)
+            if(contactsData && Array.isArray(contactsData)) {
+                contactsData.forEach(c => {
+                    if (c[7] === undefined) c[7] = '';
+                });
+            }
+            
+            return true;
+        } catch(e) {
+            console.warn('⚠️ No se pudo cargar del servidor, usando datos locales:', e);
+            // Fallback a localStorage
+            loadDataFromLocal();
+            return false;
+        }
+    }
+    
+    // === FALLBACK: Cargar de localStorage ===
+    function loadDataFromLocal() {
+        try {
+            clientsData = JSON.parse(localStorage.getItem('sigma_clients')) || JSON.parse(JSON.stringify(defaultClients));
+            contactsData = JSON.parse(localStorage.getItem('sigma_contacts')) || JSON.parse(JSON.stringify(defaultContacts));
+            hospitalMeta = JSON.parse(localStorage.getItem('sigma_meta')) || JSON.parse(JSON.stringify(defaultMeta));
+            visitsData = JSON.parse(localStorage.getItem('sigma_visits')) || JSON.parse(JSON.stringify(defaultVisits));
+        } catch(e) {
+            clientsData = JSON.parse(JSON.stringify(defaultClients));
+            contactsData = JSON.parse(JSON.stringify(defaultContacts));
+            hospitalMeta = JSON.parse(JSON.stringify(defaultMeta));
+            visitsData = JSON.parse(JSON.stringify(defaultVisits));
+        }
+        
+        // Normalizar contactos para que siempre tengan 8 columnas (email)
+        if(contactsData && Array.isArray(contactsData)) {
+            contactsData.forEach(c => {
+                if (c[7] === undefined) c[7] = '';
+            });
+        }
+    }
+    
+    // === GUARDAR DATOS AL SERVIDOR (archivo JSON central) ===
+    function saveDataToLocal() {
+        // Guardar localmente como backup
+        try {
+            localStorage.setItem('sigma_clients', JSON.stringify(clientsData));
+            localStorage.setItem('sigma_contacts', JSON.stringify(contactsData));
+            localStorage.setItem('sigma_meta', JSON.stringify(hospitalMeta));
+            localStorage.setItem('sigma_visits', JSON.stringify(visitsData));
+        } catch(e) { console.warn('Error guardando local:', e); }
+        
+        // Guardar al servidor (archivo JSON central)
+        saveDataToServer();
+    }
+    
+    async function saveDataToServer() {
+        try {
+            const data = {
+                clientes: clientsData,
+                contactos: contactsData,
+                visitas: visitsData,
+                meta: hospitalMeta
+            };
+            
+            const response = await fetch('/api/data', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            
+            if (!response.ok) throw new Error('Error guardando');
+            
+            console.log('💾 Datos guardados en servidor');
+            
+            // Mostrar indicador
+            const toastEl = document.getElementById('saveIndicator');
+            if(toastEl && window.bootstrap && typeof bootstrap.Toast !== 'undefined') {
+                toastEl.classList.remove('hide');
+                const toast = new bootstrap.Toast(toastEl);
+                toast.show();
+            } else {
+                $('#saveIndicator').fadeIn().delay(2000).fadeOut();
+            }
+            
+            // Sincronizar con Google Sheets automáticamente
+            syncToGoogleSheets();
+            
+        } catch(e) {
+            console.error('❌ Error guardando en servidor:', e);
+        }
+    }
+    
+    // === GOOGLE SHEETS SYNC ===
+    // URL de la Web App de Google Sheets (configurar después de publicar)
+    const GOOGLE_SHEETS_URL = localStorage.getItem('sigma_sheets_url') || '';
+    
+    async function syncToGoogleSheets() {
+        // Si no hay URL configurada, salir silenciosamente
+        if (!GOOGLE_SHEETS_URL) {
+            console.log('⚠️ Google Sheets URL no configurada');
+            return;
+        }
+        
+        try {
+            updateSyncIndicator('syncing');
+            
+            const data = {
+                clients: clientsData,
+                visits: visitsData,
+                contacts: contactsData,
+                meta: hospitalMeta
+            };
+            
+            const response = await fetch(GOOGLE_SHEETS_URL, {
+                method: 'POST',
+                mode: 'no-cors', // Google Apps Script requiere esto
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            
+            console.log('☁️ Datos sincronizados con Google Sheets');
+            updateSyncIndicator('synced');
+            
+        } catch(e) {
+            console.error('❌ Error sincronizando con Google Sheets:', e);
+            updateSyncIndicator('error');
+        }
+    }
+    
+    function updateSyncIndicator(status) {
+        const indicator = $('#cloudSyncIndicator');
+        if (!indicator.length) return;
+        
+        indicator.removeClass('syncing synced error');
+        
+        if (status === 'syncing') {
+            indicator.addClass('syncing').attr('title', 'Sincronizando...');
+            indicator.html('<i class="bi bi-cloud-arrow-up"></i>');
+        } else if (status === 'synced') {
+            indicator.addClass('synced').attr('title', 'Sincronizado con Google Sheets');
+            indicator.html('<i class="bi bi-cloud-check"></i>');
+            // Volver a estado normal después de 3 segundos
+            setTimeout(() => indicator.removeClass('synced'), 3000);
+        } else if (status === 'error') {
+            indicator.addClass('error').attr('title', 'Error de sincronización');
+            indicator.html('<i class="bi bi-cloud-slash"></i>');
+        }
+    }
+    
+    async function manualSyncToSheets() {
+        const url = localStorage.getItem('sigma_sheets_url');
+        
+        if (!url) {
+            showAlert('No Configurado', 'Primero configurá la URL de Google Sheets haciendo clic en "Configurar Google Sheets"', 'warning');
+            return;
+        }
+        
+        try {
+            updateSyncIndicator('syncing');
+            
+            const data = {
+                clients: clientsData,
+                visits: visitsData,
+                contacts: contactsData,
+                meta: hospitalMeta
+            };
+            
+            // Usar text/plain para que funcione con no-cors
+            // Apps Script parseará el JSON desde el body
+            await fetch(url, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(data)
+            });
+            
+            updateSyncIndicator('synced');
+            showAlert('¡Sincronizado!', 'Los datos se enviaron a Google Sheets. Revisá tu hoja de cálculo.', 'success');
+            console.log('☁️ Sync manual completado');
+            
+        } catch(e) {
+            updateSyncIndicator('error');
+            showAlert('Error', 'No se pudo sincronizar: ' + e.message, 'danger');
+            console.error('❌ Error en sync manual:', e);
+        }
+    }
+    
+    function configureGoogleSheets() {
+        const currentUrl = localStorage.getItem('sigma_sheets_url') || '';
+        const newUrl = prompt(
+            "Pegá la URL de tu Google Sheets Web App:\n\n" +
+            "(Dejá vacío para desactivar la sincronización)",
+            currentUrl
+        );
+        
+        if (newUrl === null) return; // Cancelado
+        
+        if (newUrl.trim()) {
+            localStorage.setItem('sigma_sheets_url', newUrl.trim());
+            showAlert('Google Sheets Configurado', 'La sincronización automática está activada. Los datos se guardarán en la nube.', 'success');
+            // Recargar para aplicar la nueva URL
+            location.reload();
+        } else {
+            localStorage.removeItem('sigma_sheets_url');
+            showAlert('Sincronización Desactivada', 'Los datos ya no se sincronizarán con Google Sheets.', 'warning');
+            location.reload();
+        }
+    }
+
+
+    // === BACKUP SYSTEM ===
+    function downloadBackup() {
+        const backup = {
+            version: "3.5",
+            date: new Date().toISOString(),
+            clients: clientsData,
+            visits: visitsData,
+            contacts: contactsData,
+            meta: hospitalMeta
+        };
+        
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backup));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        const fileName = "sigmaline_backup_" + new Date().toISOString().slice(0,10) + ".json";
+        downloadAnchorNode.setAttribute("download", fileName);
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+        
+        showAlert('Backup Creado', 'El archivo de seguridad se ha descargado correctamente.', 'success');
+    }
+
+    // === GUARDAR HTML PORTABLE ===
+    function downloadHTMLPortable() {
+        try {
+            let htmlContent = document.documentElement.outerHTML;
+            
+            const embeddedData = {
+                clients: clientsData,
+                visits: visitsData,
+                contacts: contactsData,
+                meta: hospitalMeta,
+                savedAt: new Date().toISOString()
+            };
+            
+            const dataScript = '<scr' + 'ipt id="embeddedData" type="application/json">' + JSON.stringify(embeddedData) + '</scr' + 'ipt>';
+            
+            if (htmlContent.includes('<script id="embeddedData"')) {
+                htmlContent = htmlContent.replace(/<script id="embeddedData"[^>]*>[\s\S]*?<\/script>/, dataScript);
+            } else {
+                htmlContent = htmlContent.replace('</head>', dataScript + '\n</head>');
+            }
+            
+            if (!htmlContent.startsWith('<!DOCTYPE')) {
+                htmlContent = '<!DOCTYPE html>\n' + htmlContent;
+            }
+            
+            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'sigmaline_' + new Date().toISOString().slice(0,10) + '.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showAlert('✅ HTML Guardado', 'Archivo descargado. Usá ese archivo la próxima vez para conservar tus datos.', 'success');
+        } catch (error) {
+            console.error('Error guardando HTML:', error);
+            showAlert('Error', 'No se pudo generar el archivo HTML: ' + error.message, 'danger');
+        }
+    }
+
+    function exportToExcel() {
+        try {
+            // Verificar si SheetJS está cargado (por si falla el CDN)
+            if (typeof XLSX === 'undefined') {
+                showAlert('Error', 'La librería de Excel no se cargó correctamente. Verificá tu conexión a internet.', 'danger');
+                return;
+            }
+
+            // 1. Crear Workbook
+            const wb = XLSX.utils.book_new();
+
+            // 2. Preparar Datos
+            // Clientes
+            const clientsHeaders = ['Hospital', 'Responsable', 'Estado', 'Paños', 'Zona', 'Tipo', 'Potencial', 'Probabilidad', 'Direccion'];
+            const clientsSheetData = [clientsHeaders, ...clientsData];
+            const wsClients = XLSX.utils.aoa_to_sheet(clientsSheetData);
+            XLSX.utils.book_append_sheet(wb, wsClients, "Clientes");
+
+            // Visitas
+            const visitsHeaders = ['Fecha', 'Vendedor', 'Hospital', 'Detalle', 'Proximo', 'Titulo', 'Productos'];
+            const visitsSheetData = [visitsHeaders, ...visitsData];
+            const wsVisits = XLSX.utils.aoa_to_sheet(visitsSheetData);
+            XLSX.utils.book_append_sheet(wb, wsVisits, "Visitas");
+
+            // Contactos
+            const contactsHeaders = ['Hospital', 'Tipo', 'Estado', 'Nombre', 'Puesto', 'Telefono', 'Interes', 'Email'];
+            const contactsSheetData = [contactsHeaders, ...contactsData];
+            const wsContacts = XLSX.utils.aoa_to_sheet(contactsSheetData);
+            XLSX.utils.book_append_sheet(wb, wsContacts, "Contactos");
+
+            // 3. Generar archivo y descargar
+            const date = new Date().toISOString().split('T')[0];
+            XLSX.writeFile(wb, `SigmaLine_Export_${date}.xlsx`);
+            
+            showAlert('Exportación Exitosa', 'El archivo Excel se descargó correctamente.', 'success');
+
+        } catch (error) {
+            console.error(error);
+            showAlert('Error', 'Hubo un problema al generar el Excel: ' + error.message, 'danger');
+        }
+    }
+
+
+    function triggerRestore() {
+        document.getElementById('restoreFile').click();
+    }
+
+    function restoreBackup(input) {
+        const file = input.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const backup = JSON.parse(e.target.result);
+                
+                if (confirm(`Se van a restaurar:\n- ${backup.clients.length} clientes\n- ${backup.visits.length} visitas\n- ${backup.contacts.length} contactos\n\n¿Estás seguro? Esto reemplazará los datos actuales.`)) {
+                    clientsData = backup.clients || [];
+                    if(clientsData && Array.isArray(clientsData)) {
+                        // Migración de datos: Asegurar nuevos campos (Zona, Tipo, Potencial, Probabilidad)
+                        clientsData.forEach(c => {
+                            // c[4]=Zona, c[5]=Tipo, c[6]=Potencial, c[7]=Probabilidad
+                            if (c[4] === undefined) c[4] = 'CABA';
+                            if (c[5] === undefined) c[5] = 'Privado';
+                            if (c[6] === undefined) c[6] = 'Medio';
+                            if (c[7] === undefined) c[7] = 0;
+                        });
+                    }
+                    visitsData = backup.visits || [];
+                    contactsData = backup.contacts || [];
+                    // Normalizar contactos para que siempre tengan 8 columnas (incluyendo email)
+                    contactsData.forEach(c => {
+                        if (c[7] === undefined) c[7] = ''; // Email vacío si no existe
+                    });
+                    hospitalMeta = backup.meta || {}; // Restaurar meta también
+                    
+                    saveDataToLocal();
+                    
+                    // Recargar todo
+                    initTables();
+                    updateCharts();
+                    renderClientsCards('all');
+                    renderVisitsCards();
+                    renderContactsCards();
+                    updateHospitalList();
+                    
+                    showAlert('Restauración Exitosa', 'Los datos se han recuperado correctamente.', 'success');
+                }
+            } catch (err) {
+                console.error(err);
+                showAlert('Error', 'El archivo de backup no es válido o está dañado.', 'error');
+            }
+            // Limpiar input para permitir cargar el mismo archivo de nuevo si se desea
+            input.value = '';
+        };
+        reader.readAsText(file);
+    }
+
+    function resetFactorySettings() {
+        if(confirm("¿Restaurar datos originales? Se perderán los cambios.")) {
+            localStorage.clear();
+            location.reload();
+        }
+    }
+
+    function switchView(viewName) {
+        $('.nav-link-desktop').removeClass('active');
+        $('#nav-desk-' + viewName).addClass('active');
+        
+        $('.mobile-nav-item').removeClass('active');
+        $('#nav-mob-' + viewName).addClass('active');
+
+        $('#view-clients, #view-visits, #view-reports, #view-hospitals, #view-contacts').hide();
+        $('#view-' + viewName).fadeIn();
+        
+        if(tables[viewName]) tables[viewName].responsive.recalc();
+        if(viewName === 'hospitals') refreshHospitalTable();
+        if(viewName === 'visits' || viewName === 'clients') applyFilters();
+        if(viewName === 'reports') updateCharts();
+    }
+
+    function applyFilters() {
+        let user = $('#currentUserDesktop').val();
+        // CORRECCIÓN DE ÍNDICES DE FILTRO:
+        if(tables['visits']) {
+            // Columna "Vendedor" es la 4ta visualmente (índice 3)
+            if(user === 'Gerencia') tables['visits'].column(3).search('').draw(); 
+            else tables['visits'].column(3).search(user).draw();
+        }
+        if(tables['clients']) {
+            // Columna "Responsable" es la 8va visualmente (índice 7)
+            // Columns: Hospital(0), Volumen(1), Zona(2), Tipo(3), Potencial(4), Última Visita(5), Estado(6), Responsable(7), Acciones(8)
+            if(user === 'Gerencia') tables['clients'].column(7).search('').draw();
+            else tables['clients'].column(7).search(user).draw();
+        }
+        if(user === 'Gerencia') $('#statsBadge').text("Vista Global");
+        else $('#statsBadge').text("Datos de: " + user);
+        
+        updateClientsKPIs();
+    }
+
+    // === NUEVA LÓGICA DE CLIENTES ===
+    let currentClientFilter = 'all';
+    const MAX_PANOS = 5000; // Para calcular porcentaje de barra
+
+    function getLastVisitForClient(hospitalName) {
+        const visits = visitsData.filter(v => v[2].toUpperCase() === hospitalName.toUpperCase());
+        if (visits.length === 0) return null;
+        visits.sort((a, b) => b[0].localeCompare(a[0]));
+        return visits[0];
+    }
+
+    function formatLastVisit(lastVisit) {
+        if (!lastVisit) return { html: '<span class="last-visit-badge never">Sin visitas</span>', days: 999 };
+        
+        const visitDate = new Date(lastVisit[0]);
+        const today = new Date();
+        const diffTime = today - visitDate;
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        
+        let badgeClass = 'recent';
+        let text = '';
+        
+        if (diffDays === 0) text = 'Hoy';
+        else if (diffDays === 1) text = 'Ayer';
+        else if (diffDays < 7) text = `Hace ${diffDays} días`;
+        else if (diffDays < 30) {
+            const weeks = Math.floor(diffDays / 7);
+            text = `Hace ${weeks} sem`;
+            badgeClass = 'warning';
+        } else {
+            const months = Math.floor(diffDays / 30);
+            text = `Hace ${months} mes${months > 1 ? 'es' : ''}`;
+            badgeClass = 'danger';
+        }
+        
+        return { 
+            html: `<span class="last-visit-badge ${badgeClass}" title="${lastVisit[0]}">${text}</span>`,
+            days: diffDays 
+        };
+    }
+
+    function renderVolumeCell(panos) {
+        if (!panos || panos === 0) return '<span class="text-muted">-</span>';
+        const percent = Math.min((panos / MAX_PANOS) * 100, 100);
+        return `
+            <div class="d-flex align-items-center gap-2">
+                <div class="volume-bar"><div class="volume-bar-fill" style="width: ${percent}%"></div></div>
+                <span class="volume-text">${panos.toLocaleString()}</span>
+            </div>`;
+    }
+
+    function renderActionButtons(hospitalName) {
+        return `
+            <div class="action-btns">
+                <button class="btn btn-sm btn-outline-secondary" onclick="openEditClient('${hospitalName}')" title="Editar cliente">
+                    <i class="bi bi-pencil-square"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-primary" onclick="quickLogVisit('${hospitalName}')" title="Registrar visita">
+                    <i class="bi bi-journal-plus"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-info" onclick="viewClientFicha('${hospitalName}')" title="Ver historial">
+                    <i class="bi bi-eye"></i>
+                </button>
+            </div>`;
+    }
+
+    function quickLogVisit(hospitalName) {
+        let u = $('#currentUserDesktop').val();
+        if(u === 'Gerencia') return showAlert("Atención", "Seleccioná tu usuario arriba para realizar esta acción.", "warning");
+        $('#visitVendorName').text(u);
+        $('#vFecha').val(new Date().toLocaleDateString('en-CA'));
+        $('#vHospital').val(hospitalName);
+        new bootstrap.Modal(document.getElementById('addVisitModal')).show();
+    }
+
+    function viewClientFicha(hospitalName) {
+        // Ir a la sección Visitas y filtrar por este hospital
+        switchView('visits');
+        
+        // Esperar a que la vista cargue y luego filtrar
+        setTimeout(() => {
+            // Poner el nombre del hospital en el buscador
+            $('#visitSearchInput').val(hospitalName);
+            // Aplicar el filtro
+            visitSearchTerm = hospitalName.toLowerCase().trim();
+            renderVisitsCards();
+        }, 100);
+    }
+    
+    // Ir a Contactos con filtro del hospital actual
+    function goToContactsFiltered() {
+        const hospital = window.currentDetailHospital;
+        if(!hospital) return;
+        
+        // Cerrar el modal
+        bootstrap.Modal.getInstance(document.getElementById('clientDetailModal')).hide();
+        
+        // Ir a la sección Contactos
+        switchView('contacts');
+        
+        // Esperar y aplicar filtro
+        setTimeout(() => {
+            $('#contactSearchInput').val(hospital);
+            renderContactsCards(hospital); // Pasar el término directamente
+        }, 200);
+    }
+    
+    // Ir a Visitas con filtro del hospital actual
+    function goToVisitsFiltered() {
+        const hospital = window.currentDetailHospital;
+        if(!hospital) return;
+        
+        // Cerrar el modal
+        bootstrap.Modal.getInstance(document.getElementById('clientDetailModal')).hide();
+        
+        // Ir a la sección Visitas
+        switchView('visits');
+        
+        // Esperar y aplicar filtro
+        setTimeout(() => {
+            $('#visitSearchInput').val(hospital);
+            visitSearchTerm = hospital.toLowerCase().trim();
+            renderVisitsCards();
+        }, 200);
+    }
+
+    function updateClientsKPIs() {
+        let user = $('#currentUserDesktop').val();
+        let filtered = (user === 'Gerencia') ? clientsData : clientsData.filter(c => c[1] === user);
+        
+        const total = filtered.length;
+        const clientes = filtered.filter(c => c[2] === 'CLIENTE').length;
+        const prospectos = filtered.filter(c => c[2] === 'PROSPECTO').length;
+        const panos = filtered.reduce((sum, c) => sum + (c[3] || 0), 0);
+        
+        $('#kpiClientsTotal').text(total);
+        $('#kpiClientsActive').text(clientes);
+        $('#kpiClientsProspect').text(prospectos);
+        $('#kpiClientsPanos').text(panos.toLocaleString());
+        
+        $('#countAll').text(total);
+        $('#countClientes').text(clientes);
+        $('#countProspectos').text(prospectos);
+    }
+
+    // === VISTA DE TARJETAS ===
+    let currentViewMode = 'cards';
+
+    function renderClientCard(client) {
+        const [hospital, responsable, estado, panos, zona, tipo, potencial, probabilidad] = client;
+        const lastVisit = getLastVisitForClient(hospital);
+        const visitInfo = formatLastVisit(lastVisit);
+        
+        // Obtener camas del hospitalMeta
+        const meta = hospitalMeta[hospital.toUpperCase()] || hospitalMeta[hospital] || {};
+        const camas = meta.camas || 0;
+        
+        // Badge de potencial con color
+        const pot = potencial || 'Medio';
+        let potColor = 'warning'; // Medio = amarillo
+        if(pot === 'Alto') potColor = 'success';
+        if(pot === 'Bajo') potColor = 'secondary';
+        const potBadge = `<span class="badge text-bg-${potColor} ms-2" style="font-size: 0.7em;">${pot}</span>`;
+        
+        // Determinar clase de la tarjeta de visita
+        let visitClass = 'no-visit';
+        let visitContent = '<span class="text-muted">Sin visitas registradas</span>';
+        
+        if (lastVisit) {
+            visitClass = visitInfo.days > 14 ? 'needs-attention' : '';
+            // Priorizar título (índice 5), si no hay usar detalle (índice 3)
+            const titulo = lastVisit[5] || '';
+            const visitTitle = titulo || (lastVisit[3] ? lastVisit[3].substring(0, 80) + '...' : 'Sin detalle');
+            const nextStep = lastVisit[4] ? `<div class="client-last-visit-next"><i class="bi bi-arrow-right me-1"></i>${lastVisit[4]}</div>` : '';
+            
+            visitContent = `
+                <div class="client-last-visit-header">
+                    <span class="client-last-visit-date"><i class="bi bi-calendar3 me-1"></i>${lastVisit[0]}</span>
+                    ${visitInfo.html}
+                </div>
+                <div class="client-last-visit-title">${visitTitle}</div>
+                ${nextStep}
+            `;
+        }
+
+        return `
+            <div class="client-card" data-hospital="${hospital}" data-estado="${estado}">
+                <div class="client-card-header" onclick="viewClientDetails('${hospital}')" style="cursor: pointer;">
+                    <h5>${hospital} <i class="bi bi-chevron-right ms-2" style="font-size: 0.8em; opacity: 0.5;"></i></h5>
+                    <span class="badge-status ${estado.toLowerCase()}">${estado}</span>
+                </div>
+                <div class="client-card-body">
+                    <div class="d-flex gap-3 mb-3">
+                        <div class="client-metric flex-grow-1">
+                            <div class="client-metric-icon panos"><i class="bi bi-box-seam"></i></div>
+                            <div>
+                                <div class="client-metric-value">${panos ? panos.toLocaleString() : '-'}</div>
+                                <div class="client-metric-label">Paños</div>
+                            </div>
+                        </div>
+                        <div class="client-metric flex-grow-1">
+                            <div class="client-metric-icon" style="background: #fef3c7; color: #d97706;"><i class="bi bi-hospital"></i></div>
+                            <div>
+                                <div class="client-metric-value">${camas ? camas.toLocaleString() : '-'}</div>
+                                <div class="client-metric-label">Camas</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 mb-3">
+                        <div class="client-metric flex-grow-1">
+                            <div class="client-metric-icon responsable"><i class="bi bi-person-fill"></i></div>
+                            <div>
+                                <div class="client-metric-value">${responsable}</div>
+                                <div class="client-metric-label">Responsable</div>
+                            </div>
+                        </div>
+                        <div class="client-metric flex-grow-1">
+                            <div class="client-metric-icon" style="background: ${pot === 'Alto' ? '#dcfce7' : pot === 'Bajo' ? '#f3f4f6' : '#fef9c3'}; color: ${pot === 'Alto' ? '#16a34a' : pot === 'Bajo' ? '#6b7280' : '#ca8a04'};"><i class="bi bi-bar-chart-fill"></i></div>
+                            <div>
+                                <div class="client-metric-value">${pot}</div>
+                                <div class="client-metric-label">Potencial</div>
+                            </div>
+                        </div>
+                    </div>
+                    ${client[8] ? `<div class="d-flex align-items-center text-muted small mb-3"><i class="bi bi-geo-alt me-2"></i>${client[8]}</div>` : ''}
+                    <div class="client-last-visit ${visitClass}">
+                        ${visitContent}
+                    </div>
+                </div>
+                <div class="client-card-footer">
+                    <button class="btn btn-outline-secondary" onclick="openEditClient('${hospital}')" title="Editar">
+                        <i class="bi bi-pencil-square"></i>Editar
+                    </button>
+                    <button class="btn btn-primary" onclick="quickLogVisit('${hospital}')" title="Nueva visita">
+                        <i class="bi bi-journal-plus"></i>Visita
+                    </button>
+                    <button class="btn btn-outline-info" onclick="viewClientFicha('${hospital}')" title="Ver historial">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    function viewClientDetails(hospitalName) {
+        // Encontrar datos del cliente
+        const client = clientsData.find(c => c[0] === hospitalName);
+        if(!client) return;
+        
+        // [Hospital, Responsable, Estado, Paños, Zona, Tipo, Potencial, Probabilidad]
+        const [hospital, responsable, estado, panos, zona, tipo, potencial, probabilidad] = client;
+        const meta = hospitalMeta[hospital.toUpperCase()] || hospitalMeta[hospital] || {};
+        
+        // 1. Llenar Header y Métricas
+        $('#detailModalTitle').text(hospital);
+        $('#detailBadgeStatus').html(`<span class="badge ${estado === 'CLIENTE' ? 'badge-cliente' : 'badge-prospecto'}">${estado}</span>`);
+        $('#detailResponsable').html(`<i class="bi bi-person-fill me-1"></i>${responsable}`);
+        $('#detailZona').text(zona || 'CABA');
+        $('#detailTipo').text(tipo || 'Privado');
+        
+        // Dirección (client[8]) - siempre mostrar
+        const direccion = client[8] || '';
+        $('#detailDireccion').show().find('span').text(direccion || 'Sin dirección');
+        
+        // Guardar hospital actual para el botón de contactos
+        window.currentDetailHospital = hospital;
+        
+        $('#detailPanos').text(panos ? panos.toLocaleString() : '-');
+        $('#detailCamas').text(meta.camas ? meta.camas.toLocaleString() : '-');
+        
+        // Lógica de visualización para Estado/Probabilidad
+        if (estado === 'CLIENTE') {
+            $('#detailProbabilidad').html(`<span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle px-3 py-2 shadow-sm">Cliente Activo</span>`);
+            $('#detailProbabilidadLabel').text('ESTADO');
+        } else {
+            const prob = probabilidad || 'Media';
+            let probClass = 'warning';
+            let probIcon = 'bi-dash-lg';
+            
+            if(prob === 'Alta') { probClass = 'success'; probIcon = 'bi-graph-up-arrow'; }
+            if(prob === 'Media-Alta') { probClass = 'info'; probIcon = 'bi-graph-up'; }
+            if(prob === 'Media') { probClass = 'warning'; probIcon = 'bi-dash'; }
+            if(prob === 'Media-Baja') { probClass = 'secondary'; probIcon = 'bi-dash'; }
+            if(prob === 'Baja') { probClass = 'danger'; probIcon = 'bi-graph-down'; }
+            
+            // Estilo "Premium" con subtile background
+            const badge = `
+                <div class="d-flex flex-column align-items-center">
+                    <span class="badge rounded-pill bg-${probClass}-subtle text-${probClass}-emphasis border border-${probClass}-subtle px-3 py-2 shadow-sm mb-1">
+                        Prospecto
+                    </span>
+                    <small class="text-${probClass}-emphasis fw-bold" style="font-size: 0.7em;">Prob. ${prob}</small>
+                </div>
+            `;
+            
+            $('#detailProbabilidad').html(badge);
+            $('#detailProbabilidadLabel').text('').hide(); // Hide label as we include structure inside
+        }
+        
+        // Asegurar que si es cliente el label se muestre
+        if (estado === 'CLIENTE') $('#detailProbabilidadLabel').show();
+        
+        const pot = potencial || 'Medio';
+        $('#detailPotencial').text(pot);
+        let potColor = 'text-warning';
+        if(pot === 'Alto') potColor = 'text-success';
+        if(pot === 'Bajo') potColor = 'text-secondary';
+        $('#detailPotencialIcon').html(`<i class="bi bi-bar-chart-fill ${potColor}"></i>`);
+
+        $('#detailProducts').text(meta.productos || 'Sin datos');
+        $('#detailExtra').text(meta.extra || 'Sin notas');
+        
+        // --- CALCULAR Y MOSTRAR HISTORIAL DE PRODUCTOS + ESTIMADOS ---
+        const hospitalVisits = visitsData.filter(v => v[2] === hospital.toUpperCase());
+        let totals = { panos:0, cofias:0, incont:0, pediat:0, desc2l:0, desc4l:0, desc7l:0 };
+        let hasData = false;
+        
+        // Sumar entregas reales
+        hospitalVisits.forEach(v => {
+            if (v[6]) { 
+                try {
+                    let p = JSON.parse(v[6]);
+                    Object.keys(p).forEach(k => {
+                        if(totals[k] !== undefined) {
+                            totals[k] += (parseInt(p[k]) || 0);
+                            hasData = true;
+                        }
+                    });
+                } catch(e) {}
+            }
+        });
+
+        // Obtener estimados
+        let estimates = {};
+        try { estimates = meta.estimados ? JSON.parse(meta.estimados) : {}; } catch(e){}
+        if(Object.keys(estimates).length > 0) hasData = true;
+
+        const prodContainer = $('#detailProductsContainer');
+        const prodSummary = $('#detailProductsSummary');
+        prodSummary.empty();
+        
+        if (hasData) {
+            prodContainer.show();
+            // Función helper para generar badge con comparación
+            const addProdBadge = (label, key, icon='bi-box') => {
+                const actual = totals[key] || 0;
+                const estimated = parseInt(estimates[key]) || 0;
+                
+                if(actual > 0 || estimated > 0) {
+                    let valueHtml = '';
+                    if (actual > 0 && estimated > 0) {
+                        // Ambos: Mostrar Actual / Estimado
+                        valueHtml = `<span class="text-dark">${actual.toLocaleString()}</span> <span class="text-muted small">/ ${estimated.toLocaleString()}</span>`;
+                    } else if (actual > 0) {
+                        // Solo Actual
+                        valueHtml = `<span class="text-dark">${actual.toLocaleString()}</span>`;
+                    } else {
+                        // Solo Estimado
+                        valueHtml = `<span class="text-muted small">Est: ${estimated.toLocaleString()}</span>`;
+                    }
+
+                    prodSummary.append(`
+                        <div class="col-6 col-md-4">
+                            <div class="d-flex align-items-center p-2 rounded bg-light border">
+                                <i class="bi ${icon} text-primary fs-4 me-2"></i>
+                                <div>
+                                    <div class="fw-bold fs-5">${valueHtml}</div>
+                                    <small class="text-muted text-uppercase" style="font-size: 10px;">${label}</small>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                }
+            };
+            
+            addProdBadge('Paños', 'panos');
+            addProdBadge('Cofias', 'cofias', 'bi-gem');
+            addProdBadge('Incontinencia', 'incont', 'bi-droplet');
+            addProdBadge('Pediátricos', 'pediat', 'bi-emoji-smile');
+            addProdBadge('Desc. 2L', 'desc2l', 'bi-trash');
+            addProdBadge('Desc. 4L', 'desc4l', 'bi-trash');
+            addProdBadge('Desc. 7L', 'desc7l', 'bi-trash');
+            
+        } else {
+            prodContainer.hide();
+        }
+        
+        // 2. Filtrar y Renderizar Contactos
+        const clientContacts = contactsData.filter(c => c[0] === hospital);
+        const contactsContainer = $('#detailContactsList');
+        
+        if (clientContacts.length > 0) {
+            const contactsHtml = clientContacts.map(c => {
+               // [Hospital, Tipo, Estado, Nombre, Puesto, Datos, Interes]
+               return `
+               <div class="d-flex align-items-center bg-white p-2 rounded shadow-sm border">
+                   <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; color: #64748b; font-weight: bold;">
+                        ${c[3] ? c[3].substring(0,2).toUpperCase() : 'NN'}
+                   </div>
+                   <div class="flex-grow-1">
+                       <h6 class="mb-0 text-dark small fw-bold">${c[3] || 'Sin nombre'}</h6>
+                       <small class="text-muted d-block" style="font-size: 11px;">${c[4] || '-'} · ${c[5] || '-'}</small>
+                   </div>
+                   ${c[5] ? `<a href="tel:${c[5]}" class="btn btn-sm btn-success rounded-circle" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;"><i class="bi bi-telephone"></i></a>` : ''}
+               </div>`;
+            }).join('');
+            contactsContainer.html(contactsHtml);
+        } else {
+            contactsContainer.html('<div class="text-muted small text-center py-3 bg-white rounded border">No hay contactos registrados</div>');
+        }
+        
+        // 3. Filtrar y Renderizar Historial de Visitas (Últimas 5)
+        const hospitalUpper = hospital.toUpperCase();
+        const clientVisits = visitsData.filter(v => v[2] && v[2].toUpperCase() === hospitalUpper)
+            .sort((a,b) => b[0].localeCompare(a[0]))
+            .slice(0, 5);
+            
+        const visitsContainer = $('#detailVisitsList');
+        if (clientVisits.length > 0) {
+            const visitsHtml = clientVisits.map(v => {
+                // [Fecha, Vendedor, Hospital, Detalle, Proximo, Titulo]
+                return `
+                <div class="border-start border-2 border-primary ps-3 position-relative">
+                    <div class="position-absolute bg-primary rounded-circle" style="width: 10px; height: 10px; left: -6px; top: 5px;"></div>
+                    <div class="d-flex justify-content-between align-items-start">
+                        <small class="text-primary fw-bold">${v[0]}</small>
+                        <small class="text-muted" style="font-size: 10px;">${v[1]}</small>
+                    </div>
+                    <h6 class="mb-1 text-dark small fw-bold mt-1">${v[5] || 'Sin título'}</h6>
+                    <p class="mb-1 text-secondary small text-truncate" style="max-width: 100%;">${v[3] || ''}</p>
+                    ${v[4] ? `<small class="d-block text-success bg-success-subtle px-2 py-1 rounded d-inline-block mt-1" style="font-size: 10px;"><i class="bi bi-arrow-right me-1"></i>${v[4]}</small>` : ''}
+                </div>`;
+            }).join('');
+            visitsContainer.html(visitsHtml);
+        } else {
+            visitsContainer.html('<div class="text-muted small text-center py-3 bg-white rounded border">No hay visitas registradas</div>');
+        }
+        
+        // 4. Configurar botón de nueva visita
+        $('#btnQuickVisitDetail').off('click').on('click', () => {
+             // Cerrar modal detalle y abrir quickVisit
+             bootstrap.Modal.getInstance(document.getElementById('clientDetailModal')).hide();
+             quickLogVisit(hospital);
+        });
+
+        // Mostrar Modal
+        new bootstrap.Modal(document.getElementById('clientDetailModal')).show();
+    }
+
+    function renderClientsCards() {
+        let user = $('#currentUserDesktop').val();
+        let filtered = (user === 'Gerencia') ? [...clientsData] : clientsData.filter(c => c[1] === user);
+
+        // Obtener valores de los filtros desplegables
+        const fZona = $('#filterZone').val();
+        const fTipo = $('#filterType').val();
+        const fPotencial = $('#filterPotential').val();
+        const fEstado = $('#filterStatus').val();
+        
+        // --- FILTRADO PARA DATA TABLES (VISTA TABLA) ---
+        if (tables['clients']) {
+            // Columna 2: Zona
+            if (fZona && fZona !== 'all') tables['clients'].column(2).search(fZona);
+            else tables['clients'].column(2).search('');
+            
+            // Columna 3: Tipo
+            if (fTipo && fTipo !== 'all') tables['clients'].column(3).search(fTipo);
+            else tables['clients'].column(3).search('');
+            
+            // Columna 4: Potencial
+            if (fPotencial && fPotencial !== 'all') tables['clients'].column(4).search(fPotencial);
+            else tables['clients'].column(4).search('');
+            
+            // Columna 6: Estado (CLIENTE/PROSPECTO)
+            if (fEstado && fEstado !== 'all') tables['clients'].column(6).search(fEstado);
+            else tables['clients'].column(6).search('');
+            
+            // Dibujar tabla
+            tables['clients'].draw();
+        }
+
+        // --- FILTRADO PARA TARJETAS (VISTA CARDS) ---
+        // Filtro Zona
+        if (fZona && fZona !== 'all') {
+            filtered = filtered.filter(c => c[4] === fZona);
+        }
+        
+        // Filtro Tipo
+        if (fTipo && fTipo !== 'all') {
+            filtered = filtered.filter(c => c[5] === fTipo);
+        }
+        
+        // Filtro Potencial
+        if (fPotencial && fPotencial !== 'all') {
+            filtered = filtered.filter(c => c[6] === fPotencial);
+        }
+        
+        // Filtro Estado
+        if (fEstado && fEstado !== 'all') {
+            filtered = filtered.filter(c => c[2] === fEstado);
+        }
+        
+        // Aplicar filtro de búsqueda por texto
+        if (clientSearchTerm) {
+            filtered = filtered.filter(c => c[0].toLowerCase().includes(clientSearchTerm));
+            
+            // También filtrar en tabla si hay término de búsqueda
+            if (tables['clients']) {
+                 tables['clients'].search(clientSearchTerm);
+            }
+        } else {
+             if (tables['clients']) {
+                 tables['clients'].search('');
+            }
+        }
+        
+        // Redibujar tabla después de búsqueda global
+        if (tables['clients']) tables['clients'].draw();
+        
+        // Ordenar por volumen descendente
+        filtered.sort((a, b) => (b[3] || 0) - (a[3] || 0));
+        
+        const cardsHtml = filtered.map(c => renderClientCard(c)).join('');
+        $('#clientsCardsView').html(cardsHtml || '<div class="text-center text-muted py-5"><i class="bi bi-inbox fs-1 d-block mb-2"></i>No hay clientes con estos filtros</div>');
+    }
+
+    function setViewMode(mode) {
+        currentViewMode = mode;
+        if (mode === 'cards') {
+            $('#clientsCardsView').show();
+            $('#clientsTableView').hide();
+            $('#viewCards').addClass('active');
+            $('#viewTable').removeClass('active');
+            renderClientsCards(currentClientFilter);
+        } else {
+            $('#clientsCardsView').hide();
+            $('#clientsTableView').show();
+            $('#viewTable').addClass('active');
+            $('#viewCards').removeClass('active');
+            if (tables['clients']) tables['clients'].draw();
+        }
+    }
+
+    function filterClientsCards(filter) {
+        currentClientFilter = filter;
+        $('.filter-chip').removeClass('active');
+        $(`.filter-chip[data-filter="${filter}"]`).addClass('active');
+        
+        if (currentViewMode === 'cards') {
+            renderClientsCards(filter);
+        } else {
+            // Modo tabla
+            if (filter === 'all') {
+                tables['clients'].column(3).search('').draw();
+            } else if (filter === 'attention') {
+                $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                    if (settings.nTable.id !== 'clientsTable') return true;
+                    const hospitalName = data[0];
+                    const lastVisit = getLastVisitForClient(hospitalName);
+                    const { days } = formatLastVisit(lastVisit);
+                    return days > 14;
+                });
+                tables['clients'].draw();
+                $.fn.dataTable.ext.search.pop();
+            } else {
+                tables['clients'].column(3).search(filter).draw();
+            }
+        }
+        
+        updateClientsKPIs();
+    }
+
+    function filterClients(filter) {
+        filterClientsCards(filter);
+    }
+
+    let clientSearchTerm = '';
+    function filterClientsSearch() {
+        clientSearchTerm = $('#clientSearchInput').val().toLowerCase().trim();
+        renderClientsCards(currentClientFilter);
+    }
+
+    // === VISITS CARDS ===
+    let currentVisitsViewMode = 'cards';
+    let currentVisitsDateFilter = 'all';
+
+    function renderVisitCard(visit) {
+        const [fecha, vendedor, hospital, detalle, proximo, titulo, productos] = visit; // Agregando titulo (5) y productos (6)
+        
+        // Formato de fecha para badge o label
+        const dateObj = new Date(fecha);
+        const day = dateObj.getDate() + 1; // Ajuste zona horaria simple
+        const month = dateObj.toLocaleString('es-ES', { month: 'short' });
+        
+        // Parsear productos si existen
+        let productsHtml = '';
+        if (productos && productos.length > 2) {
+             try {
+                 const p = JSON.parse(productos);
+                 // Mapeo de nombres clave a etiquetas bonitas
+                 const labels = {
+                     panos: 'Paños', cofias: 'Cofias', incont: 'Incontinencia', pediat: 'Pediátricos',
+                     desc2l: 'Desc. 2L', desc4l: 'Desc. 4L', desc7l: 'Desc. 7L'
+                 };
+                 
+                 const items = Object.entries(p).map(([k, v]) => `
+                    <span class="badge bg-white text-dark border me-1 mb-1 shadow-sm" style="font-weight: normal;">
+                        ${labels[k]||k} <strong class="text-primary">${v}</strong>
+                    </span>`).join('');
+                 
+                 if(items) {
+                     productsHtml = `
+                     <div class="mt-2 pt-2 border-top" style="border-style: dashed !important;">
+                        <small class="text-muted d-block mb-1" style="font-size: 10px;">PRODUCTOS ENTREGADOS</small>
+                        <div class="d-flex flex-wrap">${items}</div>
+                     </div>`;
+                 }
+             } catch(e) {}
+        }
+        
+        return `
+            <div class="client-card" data-hospital="${hospital}">
+                <div class="client-card-header">
+                    <h5>${hospital}</h5>
+                    <span class="badge-status cliente"><i class="bi bi-calendar-check me-1"></i>${fecha}</span>
+                </div>
+                <div class="client-card-body">
+                    <div class="d-flex gap-3 mb-3">
+                        <div class="client-metric flex-grow-1">
+                            <div class="client-metric-icon" style="background: #e0f2fe; color: #0284c7;"><i class="bi bi-person-fill"></i></div>
+                            <div>
+                                <div class="client-metric-value">${vendedor}</div>
+                                <div class="client-metric-label">Vendedor</div>
+                            </div>
+                        </div>
+                        <div class="client-metric flex-grow-1">
+                            <div class="client-metric-icon" style="background: #fef3c7; color: #d97706;"><i class="bi bi-clock-history"></i></div>
+                            <div>
+                                <div class="client-metric-value" style="font-size: 14px;">${day} ${month}</div>
+                                <div class="client-metric-label">Fecha</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    ${titulo ? `<div class="mb-2 fw-bold text-dark"><i class="bi bi-card-heading me-1 text-primary"></i>${titulo}</div>` : ''}
+
+                    <div class="client-last-visit">
+                         <div class="client-last-visit-header">
+                            <span class="client-last-visit-date" style="background: #e0f2fe; color: #0284c7;">
+                                <i class="bi bi-chat-left-text me-1"></i>Reporte
+                            </span>
+                        </div>
+                        <div class="client-last-visit-title">${detalle?.substring(0, 100) || 'Sin detalle'}</div>
+                        ${detalle && detalle.length > 100 ? '<div class="text-muted small mt-1">...</div>' : ''}
+                        
+                        ${productsHtml}
+                        
+                        ${proximo ? `
+                        <div class="client-last-visit-next mt-2 pt-2 border-top">
+                            <i class="bi bi-arrow-right-circle-fill text-success me-1"></i> 
+                            <span class="text-secondary small">Próximo: ${proximo}</span>
+                        </div>` : ''}
+                    </div>
+                </div>
+                <div class="client-card-footer">
+                    <button class="btn btn-outline-secondary w-100" onclick="viewVisitDetailsFromCard('${fecha}', '${hospital}')" title="Ver detalle completo">
+                        <i class="bi bi-eye me-2"></i>Ver Detalle Completo
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    function viewVisitDetailsFromCard(fecha, hospital) {
+        // Comparación case-insensitive del hospital
+        const visit = visitsData.find(v => v[0] === fecha && v[2].toUpperCase() === hospital.toUpperCase());
+        if (visit) {
+            $('#viewVisitDate').text(visit[0]);
+            $('#viewVisitHospital').text(visit[2]);
+            
+            // Mostrar título (índice 5) si existe, sino mostrar detalle (índice 3)
+            const titulo = visit[5] || '';
+            const detalle = visit[3] || '';
+            const displayText = titulo ? `${titulo}\n\n${detalle}` : detalle;
+            
+            $('#viewVisitDetail').text(displayText || 'Sin detalle');
+            $('#viewVisitNext').text(visit[4] || "-");
+            
+            // Ocultar la sección de próximo paso si no hay dato
+            if (visit[4]) {
+                $('#viewVisitNextContainer').show();
+            } else {
+                $('#viewVisitNextContainer').hide();
+            }
+            
+            new bootstrap.Modal(document.getElementById('viewVisitModal')).show();
+        }
+    }
+
+    function renderVisitsCards() {
+        try {
+            if (!visitsData) {
+                console.error("visitsData is undefined");
+                return;
+            }
+
+            let user = $('#currentUserDesktop').val();
+            let filtered = (user === 'Gerencia') ? [...visitsData] : visitsData.filter(v => v[1] === user);
+            
+            // Aplicar filtro de fecha
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0];
+            
+            if (currentVisitsDateFilter === 'today') {
+                filtered = filtered.filter(v => v[0] === todayStr);
+            } else if (currentVisitsDateFilter === 'week') {
+                const weekAgo = new Date(today);
+                weekAgo.setDate(weekAgo.getDate() - 7);
+                filtered = filtered.filter(v => new Date(v[0]) >= weekAgo);
+            } else if (currentVisitsDateFilter === 'month') {
+                const monthAgo = new Date(today);
+                monthAgo.setMonth(monthAgo.getMonth() - 1);
+                filtered = filtered.filter(v => new Date(v[0]) >= monthAgo);
+            } else if (currentVisitsDateFilter === '3months') {
+                const threeMonthsAgo = new Date(today);
+                threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+                filtered = filtered.filter(v => new Date(v[0]) >= threeMonthsAgo);
+            } else if (currentVisitsDateFilter === '6months') {
+                const sixMonthsAgo = new Date(today);
+                sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+                filtered = filtered.filter(v => new Date(v[0]) >= sixMonthsAgo);
+            }
+            
+            // Aplicar filtro de búsqueda por texto
+            if (visitSearchTerm) {
+                filtered = filtered.filter(v => v[2] && v[2].toLowerCase().includes(visitSearchTerm));
+            }
+            
+            // Ordenar por fecha descendente
+            filtered.sort((a, b) => {
+                if (!a[0] || !b[0]) return 0;
+                return b[0].localeCompare(a[0]);
+            });
+            
+            const cardsHtml = filtered.map(v => {
+                try {
+                    return renderVisitCard(v);
+                } catch(e) {
+                    console.error("Error rendering visit card", v, e);
+                    return '';
+                }
+            }).join('');
+            
+            $('#visitsCardsView').html(cardsHtml || '<div class="text-center text-muted py-5"><i class="bi bi-journal fs-1 d-block mb-2"></i>No hay visitas con este filtro</div>');
+            
+            if (typeof updateVisitsKPIs === 'function') {
+                updateVisitsKPIs();
+            }
+        } catch (error) {
+            console.error("Critical error in renderVisitsCards:", error);
+            showAlert("Error", "Hubo un problema al mostrar las visitas. Por favor recarga la página.", "error");
+        }
+    }
+
+    function setVisitsViewMode(mode) {
+        currentVisitsViewMode = mode;
+        if (mode === 'cards') {
+            $('#visitsCardsView').show();
+            $('#visitsTableView').hide();
+            $('#viewVisitsCards').addClass('active');
+            $('#viewVisitsTable').removeClass('active');
+            renderVisitsCards();
+        } else {
+            $('#visitsCardsView').hide();
+            $('#visitsTableView').show();
+            $('#viewVisitsTable').addClass('active');
+            $('#viewVisitsCards').removeClass('active');
+        }
+    }
+
+    function filterVisitsDate(filter) {
+        currentVisitsDateFilter = filter;
+        $('.date-filter-chip').removeClass('active');
+        $(`.date-filter-chip[data-date="${filter}"]`).addClass('active');
+        renderVisitsCards();
+    }
+
+    let visitSearchTerm = '';
+    function filterVisitsSearch() {
+        visitSearchTerm = $('#visitSearchInput').val().toLowerCase().trim();
+        renderVisitsCards();
+        
+        // También filtrar la tabla DataTables
+        if (tables['visits']) {
+            tables['visits'].search(visitSearchTerm).draw();
+        }
+    }
+
+    function updateVisitsKPIs() {
+        let user = $('#currentUserDesktop').val();
+        let filtered = (user === 'Gerencia') ? visitsData : visitsData.filter(v => v[1] === user);
+        
+        const total = filtered.length;
+        const thisMonth = filtered.filter(v => {
+            const d = new Date(v[0]);
+            const now = new Date();
+            return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+        }).length;
+        const pending = filtered.filter(v => v[4] && v[4].trim() !== '').length;
+        
+        $('#kpiVisitsTotal').text(total);
+        $('#kpiVisitsMonth').text(thisMonth);
+        $('#kpiVisitsPending').text(pending);
+        
+        // Update label
+        if (user === 'Gerencia') $('#visitsUserLabelDesktop').text("Todos");
+        else $('#visitsUserLabelDesktop').text(user);
+    }
+
+    // === CONTACTS CARDS ===
+    let currentContactsViewMode = 'cards';
+
+    function renderContactCard(contact) {
+        const [hospital, tipo, estado, nombre, puesto, datos, interes] = contact;
+        
+        return `
+            <div class="client-card" data-hospital="${hospital}">
+                <div class="client-card-header">
+                    <h5>${nombre || 'Sin nombre'}</h5>
+                    <span class="badge-status ${estado === 'CLIENTE' ? 'cliente' : 'prospecto'}">${estado}</span>
+                </div>
+                <div class="client-card-body">
+                    <div class="client-metric mb-2">
+                        <div class="client-metric-icon" style="background: #e0f2fe; color: #0284c7;"><i class="bi bi-hospital"></i></div>
+                        <div>
+                            <div class="client-metric-value">${hospital}</div>
+                            <div class="client-metric-label">Hospital</div>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 mb-2">
+                        <div class="client-metric flex-grow-1">
+                            <div class="client-metric-icon" style="background: #f3e8ff; color: #9333ea;"><i class="bi bi-briefcase-fill"></i></div>
+                            <div>
+                                <div class="client-metric-value" style="font-size: 13px;">${puesto || '-'}</div>
+                                <div class="client-metric-label">Puesto</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="client-metric mb-2">
+                        <div class="client-metric-icon" style="background: #dcfce7; color: #16a34a;"><i class="bi bi-telephone-fill"></i></div>
+                        <div>
+                            <div class="client-metric-value" style="font-size: 13px;">${datos || 'Sin teléfono'}</div>
+                            <div class="client-metric-label">Teléfono</div>
+                        </div>
+                    </div>
+                    <div class="client-metric mb-2">
+                        <div class="client-metric-icon" style="background: #e0e7ff; color: #4338ca;"><i class="bi bi-envelope-fill"></i></div>
+                        <div>
+                            <div class="client-metric-value" style="font-size: 13px; word-break: break-all;">${contact[7] || '-'}</div>
+                            <div class="client-metric-label">Email</div>
+                        </div>
+                    </div>
+                    <div class="client-last-visit">
+                        <div class="client-last-visit-title"><i class="bi bi-box-seam me-1"></i>${interes || 'Sin interés definido'}</div>
+                    </div>
+                </div>
+                <div class="client-card-footer">
+                    <button class="btn btn-outline-secondary" onclick="openEditContact(${contactsData.indexOf(contact)})" title="Editar">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                    ${datos ? `<a href="tel:${datos.replace(/[^0-9+]/g, '')}" class="btn btn-success" title="Llamar"><i class="bi bi-telephone-fill"></i> Llamar</a>` : '<button class="btn btn-outline-secondary" disabled><i class="bi bi-telephone-x"></i></button>'}
+                </div>
+            </div>
+        `;
+    }
+
+    function renderContactsCards(searchTerm = '') {
+        let filtered = [...contactsData];
+        
+        if (searchTerm) {
+            const term = searchTerm.toLowerCase();
+            filtered = filtered.filter(c => 
+                (c[0] && c[0].toLowerCase().includes(term)) || 
+                (c[3] && c[3].toLowerCase().includes(term)) ||
+                (c[4] && c[4].toLowerCase().includes(term))
+            );
+        }
+        
+        // Ordenar por hospital
+        filtered.sort((a, b) => a[0].localeCompare(b[0]));
+        
+        const cardsHtml = filtered.map(c => renderContactCard(c)).join('');
+        $('#contactsCardsView').html(cardsHtml || '<div class="text-center text-muted py-5"><i class="bi bi-people fs-1 d-block mb-2"></i>No hay contactos</div>');
+        
+        updateContactsKPIs();
+    }
+
+    function setContactsViewMode(mode) {
+        currentContactsViewMode = mode;
+        if (mode === 'cards') {
+            $('#contactsCardsView').show();
+            $('#contactsTableView').hide();
+            $('#viewContactsCards').addClass('active');
+            $('#viewContactsTable').removeClass('active');
+            renderContactsCards();
+        } else {
+            $('#contactsCardsView').hide();
+            $('#contactsTableView').show();
+            $('#viewContactsTable').addClass('active');
+            $('#viewContactsCards').removeClass('active');
+        }
+    }
+
+    function filterContactsSearch() {
+        const term = $('#contactSearchInput').val().toLowerCase().trim();
+        console.log('Filtering contacts with term:', term);
+        renderContactsCards(term);
+    }
+
+    function updateContactsKPIs() {
+        const total = contactsData.length;
+        const withPhone = contactsData.filter(c => c[5] && c[5].trim() !== '').length;
+        const hospitals = new Set(contactsData.map(c => c[0])).size;
+        
+        $('#kpiContactsTotal').text(total);
+        $('#kpiContactsWithPhone').text(withPhone);
+        $('#kpiContactsHospitals').text(hospitals);
+    }
+
+    function initTables() {
+        const dtConfig = {
+            responsive: true,
+            language: { url: "https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json" },
+            pageLength: 10,
+            autoWidth: false
+        };
+
+        // NUEVA TABLA DE CLIENTES MEJORADA
+        tables['clients'] = $('#clientsTable').DataTable({
+            ...dtConfig,
+            data: clientsData,
+            columns: [
+                { title: "Hospital", data: 0, className: "fw-bold text-primary" },
+                { title: "Volumen", data: 3, render: (d) => renderVolumeCell(d) },
+                { title: "Zona", data: 4, defaultContent: "CABA" },
+                { title: "Tipo", data: 5, defaultContent: "Privado" },
+                { title: "Potencial", data: 6, defaultContent: "Medio", render: d => {
+                    let c = d === 'Alto' ? 'success' : (d === 'Bajo' ? 'secondary' : 'warning');
+                    return `<span class="badge text-bg-${c}">${d}</span>`;
+                }},
+                { title: "Última Visita", data: 0, render: (d, t, row) => {
+                    const lastVisit = getLastVisitForClient(row[0]);
+                    return formatLastVisit(lastVisit).html;
+                }},
+                { title: "Estado", data: 2, render: d => `<span class="badge ${d==='CLIENTE'?'badge-cliente':'badge-prospecto'}">${d}</span>` },
+                { title: "Responsable", data: 1, render: d => `<span class="badge badge-vendedor">${d}</span>` },
+                { title: "Acciones", data: 0, orderable: false, render: (d) => renderActionButtons(d) }
+            ],
+            order: [[1, 'desc']], // Ordenar por volumen descendente
+            drawCallback: function() {
+                updateClientsKPIs();
+            }
+        });
+
+        // VISUAL: Fecha(0), Hospital(2), Gestión(3), Vendedor(1), Próximo(4), Ver
+        // DATA: [Fecha(0), Vendedor(1), Hospital(2), Gestión(3), Próximo(4)]
+        tables['visits'] = $('#visitsTable').DataTable({
+            ...dtConfig,
+            data: visitsData,
+            columns: [
+                { title: "Fecha", data: 0, className: "visit-date", render: d => `<i class="bi bi-calendar3"></i> ${d}` },
+                { title: "Hospital", data: 2, className: "fw-bold" },
+                { title: "Gestión", data: null, render: (d, t, row) => {
+                    const titulo = row[5];
+                    const detalle = row[3];
+                    const texto = titulo || detalle || '-';
+                    return `<div class="truncate-text">${texto}</div>`;
+                }},
+                { title: "Vendedor", data: 1, render: d => `<span class="badge badge-vendedor">${d}</span>` }, // Filtro aplica aquí (Col Index 3)
+                { title: "Próximo", data: 4, render: d => d ? `<small class="text-danger">${d}</small>` : '-' },
+                { title: "Ver", data: null, orderable:false, render: (d,t,row,meta) => `<button class="btn btn-sm btn-outline-primary" onclick="viewVisitDetails(${meta.row})"><i class="bi bi-eye"></i></button>` }
+            ],
+            order: [[0, 'desc']]
+        });
+
+        // DATA GENERADA DINÁMICAMENTE: [Nombre, Next, Productos, Camas, Extra, Nombre(ID)]
+        // VISUAL: Hospital(0), Prox(1), Prod(2), Camas(3), Extra(4), Edit
+        tables['hospitals'] = $('#hospitalsTable').DataTable({
+            ...dtConfig,
+            data: refreshHospitalData(),
+            columns: [
+                { title: "Hospital", data: 0, className: "fw-bold text-primary" },
+                { title: "Próximo Paso", data: 1, className: "bg-light", render: d => `<div class='badge-next-step'>${d}</div>` },
+                { title: "Productos", data: 2 },
+                { title: "Camas", data: 3 },
+                { title: "Extra", data: 4, render: d => `<small>${d}</small>` },
+                { title: "Edit", data: 5, orderable: false, render: (d) => `<button class="btn btn-sm btn-outline-secondary" onclick="openEditHospital('${d}')"><i class="bi bi-pencil-square"></i></button>` }
+            ]
+        });
+
+        // DATA: [Hospital(0), Nombre(3), Puesto(4), Datos(5), Estado(2), Interés(6)] -- Wait, contactsData structure is differnt in this version!
+        // contactsData in this file: [Hospital, Tipo, Estado, Nombre, Puesto, Datos, Interes] -> indices 0, 1, 2, 3, 4, 5, 6
+        // VISUAL: Hospital(0), Nombre(3), Puesto(4), Datos(5), Estado(2), Interés(6)
+        tables['contacts'] = $('#mainTable').DataTable({
+            ...dtConfig,
+            data: contactsData,
+            columns: [
+                { title: "Hospital", data: 0, className: "fw-bold text-primary" },
+                { title: "Nombre", data: 3 },
+                { title: "Puesto", data: 4, render: d => d ? `<small class="fw-bold text-muted">${d}</small>` : '-' },
+                { title: "Datos", data: 5 },
+                { title: "Email", data: 7, render: d => d || '-' },
+                { title: "Estado", data: 2, render: d => `<span class="badge ${d==='CLIENTE'?'badge-cliente':'badge-prospecto'}">${d}</span>` },
+                { title: "Interés", data: 6 }
+            ]
+        });
+    }
+
+    // Funciones de Datos
+    function getLatestAction(hosp) {
+        let h = visitsData.filter(v => v[2] === hosp.toUpperCase());
+        h.sort((a,b) => b[0].localeCompare(a[0]));
+        let l = h.find(v => v[4]);
+        return l ? `${l[0]}: ${l[4]}` : "-";
+    }
+    function refreshHospitalData() {
+        let names = new Set([...clientsData.map(c=>c[0].toUpperCase()), ...visitsData.map(v=>v[2])]);
+        let res = [];
+        names.forEach(n => {
+            let m = hospitalMeta[n] || {camas:"", productos:"", extra:""};
+            res.push([n, getLatestAction(n), m.productos||"-", m.camas||"-", m.extra||"-", n]);
+        });
+        return res;
+    }
+    function refreshHospitalTable() { tables['hospitals'].clear().rows.add(refreshHospitalData()).draw(); }
+    function updateHospitalList() {
+        let names = [...new Set(clientsData.map(c=>c[0]))].sort();
+        $('#hospitalOptions').empty();
+        $('#hospitalOptionsContact').empty();
+        names.forEach(n => {
+            $('#hospitalOptions').append(`<option value="${n}">`);
+            $('#hospitalOptionsContact').append(`<option value="${n}">`);
+        });
+    }
+    function updateCharts() {
+        let user = $('#currentUserDesktop').val();
+        // Filtrar datos según usuario
+        let fVisits = (user === 'Gerencia') ? visitsData : visitsData.filter(v => v[1] === user);
+        let fClients = (user === 'Gerencia') ? clientsData : clientsData.filter(c => c[1] === user);
+
+        // === KPIs PRINCIPALES ===
+        let totalVisitas = fVisits.length;
+        let clientesActivos = fClients.filter(c => c[2] === 'CLIENTE').length;
+        let prospectos = fClients.filter(c => c[2] === 'PROSPECTO').length;
+        let totalPanos = fClients.reduce((acc, curr) => acc + (curr[3] || 0), 0);
+        
+        $('#statsVisitasTotal').text(totalVisitas);
+        $('#statsClientesActivos').text(clientesActivos);
+        $('#statsProspectos').text(prospectos);
+        $('#statsPanosTotal').text(totalPanos.toLocaleString());
+        
+        // Calcular tendencia (visitas últimos 30 días vs anteriores 30)
+        let hoy = new Date();
+        let hace30 = new Date(hoy - 30*24*60*60*1000);
+        let hace60 = new Date(hoy - 60*24*60*60*1000);
+        let visitasUlt30 = fVisits.filter(v => new Date(v[0]) >= hace30).length;
+        let visitasAnt30 = fVisits.filter(v => new Date(v[0]) >= hace60 && new Date(v[0]) < hace30).length;
+        
+        if(visitasAnt30 > 0) {
+            let pct = Math.round((visitasUlt30 - visitasAnt30) / visitasAnt30 * 100);
+            $('#statsVisitasTrend').html(pct >= 0 ? `<i class="bi bi-arrow-up"></i> ${pct}% vs mes ant.` : `<i class="bi bi-arrow-down"></i> ${Math.abs(pct)}% vs mes ant.`);
+            $('#statsVisitasTrend').removeClass('text-success text-danger').addClass(pct >= 0 ? 'text-success' : 'text-danger');
+        } else {
+            $('#statsVisitasTrend').text('—');
+        }
+        
+        // Porcentaje de clientes
+        let totalCli = clientesActivos + prospectos;
+        if(totalCli > 0) {
+            $('#statsClientesPct').text(`${Math.round(clientesActivos/totalCli*100)}% del total`);
+        }
+        
+        // Label de usuario
+        $('#statsUserLabel').text(user === 'Gerencia' ? 'Todos' : user);
+        
+        // === GRÁFICO: ACTIVIDAD MENSUAL ===
+        let meses = {};
+        let nombresMeses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+        fVisits.forEach(v => {
+            let fecha = new Date(v[0]);
+            let key = `${nombresMeses[fecha.getMonth()]} ${fecha.getFullYear().toString().slice(-2)}`;
+            meses[key] = (meses[key] || 0) + 1;
+        });
+        
+        // Ordenar por fecha
+        let mesesOrdenados = Object.entries(meses).sort((a, b) => {
+            let [mA, yA] = a[0].split(' ');
+            let [mB, yB] = b[0].split(' ');
+            return (yA + nombresMeses.indexOf(mA)) - (yB + nombresMeses.indexOf(mB));
+        }).slice(-6); // últimos 6 meses
+        
+        if(charts.activityMonthly) {
+            charts.activityMonthly.data.labels = mesesOrdenados.map(m => m[0]);
+            charts.activityMonthly.data.datasets[0].data = mesesOrdenados.map(m => m[1]);
+            charts.activityMonthly.update();
+        }
+        
+        // === GRÁFICO: PIPELINE ===
+        if(charts.pipeline) {
+            charts.pipeline.data.labels = ['Clientes', 'Prospectos'];
+            charts.pipeline.data.datasets[0].data = [clientesActivos, prospectos];
+            charts.pipeline.update();
+        }
+        
+        // === TOP 5 CLIENTES (por paños) ===
+        let topClientes = [...fClients]
+            .filter(c => c[2] === 'CLIENTE' && c[3] > 0)
+            .sort((a, b) => b[3] - a[3])
+            .slice(0, 5);
+        
+        let topHtml = topClientes.map((c, i) => `
+            <li class="list-group-item d-flex justify-content-between align-items-center py-2">
+                <span><i class="bi bi-${i === 0 ? 'trophy text-warning' : 'building'} me-2"></i>${c[0]}</span>
+                <span class="badge bg-primary rounded-pill">${c[3].toLocaleString()}</span>
+            </li>
+        `).join('') || '<li class="list-group-item text-muted">Sin datos</li>';
+        $('#statsTopClientes').html(topHtml);
+        
+        // === DISTRIBUCIÓN POR ZONA ===
+        let zonas = {};
+        fClients.forEach(c => {
+            let zona = c[4] || 'Sin zona';
+            zonas[zona] = (zonas[zona] || 0) + 1;
+        });
+        
+        let zonasOrdenadas = Object.entries(zonas).sort((a, b) => b[1] - a[1]);
+        let zonasHtml = zonasOrdenadas.slice(0, 5).map(z => `
+            <li class="list-group-item d-flex justify-content-between align-items-center py-2">
+                <span><i class="bi bi-geo-alt me-2"></i>${z[0]}</span>
+                <span class="badge bg-secondary rounded-pill">${z[1]}</span>
+            </li>
+        `).join('') || '<li class="list-group-item text-muted">Sin datos</li>';
+        $('#statsZonas').html(zonasHtml);
+        
+        // Mantener compatibilidad con gráficos viejos
+        if(charts.share) {
+            let cli = fClients.filter(c => c[2]==='CLIENTE').length;
+            let pro = fClients.filter(c => c[2]==='PROSPECTO').length;
+            charts.share.data.labels = ['Cliente', 'Prospecto'];
+            charts.share.data.datasets[0].data = [cli, pro];
+            charts.share.update();
+        }
+        
+        if(charts.activity) {
+            let dCounts = {};
+            let recentVisits = fVisits.slice(0, 15);
+            recentVisits.forEach(v => { dCounts[v[0]] = (dCounts[v[0]]||0) + 1; });
+            let dates = Object.keys(dCounts).sort();
+            charts.activity.data.labels = dates;
+            charts.activity.data.datasets[0].data = dates.map(d => dCounts[d]);
+            charts.activity.update();
+        }
+    }
+
+    // Modales
+    function openAddClientModal() {
+        let u = $('#currentUserDesktop').val();
+        let s = document.getElementById('cResponsable');
+        if(u !== 'Gerencia') s.value = u; else s.selectedIndex = 0;
+        new bootstrap.Modal(document.getElementById('addClientModal')).show();
+    }
+    function openVisitModal() {
+        let u = $('#currentUserDesktop').val();
+        if(u === 'Gerencia') return showAlert("Atención", "Seleccioná tu usuario arriba para realizar esta acción.", "warning");
+        $('#visitVendorName').text(u);
+        $('#vFecha').val(new Date().toLocaleDateString('en-CA'));
+        new bootstrap.Modal(document.getElementById('addVisitModal')).show();
+    }
+    function viewVisitDetails(idx) {
+        // Get data from table based on index. Because of filtering, use row(idx).data() might get visual index or data index?
+        // DataTables row() selector works with DOM element or index. If sorted/filtered, index changes.
+        // Better to pass 'this' and get row from it, but here we pass meta.row which is internal data index usually safe if data not reloaded entirely.
+        // Actually with responsive plugin, button might be in child row.
+        let d = tables['visits'].row(idx).data(); 
+        if(!d) return;
+        $('#viewVisitDate').text(d[0]); $('#viewVisitHospital').text(d[2]); $('#viewVisitDetail').text(d[3]); $('#viewVisitNext').text(d[4]||"-");
+        new bootstrap.Modal(document.getElementById('viewVisitModal')).show();
+    }
+
+    // Save Operations
+    function addVisit() {
+        let u = $('#currentUserDesktop').val();
+        let titulo = $('#vTitulo').val() || '';
+        
+        // Capturar productos
+        let prods = {
+            panos: parseInt($('#prodPanos').val()) || 0,
+            cofias: parseInt($('#prodCofias').val()) || 0,
+            incont: parseInt($('#prodIncont').val()) || 0,
+            pediat: parseInt($('#prodPediat').val()) || 0,
+            desc2l: parseInt($('#prodDesc2L').val()) || 0,
+            desc4l: parseInt($('#prodDesc4L').val()) || 0,
+            desc7l: parseInt($('#prodDesc7L').val()) || 0
+        };
+        // Quitar ceros para limpiar
+        Object.keys(prods).forEach(k => prods[k] === 0 && delete prods[k]);
+        let prodsStr = Object.keys(prods).length > 0 ? JSON.stringify(prods) : '';
+
+        // Added prodsStr at index 6
+        let n = [$('#vFecha').val(), u, $('#vHospital').val().toUpperCase(), $('#vDetalle').val(), $('#vNext').val(), titulo, prodsStr];
+        if(!n[0] || !n[2]) return showAlert("Error", "Por favor completá todos los datos válidos.", "error");
+        tables['visits'].row.add(n).draw(); visitsData.push(n); saveDataToLocal();
+        bootstrap.Modal.getInstance(document.getElementById('addVisitModal')).hide(); $('#addVisitForm')[0].reset(); applyFilters(); updateCharts();
+        renderClientsCards(currentClientFilter); // Actualizar tarjetas de clientes con el nuevo título
+        renderVisitsCards(); // Actualizar tarjetas de visitas
+        
+        // Refrescar modal de detalles si está abierto para este hospital
+        if(window.currentDetailHospital && window.currentDetailHospital.toUpperCase() === n[2]) {
+            viewClientDetails(window.currentDetailHospital);
+        }
+    }
+    
+    // === INLINE CONTACTS ===
+    let pendingContacts = [];
+    
+    function toggleInlineContactForm() {
+        const form = document.getElementById('inlineContactForm');
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+    
+    function addInlineContact() {
+        const nombre = $('#icNombre').val().trim();
+        const puesto = $('#icPuesto').val().trim();
+        const telefono = $('#icTelefono').val().trim();
+        const interes = $('#icInteres').val().trim();
+        
+        if (!nombre) return showAlert("Falta Nombre", "Por favor ingresá el nombre del contacto.", "warning");
+        
+        pendingContacts.push({ nombre, puesto, telefono, interes });
+        renderPendingContacts();
+        
+        // Limpiar mini form
+        $('#icNombre').val('');
+        $('#icPuesto').val('');
+        $('#icTelefono').val('');
+        $('#icInteres').val('');
+        toggleInlineContactForm();
+    }
+    
+    function removeInlineContact(index) {
+        pendingContacts.splice(index, 1);
+        renderPendingContacts();
+    }
+    
+    function renderPendingContacts() {
+        const list = $('#pendingContactsList');
+        const msg = $('#noContactsMsg');
+        
+        if (pendingContacts.length === 0) {
+            list.html('');
+            msg.show();
+            return;
+        }
+        
+        msg.hide();
+        let html = pendingContacts.map((c, i) => `
+            <div class="d-flex align-items-center justify-content-between p-2 mb-2" style="background: #f1f5f9; border-radius: 8px;">
+                <div>
+                    <strong>${c.nombre}</strong>
+                    <small class="text-muted d-block">${c.puesto || 'Sin puesto'} · ${c.telefono || 'Sin tel'}</small>
+                </div>
+                <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeInlineContact(${i})" title="Quitar">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+        `).join('');
+        list.html(html);
+    }
+    
+    function addClient() {
+        let hospital = $('#cHospital').val();
+        if(!hospital) return showAlert("Falta Dato", "Por favor ingresá el nombre del hospital.", "warning");
+        
+        // [Hospital, Responsable, Estado, Paños, Zona, Tipo, Potencial, Probabilidad, Direccion]
+        let n = [
+            hospital, 
+            $('#cResponsable').val(), 
+            $('#cEstado').val(), 
+            Number($('#cPanos').val()),
+            $('#cZona').val(),
+            $('#cTipo').val(),
+            $('#cPotencial').val(),
+            $('#cProbabilidad').val(),
+            $('#cDireccion').val()
+        ];
+        
+        // Guardar info extra en hospitalMeta
+        let key = hospital.toUpperCase();
+        hospitalMeta[key] = {
+            camas: Number($('#cCamas').val()) || 0,
+            productos: $('#cProductos').val() || '',
+            extra: $('#cExtra').val() || ''
+        };
+        
+        tables['clients'].row.add(n).draw(); clientsData.push(n);
+        
+        // Guardar contactos pendientes
+        pendingContacts.forEach(c => {
+            let contactRow = [hospital.toUpperCase(), "PRIVADO", $('#cEstado').val(), c.nombre, c.puesto, c.telefono, c.interes, ""];
+            tables['contacts'].row.add(contactRow).draw();
+            contactsData.push(contactRow);
+        });
+        
+        // Limpiar todo
+        pendingContacts = [];
+        renderPendingContacts();
+        
+        saveDataToLocal();
+        bootstrap.Modal.getInstance(document.getElementById('addClientModal')).hide(); 
+        $('#addClientForm')[0].reset(); updateHospitalList(); updateCharts();
+        renderClientsCards(); // Actualizar tarjetas
+        renderContactsCards(); // Actualizar contactos
+        updateContactsKPIs();
+    }
+    function openEditClient(n) {
+        let c = clientsData.find(x => x[0] === n); if(!c) return;
+        let meta = hospitalMeta[n.toUpperCase()] || hospitalMeta[n] || {};
+        
+        $('#editHospName').val(n); 
+        $('#displayHospName').text(n);
+        
+        // --- CLIENT DATA ---
+        // clientsData: [Hospital(0), Responsable(1), Estado(2), Paños(3), Zona(4), Tipo(5), Potencial(6), Probabilidad(7), Direccion(8)]
+        
+        $('#editResponsable').val(c[1] || 'Emiliano');
+        $('#editEstado').val(c[2] || 'PROSPECTO');
+        $('#editDireccion').val(c[8] || '');
+        
+        $('#editCamas').val(meta.camas || c[3] || ''); 
+        
+        $('#editZonaFicha').val(c[4] || 'CABA');
+        $('#editTipoFicha').val(c[5] || 'Privado');
+        $('#editPotencialFicha').val(c[6] || 'Medio');
+        $('#editProbabilidadFicha').val(c[7] || 'Media');
+        
+        // Estimates 
+        let est = {};
+        try { est = meta.estimados ? JSON.parse(meta.estimados) : {}; } catch(e){}
+        $('#estPanos').val(est.panos || c[3] || ''); 
+        $('#estCofias').val(est.cofias || '');
+        $('#estIncont').val(est.incont || '');
+        $('#estPediat').val(est.pediat || '');
+        $('#estDesc2L').val(est.desc2l || '');
+        $('#estDesc4L').val(est.desc4l || '');
+        $('#estDesc7L').val(est.desc7l || '');
+        
+        $('#editProds').val(meta.productos || '');
+        $('#editExtra').val(meta.extra || '');
+
+        new bootstrap.Modal(document.getElementById('editClientModal')).show();
+    }
+
+    function saveClientChanges() {
+        let hName = $('#editHospName').val();
+        let idx = clientsData.findIndex(c => c[0] === hName);
+        if(idx < 0) return;
+
+        // Gather Estimates
+        let est = {
+            panos: parseInt($('#estPanos').val()) || 0,
+            cofias: parseInt($('#estCofias').val()) || 0,
+            incont: parseInt($('#estIncont').val()) || 0,
+            pediat: parseInt($('#estPediat').val()) || 0,
+            desc2l: parseInt($('#estDesc2L').val()) || 0,
+            desc4l: parseInt($('#estDesc4L').val()) || 0,
+            desc7l: parseInt($('#estDesc7L').val()) || 0
+        };
+        // Clean zeros
+        Object.keys(est).forEach(k => est[k] === 0 && delete est[k]);
+        let estStr = Object.keys(est).length > 0 ? JSON.stringify(est) : '';
+
+        // Update Client Data Array
+        // [Hospital(0), Responsable(1), Estado(2), Paños(3), Zona(4), Tipo(5), Potencial(6), Probabilidad(7), Direccion(8)]
+        
+        clientsData[idx][1] = $('#editResponsable').val();
+        clientsData[idx][2] = $('#editEstado').val();
+        clientsData[idx][8] = $('#editDireccion').val();
+        
+        clientsData[idx][4] = $('#editZonaFicha').val();
+        clientsData[idx][5] = $('#editTipoFicha').val();
+        clientsData[idx][6] = $('#editPotencialFicha').val();
+        clientsData[idx][7] = $('#editProbabilidadFicha').val();
+        
+        // Update Paños in main array from estimate
+        clientsData[idx][3] = est.panos || 0;
+
+        // Update Meta
+        if(!hospitalMeta[hName]) hospitalMeta[hName] = {};
+        hospitalMeta[hName].camas = $('#editCamas').val();
+        hospitalMeta[hName].productos = $('#editProds').val();
+        hospitalMeta[hName].extra = $('#editExtra').val();
+        hospitalMeta[hName].estimados = estStr;
+
+        tables['clients'].clear().rows.add(clientsData).draw(); 
+        saveDataToLocal(); 
+        applyFilters(); 
+        updateCharts();
+        renderClientsCards(); 
+        
+        bootstrap.Modal.getInstance(document.getElementById('editClientModal')).hide();
+        
+        // If viewing details, update them
+        if(window.currentDetailHospital === hName) {
+            viewClientDetails(hName);
+        }
+    }
+    function addContact() {
+        // [hospital, tipo, estado, nombre, puesto, datos, interes, email]
+        let n = [$('#ctHospital').val(), "PRIVADO", "CLIENTE", $('#ctNombre').val(), $('#ctPuesto').val(), $('#ctDatos').val(), $('#ctInteres').val(), $('#ctEmail').val()];
+        if(!n[0]) return showAlert("Falta Dato", "Por favor completá el nombre del hospital.", "warning");
+        tables['contacts'].row.add(n).draw(); contactsData.push(n); saveDataToLocal();
+        bootstrap.Modal.getInstance(document.getElementById('addContactModal')).hide(); $('#addContactForm')[0].reset();
+        renderContactsCards(); // Actualizar tarjetas
+        updateContactsKPIs(); // Actualizar KPIs
+    }
+
+    function openEditContact(idx) {
+        if(idx < 0 || idx >= contactsData.length) return;
+        const contact = contactsData[idx];
+        // [hospital, tipo, estado, nombre, puesto, datos, interes, email]
+        
+        $('#editContactIndex').val(idx);
+        $('#editCtHospital').val(contact[0] || '');
+        $('#editCtNombre').val(contact[3] || '');
+        $('#editCtPuesto').val(contact[4] || '');
+        $('#editCtDatos').val(contact[5] || '');
+        $('#editCtInteres').val(contact[6] || '');
+        $('#editCtEmail').val(contact[7] || '');
+        
+        // Actualizar datalist de hospitales
+        let opts = clientsData.map(c => `<option value="${c[0]}">`).join('');
+        $('#hospitalOptionsContactEdit').html(opts);
+        
+        new bootstrap.Modal(document.getElementById('editContactModal')).show();
+    }
+
+    function saveContactChanges() {
+        const idx = parseInt($('#editContactIndex').val());
+        if(idx < 0 || idx >= contactsData.length) return;
+        
+        const hospital = $('#editCtHospital').val();
+        if(!hospital) return showAlert("Falta Dato", "El hospital es obligatorio.", "warning");
+        
+        // Determinar estado y tipo basado en el hospital seleccionado
+        const client = clientsData.find(c => c[0].toUpperCase() === hospital.toUpperCase());
+        const estado = client ? client[2] : 'PROSPECTO';
+        const tipo = client ? (client[5] || 'Privado') : 'Privado';
+        
+        // Actualizar contacto
+        contactsData[idx] = [
+            hospital,
+            tipo.toUpperCase(),
+            estado,
+            $('#editCtNombre').val(),
+            $('#editCtPuesto').val(),
+            $('#editCtDatos').val(),
+            $('#editCtInteres').val(),
+            $('#editCtEmail').val()
+        ];
+        
+        // Actualizar DataTable
+        if(tables['contacts']) {
+            tables['contacts'].clear().rows.add(contactsData).draw();
+        }
+        
+        saveDataToLocal();
+        bootstrap.Modal.getInstance(document.getElementById('editContactModal')).hide();
+        renderContactsCards();
+        updateContactsKPIs();
+        showAlert("Contacto Actualizado", "Los cambios se guardaron correctamente.", "success");
+    }
+
+    function deleteContact() {
+        const idx = parseInt($('#editContactIndex').val());
+        if(idx < 0 || idx >= contactsData.length) return;
+        
+        const contactName = contactsData[idx][3] || 'este contacto';
+        
+        if(confirm(`¿Estás seguro de eliminar a "${contactName}"? Esta acción no se puede deshacer.`)) {
+            contactsData.splice(idx, 1);
+            
+            // Actualizar DataTable
+            if(tables['contacts']) {
+                tables['contacts'].clear().rows.add(contactsData).draw();
+            }
+            
+            saveDataToLocal();
+            bootstrap.Modal.getInstance(document.getElementById('editContactModal')).hide();
+            renderContactsCards();
+            updateContactsKPIs();
+            showAlert("Contacto Eliminado", "El contacto se eliminó correctamente.", "success");
+        }
+    }
+
+    function exportTableToCSV(sel, name) {
+        let csv=[]; let t=$(sel).DataTable();
+        let h=[]; $(sel+' thead th').each(function(){ if($(this).text()!=='Ver' && $(this).text()!=='Acciones' && $(this).text()!=='Edit' && $(this).text()!=='Editar') h.push($(this).text())});
+        csv.push(h.join(","));
+        t.rows({search:'applied'}).data().toArray().forEach(r=>{
+            let cr=r.map(c=>`"${String(c).replace(/<[^>]+>/g,'').trim().replace(/"/g,'""')}"`);
+            if(sel.includes('hospitals') || sel.includes('clients') || sel.includes('visits')) cr.pop(); 
+            csv.push(cr.join(","));
+        });
+        let l=document.createElement("a"); l.href=URL.createObjectURL(new Blob(["\ufeff"+csv.join("\n")],{type:"text/csv"}));
+        l.download=name; document.body.appendChild(l); l.click();
+    }
+
+    function initCharts() {
+        // Gráficos antiguos (por compatibilidad)
+        let shareCanvas = document.getElementById('chartShare');
+        let activityCanvas = document.getElementById('chartActivity');
+        
+        if(shareCanvas) {
+            charts.share = new Chart(shareCanvas, { type: 'pie', data: { labels: [], datasets: [{ data: [], backgroundColor: ['#00aeef', '#28a745', '#ffc107'] }] }, options: { responsive: true, maintainAspectRatio: false } });
+        }
+        if(activityCanvas) {
+            charts.activity = new Chart(activityCanvas, { type: 'bar', data: { labels: [], datasets: [{ label: 'Visitas', data: [], backgroundColor: '#005691' }] }, options: { responsive: true, maintainAspectRatio: false } });
+        }
+        
+        // Nuevos gráficos de stats
+        let monthlyCanvas = document.getElementById('chartActivityMonthly');
+        let pipelineCanvas = document.getElementById('chartPipeline');
+        
+        if(monthlyCanvas) {
+            charts.activityMonthly = new Chart(monthlyCanvas, { 
+                type: 'bar', 
+                data: { 
+                    labels: [], 
+                    datasets: [{ 
+                        label: 'Visitas', 
+                        data: [], 
+                        backgroundColor: 'rgba(0, 174, 239, 0.7)',
+                        borderColor: '#00aeef',
+                        borderWidth: 1
+                    }] 
+                }, 
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                } 
+            });
+        }
+        
+        if(pipelineCanvas) {
+            charts.pipeline = new Chart(pipelineCanvas, { 
+                type: 'doughnut', 
+                data: { 
+                    labels: ['Clientes', 'Prospectos'], 
+                    datasets: [{ 
+                        data: [0, 0], 
+                        backgroundColor: ['#28a745', '#17a2b8'],
+                        borderWidth: 2
+                    }] 
+                }, 
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { position: 'bottom' }
+                    }
+                } 
+            });
+        }
+    }
+</script>
+</body>
+</html>

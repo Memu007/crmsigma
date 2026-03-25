@@ -1,0 +1,19 @@
+Hospital,Responsable,Estado,Paños,Zona,Tipo,Potencial,Probabilidad,Direccion,Camas,Productos,Notas
+Hospital Italiano,Emiliano,CLIENTE,5000,CABA,Privado,Alto,Alta,"Tte. Gral. Juan D. Perón 4190, CABA",800,"Cofias, Paños, Incontinencia",Cliente estratégico. Requiere visitas mensuales.
+Sanatorio Güemes,Emiliano,CLIENTE,3200,CABA,Privado,Alto,Alta,"Av. Córdoba 3933, CABA",450,"Paños, Cofias",Renovación de contrato en marzo.
+Hospital Fernández,Emiliano,PROSPECTO,0,CABA,Publico,Alto,Media,"Av. Cerviño 3356, CABA",380,,Licitación abierta para 2026.
+Clínica Bazterrica,Emiliano,CLIENTE,1800,CABA,Privado,Medio,Media-Alta,"Juncal 3002, CABA",200,Descartables,
+Hospital Garrahan,Emiliano,CLIENTE,4500,CABA,Publico,Alto,Alta,"Pichincha 1890, CABA",543,"Paños, Cofias, Incontinencia",Hospital pediátrico de referencia
+Sanatorio Anchorena,Emiliano,CLIENTE,2200,CABA,Privado,Medio,Media-Alta,"Tomás M. de Anchorena 1870, CABA",280,Paños,
+Hospital Posadas,Agustina,PROSPECTO,0,GBA Oeste,Publico,Alto,Media,"Av. Pte. Illia s/n, El Palomar",500,Cofias,Licitación en curso.
+Hospital Pirovano,Agustina,CLIENTE,2100,CABA,Publico,Medio,Alta,"Av. Monroe 3555, CABA",280,"Paños, Incontinencia",Proveedor desde 2022.
+Sanatorio Otamendi,Agustina,CLIENTE,2800,CABA,Privado,Alto,Alta,"Azcuénaga 870, CABA",220,"Cofias, Paños, Guantes","Cliente premium, muy exigente."
+Hospital Durand,Agustina,PROSPECTO,0,CABA,Publico,Medio,Baja,"Av. Díaz Vélez 5044, CABA",350,,Proceso de compra muy lento.
+Hospital Rivadavia,Agustina,CLIENTE,1500,CABA,Publico,Medio,Media,"Av. Las Heras 2670, CABA",320,Paños,
+Clínica Santa Isabel,Agustina,CLIENTE,1800,CABA,Privado,Medio,Alta,"Directorio 2037, CABA",150,Cofias,Contrato renovado agosto 2025
+Sanatorio Norte,Mauricio,CLIENTE,1200,GBA Norte,Privado,Medio,Media-Alta,"Av. del Libertador 1458, Vicente López",150,Descartables generales,
+Hospital Central San Isidro,Mauricio,CLIENTE,2500,GBA Norte,Publico,Alto,Alta,"Av. Santa Fe 431, San Isidro",320,"Paños, Cofias, Incontinencia",Ampliando sector de internación.
+Clínica del Sol,Mauricio,PROSPECTO,0,GBA Norte,Privado,Medio,Media,"Av. Maipú 1660, Olivos",180,,Primera reunión programada para enero.
+Sanatorio San Lucas,Mauricio,CLIENTE,1600,GBA Norte,Privado,Medio,Media-Alta,"Av. del Libertador 17115, San Isidro",140,Paños,Renovación automática cada año.
+Hospital de Tigre,Mauricio,CLIENTE,1100,GBA Norte,Publico,Medio,Media,"Av. Italia 650, Tigre",180,Cofias,
+Clínica Olivos,Mauricio,PROSPECTO,0,GBA Norte,Privado,Alto,Media-Alta,"Av. Maipú 1800, Olivos",200,,Interesados en incontinencia

@@ -1,0 +1,47 @@
+Fecha,Vendedor,Hospital,Detalle,Proximo_Paso,Titulo
+2025-07-05,Emiliano,HOSPITAL ITALIANO,Primera reunión del semestre. Revisamos contrato actual.,Preparar renovación,Reunión semestral
+2025-07-10,Emiliano,SANATORIO GÜEMES,Visita de seguimiento. Todo OK con los productos.,Mantener contacto,Control mensual
+2025-07-12,Agustina,HOSPITAL PIROVANO,Entrega de muestras nuevas. Muy interesados.,Esperar feedback,Muestras nuevas
+2025-07-15,Mauricio,HOSPITAL CENTRAL SAN ISIDRO,Reunión con director. Quieren ampliar pedidos.,Preparar cotización ampliada,Oportunidad ampliación
+2025-07-18,Emiliano,HOSPITAL GARRAHAN,Entrega mensual. Sin novedades.,Próxima entrega agosto,Entrega julio
+2025-07-22,Agustina,SANATORIO OTAMENDI,Reunión con Dr. Martinez. Nuevo proyecto de incontinencia.,Enviar propuesta detallada,Proyecto incontinencia
+2025-07-25,Mauricio,SANATORIO NORTE,Control de stock. Necesitan pedido urgente.,Coordinar entrega,Stock bajo
+2025-08-02,Emiliano,HOSPITAL ITALIANO,Seguimiento renovación contrato. En proceso.,Esperar firma,Renovación contrato
+2025-08-05,Agustina,HOSPITAL POSADAS,Primera visita prospección. Proceso de licitación.,Monitorear licitación,Prospección inicial
+2025-08-08,Mauricio,SANATORIO SAN LUCAS,Renovación anual automática. Firma OK.,Próximo año,Renovación firmada
+2025-08-12,Emiliano,CLÍNICA BAZTERRICA,Consulta por nuevos productos. Interesados en incontinencia.,Enviar catálogo,Nuevos productos
+2025-08-15,Agustina,HOSPITAL RIVADAVIA,Visita nuevo cliente. Firmamos primer contrato.,Coordinar primera entrega,Nuevo cliente!
+2025-08-18,Mauricio,HOSPITAL DE TIGRE,Evento 10 años hospital. Networking con decisores.,Seguimiento contactos,Evento networking
+2025-08-22,Emiliano,HOSPITAL FERNÁNDEZ,Reunión licitación 2026. Preparamos documentación.,Presentar en septiembre,Licitación 2026
+2025-08-28,Agustina,CLÍNICA SANTA ISABEL,Reunión renovación. Todo OK.,Renovar agosto próximo,Renovación OK
+2025-09-01,Mauricio,CLÍNICA DEL SOL,Primera reunión. Muy interesados pero sin presupuesto.,Retomar en 2026,Primera reunión
+2025-09-05,Emiliano,SANATORIO GÜEMES,Renovación contrato. Ampliamos línea de productos.,Entrega nueva línea sept,Contrato ampliado
+2025-09-10,Agustina,SANATORIO OTAMENDI,Presentación propuesta incontinencia. Aprobada!,Coordinar implementación,Propuesta aprobada
+2025-09-12,Mauricio,HOSPITAL CENTRAL SAN ISIDRO,Entrega cotización sector nuevo. Muy contentos.,Esperar aprobación final,Cotización entregada
+2025-09-18,Emiliano,HOSPITAL ITALIANO,Reunión con Jefa Médica Infectología. Nuevos protocolos.,Implementar protocolos,Nuevos protocolos
+2025-09-22,Agustina,HOSPITAL DURAND,Segunda visita prospección. Proceso muy lento.,Seguir intentando,Seguimiento difícil
+2025-09-25,Mauricio,CLÍNICA OLIVOS,Primera reunión. Director muy interesado en incontinencia.,Preparar demo,Prospección positiva
+2025-10-01,Emiliano,HOSPITAL GARRAHAN,Entrega mensual octubre. Aumento pedido 20%.,Ajustar producción,Aumento pedido
+2025-10-05,Agustina,HOSPITAL POSADAS,Seguimiento licitación. Avanzando bien.,Esperar resultado,Licitación avanza
+2025-10-10,Mauricio,SANATORIO NORTE,Entrega pedido urgente. Cliente muy agradecido.,Visita noviembre,Entrega urgente OK
+2025-10-15,Emiliano,SANATORIO ANCHORENA,Nueva contacto Laura. Interesada en ampliar.,Reunión octubre,Nuevo contacto
+2025-10-18,Agustina,HOSPITAL PIROVANO,Evaluación trimestral. Excelente feedback.,Mantener nivel,Evaluación Q3
+2025-10-22,Mauricio,HOSPITAL CENTRAL SAN ISIDRO,Aprobación sector nuevo! Gran venta.,Implementar noviembre,VENTA CERRADA!
+2025-10-28,Emiliano,HOSPITAL FERNÁNDEZ,Presentación licitación 2026. Quedamos primeros.,Esperar adjudicación,Licitación presentada
+2025-10-30,Agustina,SANATORIO OTAMENDI,Implementación incontinencia iniciada. Capacitación personal.,Seguimiento implementación,Implementación
+2025-11-05,Mauricio,SANATORIO SAN LUCAS,Visita rutinaria. Todo funcionando bien.,Próxima febrero,Control OK
+2025-11-08,Emiliano,HOSPITAL ITALIANO,Reunión evaluación anual. Renovamos 2 años más.,Contrato firmado,Renovación 2 años
+2025-11-12,Agustina,HOSPITAL DURAND,Tercera visita. Finalmente avanzamos! Reunión con director.,Propuesta formal,Avance importante
+2025-11-15,Mauricio,CLÍNICA OLIVOS,Demo productos incontinencia. Muy impresionados.,Cotización formal,Demo exitosa
+2025-11-18,Emiliano,CLÍNICA BAZTERRICA,Entrega catálogo incontinencia. Pedido inicial!,Coordinar primera entrega,Nuevo pedido
+2025-11-22,Agustina,HOSPITAL RIVADAVIA,Seguimiento primer trimestre. Todo perfecto.,Mantener nivel,Review Q1
+2025-11-25,Mauricio,HOSPITAL DE TIGRE,Renovación anual. Sin cambios.,Próximo año,Renovación OK
+2025-11-28,Emiliano,HOSPITAL GARRAHAN,Preparación entrega diciembre. Aumento extra navidad.,Entrega especial dic,Pedido navidad
+2025-12-02,Agustina,SANATORIO OTAMENDI,Evaluación implementación incontinencia. Éxito total!,Expandir otros sectores,Implementación exitosa
+2025-12-05,Mauricio,HOSPITAL CENTRAL SAN ISIDRO,Instalación sector nuevo completada!,Seguimiento enero,Instalación completa
+2025-12-08,Emiliano,HOSPITAL FERNÁNDEZ,Adjudicación licitación 2026 confirmada!,Preparar inicio enero,GANAMOS LICITACIÓN!
+2025-12-10,Agustina,HOSPITAL POSADAS,Resultado licitación: quedamos segundos. Cerca!,Próxima licitación,Segundo puesto
+2025-12-12,Mauricio,CLÍNICA OLIVOS,Cierre venta. Primer contrato firmado!,Coordinar implementación,NUEVO CLIENTE!
+2025-12-15,Emiliano,SANATORIO GÜEMES,Reunión fin de año. Excelente relación.,Retomar enero,Cierre de año
+2025-12-15,Agustina,HOSPITAL PIROVANO,Entrega especial navidad. Regalo corporativo.,Feliz año,Entrega navidad
+2025-12-15,Mauricio,SANATORIO NORTE,Visita fin de año. Todo OK.,Próximo febrero,Cierre OK

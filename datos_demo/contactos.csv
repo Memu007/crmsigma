@@ -1,0 +1,25 @@
+Hospital,Tipo,Estado,Nombre,Puesto,Telefono,Interes,Email
+Hospital Italiano,PRIVADO,CLIENTE,Sandra Arevalo,Jefa Pediatria,,VARIOS,sarevalo@hospitalitaliano.org.ar
+Hospital Italiano,PRIVADO,CLIENTE,Dr. Roberto Martinez,Director Médico,11-4567-8901,PROTOCOLO,rmartinez@hospitalitaliano.org.ar
+Hospital Italiano,PRIVADO,CLIENTE,Lucia Fernandez,Compras,11-2345-6789,INSUMOS,lfernandez@hospitalitaliano.org.ar
+Sanatorio Güemes,PRIVADO,CLIENTE,Carolina Lopez,Enfermería Jefa,11-5544-3322,PAÑOS,clopez@sanatorioguemes.com
+Sanatorio Güemes,PRIVADO,CLIENTE,Martin Acosta,Farmacia,11-6677-8899,COFIAS,macosta@sanatorioguemes.com
+Hospital Fernández,PUBLICO,PROSPECTO,Gloria Mendez,Control Infecciones,11-9988-7766,PROTOCOLO,
+Clínica Bazterrica,PRIVADO,CLIENTE,Maria Marta,Compras,11-362-500-17,DESCARTADORES,mmarta@bazterrica.com.ar
+Hospital Garrahan,PUBLICO,CLIENTE,Analia Rodriguez,Enfermería,11-3058-0479,PAÑOS,arodriguez@garrahan.gov.ar
+Hospital Garrahan,PUBLICO,CLIENTE,Francisco Luna,Farmacia,11-4455-6677,INCONTINENCIA,fluna@garrahan.gov.ar
+Sanatorio Anchorena,PRIVADO,CLIENTE,Laura Leone,Compras,11-451-683-83,INSUMOS,lleone@anchorena.com.ar
+Hospital Posadas,PUBLICO,PROSPECTO,Daniela Suarez,Jefa Compras,11-7788-9900,COFIAS,
+Hospital Pirovano,PUBLICO,CLIENTE,Romina Gutierrez,Enfermería,11-3344-5566,INCONTINENCIA,rgutierrez@pirovano.gob.ar
+Sanatorio Otamendi,PRIVADO,CLIENTE,Dr. Eduardo Martinez,Director Médico,11-4567-8901,INCONTINENCIA,emartinez@otamendi.com.ar
+Sanatorio Otamendi,PRIVADO,CLIENTE,Patricia Vega,Compras,11-2233-4455,PAÑOS,pvega@otamendi.com.ar
+Hospital Durand,PUBLICO,PROSPECTO,Silvia Morales,Farmacia,11-6655-4433,,
+Hospital Rivadavia,PUBLICO,CLIENTE,Andrea Paz,Enfermería Jefa,11-8877-6655,PAÑOS,apaz@rivadavia.gob.ar
+Clínica Santa Isabel,PRIVADO,CLIENTE,Noelia Garcia,Capacitaciones,11-5566-7788,COFIAS,ngarcia@santaisabel.com.ar
+Sanatorio Norte,PRIVADO,CLIENTE,Juan Carlos Mendez,Compras,11-9900-1122,DESCARTADORES,jcmendez@sanatorionorte.com
+Hospital Central San Isidro,PUBLICO,CLIENTE,Ana Gimenez,Compras,11-2345-6789,PAÑOS,agimenez@sanisidro.gob.ar
+Hospital Central San Isidro,PUBLICO,CLIENTE,Dr. Pablo Ruiz,Director,11-3456-7890,INCONTINENCIA,pruiz@sanisidro.gob.ar
+Clínica del Sol,PRIVADO,PROSPECTO,Mariana Costa,Farmacia,11-4567-8901,,
+Sanatorio San Lucas,PRIVADO,CLIENTE,Ricardo Torres,Compras,11-5678-9012,PAÑOS,rtorres@sanlucas.com.ar
+Hospital de Tigre,PUBLICO,CLIENTE,Fabiana Aguirre,Enfermería,11-6789-0123,COFIAS,faguirre@tigre.gob.ar
+Clínica Olivos,PRIVADO,PROSPECTO,Sergio Blanco,Director Médico,11-7890-1234,INCONTINENCIA,
