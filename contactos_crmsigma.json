@@ -1,0 +1,1932 @@
+[
+  {
+    "Institución": "Adventista",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Christian",
+    "Puesto": "Compras",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "christian.torres@clinicaadventista.org"
+  },
+  {
+    "Institución": "Adventista",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Mercedes",
+    "Puesto": "ECI",
+    "Teléfono": "11 3371-0352",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Adventista",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Romina",
+    "Puesto": "Enfermería",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "11 5877-7206"
+  },
+  {
+    "Institución": "Alcla",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Ana",
+    "Puesto": "Enfermería",
+    "Teléfono": "+54 9 11 2790-9223",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Alpi",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Susana",
+    "Puesto": "ECI",
+    "Teléfono": "1155062669",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Alvarez",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "Sandra",
+    "Puesto": "ECI",
+    "Teléfono": "11 5970-9033",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Anchorena Recoleta",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Camila",
+    "Puesto": "ECI",
+    "Teléfono": "+54 9 11 6820-6498",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Anchorena Recoleta",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Giovanna",
+    "Puesto": "ECI",
+    "Teléfono": "+54 9 11 3558-2025",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Anchorena Recoleta",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Juan Pablo",
+    "Puesto": "Compras",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Anchorena Recoleta",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Luciano",
+    "Puesto": "Farmacia",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "luciano.gebert@sanatorio-anchorena.com.ar"
+  },
+  {
+    "Institución": "Anchorena San Martin",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Ruben rojas",
+    "Puesto": "Enfermería",
+    "Teléfono": "11 3419-3169",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Britanico",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Ana",
+    "Puesto": "ECI",
+    "Teléfono": "11 3620-3374",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Britanico",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Daniel",
+    "Puesto": "Compras",
+    "Teléfono": "43096951",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Britanico",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Gustavo",
+    "Puesto": "Enfermería",
+    "Teléfono": "+54 9 11 6031-2530",
+    "Interés": "",
+    "Email": "gdgaray@hbritanico.com.ar"
+  },
+  {
+    "Institución": "C. De La Torre",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Ivana",
+    "Puesto": "Enfermería",
+    "Teléfono": "11 6891-6205",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "C. De La Torre",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Marina",
+    "Puesto": "ECI",
+    "Teléfono": "11 5472-5387",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Casa Cuna",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "Fabiana",
+    "Puesto": "ECI",
+    "Teléfono": "11 6360-2492",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Cesar Milstein",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "Marcela",
+    "Puesto": "ECI",
+    "Teléfono": "11 6940-5278",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Churruca",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Cinthia Salazar",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Churruca",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Gabriela",
+    "Puesto": "ECI",
+    "Teléfono": "1162527262",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Clinica Basilea",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Alejandra",
+    "Puesto": "Enfermería",
+    "Teléfono": "1159753835",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Clinica Colegiales",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Laura",
+    "Puesto": "Enfermería",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "laura_ehman13@hotmail.com"
+  },
+  {
+    "Institución": "Clinica De La Ciudad",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Isabel",
+    "Puesto": "Enfermería",
+    "Teléfono": "11 5325-0181",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Clinica Del Sol",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Fabian",
+    "Puesto": "Farmacia",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "FBROGGI@cdelsol.com.ar"
+  },
+  {
+    "Institución": "Clinica Del Sol",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Julia",
+    "Puesto": "ECI",
+    "Teléfono": "11 3489-0429",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Clinica La Independecia",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "carme",
+    "Puesto": "Enfermería",
+    "Teléfono": "11 6977-8443",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Clinica Ulme",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "fernando gini",
+    "Puesto": "Farmacia",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "fgini@sanatoriocolegiales.com.ar"
+  },
+  {
+    "Institución": "Clinica Ulme",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "patricia",
+    "Puesto": "ECI",
+    "Teléfono": "1159667430",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Clínica Bazterrica",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Griselda",
+    "Puesto": "ECI",
+    "Teléfono": "+54 9 11 3340-8189",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Clínica Bazterrica",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "luna",
+    "Puesto": "Enfermería",
+    "Teléfono": "lunaromero@bazterrica.com.ar",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Clínica Bazterrica",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "luna",
+    "Puesto": "BBB / Otros",
+    "Teléfono": "lunaromero@bazterrica.com.ar",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Clínica Bazterrica Oeste",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Griselda",
+    "Puesto": "ECI",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Clínica Pasteleros",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Contacto",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Clínica San Camilo",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Sandra",
+    "Puesto": "Enfermería",
+    "Teléfono": "1551013485",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Clínica San Camilo",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Vanesa",
+    "Puesto": "Compras",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "vmanas@sancamilo.org.ar"
+  },
+  {
+    "Institución": "Corporacion San Martin",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Fernando",
+    "Puesto": "ECI",
+    "Teléfono": "11 3915-4786",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Corporacion San Martin",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Gustavo",
+    "Puesto": "Compras",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "gdangelo@corporacion.com.ar"
+  },
+  {
+    "Institución": "Cruces",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Maria Jose",
+    "Puesto": "Farmacia",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "Majo.meloacevedo@gmail.com"
+  },
+  {
+    "Institución": "Cruces",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Natalia",
+    "Puesto": "ECI",
+    "Teléfono": "11 6973-1205",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Drog Azcuenaga",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Francisco",
+    "Puesto": "ECI",
+    "Teléfono": "francisco@azcuenaga.ar",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Eldertec",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Santiago",
+    "Puesto": "ECI",
+    "Teléfono": "+54 9 11 2864-6678",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Español",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Giulana",
+    "Puesto": "Compras",
+    "Teléfono": "1166120961",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Español",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "MARA",
+    "Puesto": "ECI",
+    "Teléfono": "1151211961",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Español La Plata",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "damian",
+    "Puesto": "Compras",
+    "Teléfono": "compras@hospitalespanol.com.ar",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Español La Plata",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "yerbara",
+    "Puesto": "Enfermería",
+    "Teléfono": "2215893072",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Fernandez",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "Daniel",
+    "Puesto": "Enfermería",
+    "Teléfono": "11 5374-4276",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Finoccieto",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Margarita",
+    "Puesto": "ECI",
+    "Teléfono": "11 3199-2157",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Finoccieto",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Patricia",
+    "Puesto": "Farmacia",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "Pestevez@sanatoriofinochietto.com"
+  },
+  {
+    "Institución": "Fleming",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Christian Romano",
+    "Puesto": "BBB / Otros",
+    "Teléfono": "113101655",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Fleming",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Mariela",
+    "Puesto": "ECI",
+    "Teléfono": "1153493846",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Fleming",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Sandra",
+    "Puesto": "Enfermería",
+    "Teléfono": "1133419255",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Fleni",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Debora",
+    "Puesto": "ECI",
+    "Teléfono": "11 3168-5290",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Fleni",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Jorge Godoy",
+    "Puesto": "Enfermería",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "jgodoy@fleni.org.ar"
+  },
+  {
+    "Institución": "Fundacion Hospitalaria",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Adriana",
+    "Puesto": "Enfermería",
+    "Teléfono": "+54 9 11 6618-2909",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Fundacion Hospitalaria",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Adriana Reyes",
+    "Puesto": "Compras",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "areyes@fund-hospitalaria.com.ar"
+  },
+  {
+    "Institución": "Fundación Favaloro",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Cecilia",
+    "Puesto": "Enfermería",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "Cvisus@ffavaloro.org.ar"
+  },
+  {
+    "Institución": "Fundación Favaloro",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Lara",
+    "Puesto": "Compras",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "lcvilato@ffavaloro.org"
+  },
+  {
+    "Institución": "Fundación Favaloro",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Sonia",
+    "Puesto": "Enfermería",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "Svega@ffavaloro.org.ar"
+  },
+  {
+    "Institución": "Fundaleu",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Leonardo",
+    "Puesto": "Enfermería",
+    "Teléfono": "11 3645-1001",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Fundaleu",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Miguel",
+    "Puesto": "Farmacia",
+    "Teléfono": "+54 9 11 6287-5727",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Gesavi",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "German",
+    "Puesto": "ECI",
+    "Teléfono": "+54 9 11 6357-6161",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Guemes",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Jesica",
+    "Puesto": "ECI",
+    "Teléfono": "1159790327",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Gutierrez",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "fernanda",
+    "Puesto": "Enfermería",
+    "Teléfono": "gutierrez_farmacia@buenosaires.gob.ar",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Gutierrez",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "veronica",
+    "Puesto": "ECI",
+    "Teléfono": "1150444454",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Alvarez",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Carlos",
+    "Puesto": "Jefatura",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Alvarez",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Carlos  Terapia",
+    "Puesto": "Jefatura",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Alvarez",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Carolina  De Melani",
+    "Puesto": "Secretaría",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Alvarez",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Flavia Díaz Jefatura",
+    "Puesto": "Terapia Intensiva",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Alvarez",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Florencia  De",
+    "Puesto": "Farmacia",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Alvarez",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Francis  Uni Med 3 Clínica Médica  (Cofias)",
+    "Puesto": "Jefatura",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Alvarez",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Graciela Soto Un 5 Uco",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Argerich",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Dip Romina  De Depto",
+    "Puesto": "Enfermería",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Argerich",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Dip Romina  De Depto Enf",
+    "Puesto": "Jefatura",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Austral",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Marisa Bazzano",
+    "Puesto": "Farmacia",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Austral Pilar",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Andrea",
+    "Puesto": "Compras",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "ATOSO@cas.austral.edu.ar"
+  },
+  {
+    "Institución": "Hospital Austral Pilar",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Marcelino",
+    "Puesto": "Enfermería",
+    "Teléfono": "+54 9 11 3236-8744",
+    "Interés": "",
+    "Email": "menriquez@cas.austral.edu.ar"
+  },
+  {
+    "Institución": "Hospital Bicentenario",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Erica",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Bicentenario",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "suministros",
+    "Puesto": "Compras",
+    "Teléfono": "suministros@hbeecheverria.ar",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Bicentenario",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "victoria etchard",
+    "Puesto": "Enfermería",
+    "Teléfono": "11587236598",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Británico",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Estela Ledezma",
+    "Puesto": "Terapia Intensiva",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital de Clínicas",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Cristian Villasanta",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital de Clínicas",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Maria Carmen Fonseca",
+    "Puesto": "ECI",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "HOSPITAL DE TIGRE",
+    "Tipo": "CABA",
+    "Estado": "CLIENTE",
+    "Nombre": "Dra Caroline Laffont Jefa Pediátrico Tigre Pedido",
+    "Puesto": "General",
+    "Teléfono": "",
+    "Interés": "Encontrado vía script de revisión",
+    "Email": ""
+  },
+  {
+    "Institución": "HOSPITAL DE TIGRE",
+    "Tipo": "CABA",
+    "Estado": "CLIENTE",
+    "Nombre": "Dra Silvina Bruno Tigre",
+    "Puesto": "General",
+    "Teléfono": "",
+    "Interés": "Encontrado vía script de revisión",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Durand",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Fatima Aguirre",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Durand",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "Hector",
+    "Puesto": "ECI",
+    "Teléfono": "11 6280-6680",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Durand",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Pediat Elizabeth Reyes",
+    "Puesto": "Enfermería",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Elizalde",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Apaza Graciela",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Español",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Karina",
+    "Puesto": "ECI",
+    "Teléfono": "11 3638-8932",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Español",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Mara",
+    "Puesto": "Enfermería",
+    "Teléfono": "+54 9 11 5121-1961",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Fernández",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Carolina Cantero",
+    "Puesto": "Depósito",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Fernández",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Escalante  De Departamento",
+    "Puesto": "Jefatura",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "HOSPITAL FERNÁNDEZ",
+    "Tipo": "CABA",
+    "Estado": "CLIENTE",
+    "Nombre": "Escalante Jefa De Departamento Fernandez",
+    "Puesto": "General",
+    "Teléfono": "",
+    "Interés": "Encontrado vía script de revisión",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Fernández",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Gloria Olazar",
+    "Puesto": "ECI",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Fernández",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Rodrigo",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Garrahan",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "analia",
+    "Puesto": "Enfermería",
+    "Teléfono": "11 3058-0479",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Garrahan",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Guadalupe",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Garrahan",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "Silvia",
+    "Puesto": "ECI",
+    "Teléfono": "11 6055-3413",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Italiano",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Agustina",
+    "Puesto": "Pediatría",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Italiano",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Analia Julien",
+    "Puesto": "Terapia Intensiva",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Italiano",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Brenda perez (sup de terapia adultos)",
+    "Puesto": "BBB / Otros",
+    "Teléfono": "1169300049",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Italiano",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "camila.oviedo@hospitalitaliano.org.ar",
+    "Puesto": "BBB / Otros",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Italiano",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "elsa villalba",
+    "Puesto": "Enfermería",
+    "Teléfono": "elsa.villalba@hospitalitaliano.org.ar",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Italiano",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "silvia ilari",
+    "Puesto": "ECI",
+    "Teléfono": "1161633721",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Muñiz",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Estella Iasparra   1",
+    "Puesto": "Jefatura",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Muñiz",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Estella Iasparra  Terapia 1",
+    "Puesto": "Jefatura",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "HOSPITAL MUÑIZ",
+    "Tipo": "CABA",
+    "Estado": "CLIENTE",
+    "Nombre": "Estella Iasparra Jefa Terapia 1 Muñiz",
+    "Puesto": "General",
+    "Teléfono": "",
+    "Interés": "Encontrado vía script de revisión",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Pediátrico Tigre",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Dra Caroline Laffont   Tigre Pedido",
+    "Puesto": "Jefatura",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "HOSPITAL PENNA",
+    "Tipo": "CABA",
+    "Estado": "CLIENTE",
+    "Nombre": "Ajustino Dr Jose Penna",
+    "Puesto": "Dr Jose Penna",
+    "Teléfono": "",
+    "Interés": "Encontrado vía script de revisión",
+    "Email": ""
+  },
+  {
+    "Institución": "HOSPITAL PENNA",
+    "Tipo": "CABA",
+    "Estado": "CLIENTE",
+    "Nombre": "Andres Cardozo Jefe Traumato Penna",
+    "Puesto": "General",
+    "Teléfono": "",
+    "Interés": "Encontrado vía script de revisión",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Pirovano",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Andrea Soto",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Pirovano",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Carmen",
+    "Puesto": "Supervisión",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "HOSPITAL PIROVANO",
+    "Tipo": "CABA",
+    "Estado": "CLIENTE",
+    "Nombre": "Dra Verónica Berdiñas Jefa Infecto Vte Lope",
+    "Puesto": "General",
+    "Teléfono": "",
+    "Interés": "Encontrado vía script de revisión",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Pirovano",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Elizabeth",
+    "Puesto": "Supervisión",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Pirovano",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "Veronica",
+    "Puesto": "ECI",
+    "Teléfono": "+54 9 11 6019-9531",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Posadas",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Ana Paula Ortiz",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Posadas",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "Analia",
+    "Puesto": "ECI",
+    "Teléfono": "11 5594-2519",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Posadas",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Barboza Yamila Hosp Escuela",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Posadas",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Battes Alejandra Hosp",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Posadas",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Candela",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Posadas",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Emilse",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Posadas",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Estefania",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Posadas",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Estela Noe",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Posadas",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Graciela Ceña",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Santa Isabel",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Andrea",
+    "Puesto": "ECI",
+    "Teléfono": "+54 9 11 6199-0222",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Santa Isabel",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Capri Barberia",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Santa Isabel",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Cristian  Coordinación  Isabel",
+    "Puesto": "Jefatura",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Santa Isabel",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "eliana",
+    "Puesto": "Farmacia",
+    "Teléfono": "epalermo@santaisabel.com.ar",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Santa Isabel",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Franco Ayelen   Clinica  Clara",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Santa Isabel",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "walter allende )deposito)",
+    "Puesto": "BBB / Otros",
+    "Teléfono": "1163765992",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Tornú",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Algarin Gladys",
+    "Puesto": "Jefatura",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Tornú",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Algarin Gladys  Terapia",
+    "Puesto": "Jefatura",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Tornú",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Gabriela",
+    "Puesto": "ECI",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Zubizarreta Norte",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "Juliana",
+    "Puesto": "ECI",
+    "Teléfono": "1168382349",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Hospital Zubizarreta Norte",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "Mabel",
+    "Puesto": "Enfermería",
+    "Teléfono": "1155669378",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "HOSPITAL ÁLVAREZ",
+    "Tipo": "CABA",
+    "Estado": "CLIENTE",
+    "Nombre": "Carolina Secretaria De Melani Alvarez",
+    "Puesto": "General",
+    "Teléfono": "",
+    "Interés": "Encontrado vía script de revisión",
+    "Email": ""
+  },
+  {
+    "Institución": "HOSPITAL ÁLVAREZ",
+    "Tipo": "CABA",
+    "Estado": "CLIENTE",
+    "Nombre": "Florencia Jefa De Farmacia Alvarez",
+    "Puesto": "General",
+    "Teléfono": "",
+    "Interés": "Encontrado vía script de revisión",
+    "Email": ""
+  },
+  {
+    "Institución": "HOSPITAL ÁLVAREZ",
+    "Tipo": "CABA",
+    "Estado": "CLIENTE",
+    "Nombre": "Francis Jefa Uni Med 3 Clínica Médica Alvarez (Cofias)",
+    "Puesto": "General",
+    "Teléfono": "",
+    "Interés": "Encontrado vía script de revisión",
+    "Email": ""
+  },
+  {
+    "Institución": "Htal Aleman",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Alejandro",
+    "Puesto": "ECI",
+    "Teléfono": "221 5069322",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Htal Aleman",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "nicolas",
+    "Puesto": "Enfermería",
+    "Teléfono": "1169587861",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Htal De Clinicas",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "Maria",
+    "Puesto": "ECI",
+    "Teléfono": "1160031689",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Htal Mendez",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "Fernanda",
+    "Puesto": "ECI",
+    "Teléfono": "11 3046-4963",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Htal Militar",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Gladys",
+    "Puesto": "Enfermería",
+    "Teléfono": "11 6448-0667",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Htal San Isidro",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "Daniela",
+    "Puesto": "ECI",
+    "Teléfono": "+54 9 11 6229-7439",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Htal Vte Lopez",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "Andrea",
+    "Puesto": "ECI",
+    "Teléfono": "11 6376-2576",
+    "Interés": "",
+    "Email": "andre.g100@hotmail.com"
+  },
+  {
+    "Institución": "IADT",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Laura almiron",
+    "Puesto": "Compras",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "laura.almiron@iadt.com.ar"
+  },
+  {
+    "Institución": "IADT",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Soledad jurado",
+    "Puesto": "Enfermería",
+    "Teléfono": "1167829851",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "ICBA",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Estela",
+    "Puesto": "Enfermería",
+    "Teléfono": "11 3424-2543",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "ICBA",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Marcelo",
+    "Puesto": "Compras",
+    "Teléfono": "+54 9 11 4403-7704",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Imac",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Compras",
+    "Puesto": "Compras",
+    "Teléfono": "1169519610",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Imac",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Patricia",
+    "Puesto": "ECI",
+    "Teléfono": "1140884877",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Juncal",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Ana",
+    "Puesto": "ECI",
+    "Teléfono": "11 3620-3374",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Juncal",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Andrea",
+    "Puesto": "Compras",
+    "Teléfono": "11 5667-9465",
+    "Interés": "",
+    "Email": "andrea.martinez@sjuncal.com.a"
+  },
+  {
+    "Institución": "Materno Inf Tigre",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "Mabel",
+    "Puesto": "Enfermería",
+    "Teléfono": "11 3112-1959",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Materno Infantil San Isidro",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "Juliana",
+    "Puesto": "ECI",
+    "Teléfono": "11 6838-2349",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Mod Priv Lanus",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Adriana Perez",
+    "Puesto": "Compras",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "aperez@clinicamodelolanus.com"
+  },
+  {
+    "Institución": "Mod Priv Lanus",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Laura",
+    "Puesto": "ECI",
+    "Teléfono": "11 5847-2243",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Omint",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Claudia Tilio",
+    "Puesto": "Compras",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "ctilio@omint.com.ar"
+  },
+  {
+    "Institución": "Penna",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "Eliana",
+    "Puesto": "Enfermería",
+    "Teléfono": "1166886924",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Penna",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "mariana",
+    "Puesto": "ECI",
+    "Teléfono": "11 3560-9383",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Piñero",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "Ana",
+    "Puesto": "ECI",
+    "Teléfono": "1141677831",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Ramos Mejia",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "Irazabal",
+    "Puesto": "Enfermería",
+    "Teléfono": "1141636371",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Ramos Mejia",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "Marisa",
+    "Puesto": "ECI",
+    "Teléfono": "1150448181",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "San Jose",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Nilda",
+    "Puesto": "ECI",
+    "Teléfono": "1165908330",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Sanatorio Anchorena",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Camila",
+    "Puesto": "ECI",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Sanatorio Anchorena",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Eugenia Echague",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Sanatorio Anchorena",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Laura Leone Int 18513",
+    "Puesto": "Compras",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Sanatorio Colegiales",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Andrés Vargas Sup",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Sanatorio Colegiales",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Noelia",
+    "Puesto": "ECI",
+    "Teléfono": "1165620020",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Sanatorio Del Oeste",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Sabrina",
+    "Puesto": "Compras",
+    "Teléfono": "1141573679",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Sanatorio Finochietto",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Analia",
+    "Puesto": "Compras",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Sanatorio Franchin",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Guerrero Sandra  De Dpto",
+    "Puesto": "Jefatura",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Sanatorio Las Lomas",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Sandra",
+    "Puesto": "ECI",
+    "Teléfono": "1167582093",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Sanatorio Mater Dei",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Andrea",
+    "Puesto": "Compras",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Sanatorio Mater Dei",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "David",
+    "Puesto": "Farmacia",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "david.morales@smdei.com"
+  },
+  {
+    "Institución": "Sanatorio Mater Dei",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Griselda Leguizamon",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Sanatorio Mater Dei",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Santiago",
+    "Puesto": "Compras",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "david.morales@smdei.com"
+  },
+  {
+    "Institución": "Sanatorio Montegrande",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Marta",
+    "Puesto": "ECI",
+    "Teléfono": "1149707190",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Sanatorio Norte",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Esterilizadora  Sa",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Sanatorio San Lucas",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Egidio",
+    "Puesto": "Enfermería",
+    "Teléfono": "11 4141-1622",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Sanatorio San Lucas",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Ruben",
+    "Puesto": "Farmacia",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "rhuizzi@sanlucas.com.ar"
+  },
+  {
+    "Institución": "Sor Ludovica",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "ANdrea",
+    "Puesto": "ECI",
+    "Teléfono": "221 304-7369",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Swiss",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Juan Carlos",
+    "Puesto": "Enfermería",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": "JuanCarlos.Verardi@swissmedical.com.ar"
+  },
+  {
+    "Institución": "Swiss Los Arcos",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Ana Santillan",
+    "Puesto": "ECI",
+    "Teléfono": "11 4974-5143",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Swiss Los Arcos",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Fabricio",
+    "Puesto": "Enfermería",
+    "Teléfono": "1133581709",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Swiss Los Arcos",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Rosa",
+    "Puesto": "ECI",
+    "Teléfono": "+54 9 11 4160-6003",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Trinidad",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Carla Grance  Ramos",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Trinidad",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Gaby Pacheco  Palermo",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Trinidad",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Gomez Rosana Clinica  Quilmes",
+    "Puesto": "Contacto",
+    "Teléfono": "",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Trinidad Mitre",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Fernanda",
+    "Puesto": "ECI",
+    "Teléfono": "1138135791",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Trinidad Palermo",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Cristina",
+    "Puesto": "ECI",
+    "Teléfono": "1155024737",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Trinidad Thames",
+    "Tipo": "Privado",
+    "Estado": "CLIENTE",
+    "Nombre": "Lorenza",
+    "Puesto": "ECI",
+    "Teléfono": "1132999290",
+    "Interés": "",
+    "Email": ""
+  },
+  {
+    "Institución": "Velez Sarfield",
+    "Tipo": "Publico",
+    "Estado": "CLIENTE",
+    "Nombre": "Vanesa",
+    "Puesto": "ECI",
+    "Teléfono": "1156046820",
+    "Interés": "",
+    "Email": ""
+  }
+]
