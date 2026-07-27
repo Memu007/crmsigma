@@ -14,15 +14,16 @@ jobs:
   verificar:
     runs-on: ubuntu-latest
     steps:
-      - name: Consultar metadatos de despliegue
+      - name: Consultar metadatos y API desplegada
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
           MAIN_SHA: d4ba1a9ad11683a7f5dcca065c6d968b1d7fa1c0
         run: |
           python - <<'PY'
-          import json, os, re, urllib.request, urllib.error
+          import json, os, re, urllib.request
           from pathlib import Path
+          from urllib.parse import urlsplit
 
           token = os.environ['GH_TOKEN']
           repo = os.environ['REPO']
@@ -45,7 +46,10 @@ jobs:
               'deployments': [],
               'check_runs': [],
               'commit_statuses': [],
-              'candidate_urls': [],
+              'candidate_urls': [
+                  'http://crmsigmaline.com', 'https://crmsigmaline.com',
+                  'http://ventassigmaline.com', 'https://ventassigmaline.com'
+              ],
               'api_results': []
           }
 
@@ -103,7 +107,7 @@ jobs:
           except Exception as e:
               payload['statuses_error'] = str(e)
 
-          url_re = re.compile(r'https://[^\s"\']+')
+          url_re = re.compile(r'https?://[^\s"\']+')
           def walk(obj):
               if isinstance(obj, dict):
                   for v in obj.values(): walk(v)
@@ -112,14 +116,18 @@ jobs:
               elif isinstance(obj, str):
                   for u in url_re.findall(obj):
                       u = u.rstrip('),.;]')
-                      if any(x in u for x in ['railway.app', 'up.railway.app', 'onrender.com', 'vercel.app']):
+                      host = (urlsplit(u).hostname or '').lower()
+                      if host and host not in {'github.com', 'api.github.com'}:
                           payload['candidate_urls'].append(u)
-          walk(payload)
+          walk(payload['deployments'])
+          walk(payload['check_runs'])
+          walk(payload['commit_statuses'])
           payload['candidate_urls'] = sorted(set(payload['candidate_urls']))
 
           tested = set()
           for url in payload['candidate_urls']:
-              base = url.split('/api/')[0].rstrip('/')
+              parsed = urlsplit(url)
+              base = f'{parsed.scheme}://{parsed.netloc}'.rstrip('/')
               if base in tested: continue
               tested.add(base)
               api_url = base + '/api/data'
@@ -128,6 +136,7 @@ jobs:
                   req = urllib.request.Request(api_url, headers={'User-Agent': 'crm-verifier'})
                   with urllib.request.urlopen(req, timeout=30) as r:
                       raw = r.read()
+                      result['final_url'] = r.geturl()
                       result['http_status'] = r.status
                       result['content_type'] = r.headers.get('content-type')
                       data = json.loads(raw)
