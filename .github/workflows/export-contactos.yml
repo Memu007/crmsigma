@@ -4,17 +4,22 @@ on:
   push:
     branches:
       - tmp-export-contactos-20260727
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: write
 
 jobs:
   exportar:
-    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    if: ${{ github.event_name == 'pull_request' || !contains(github.event.head_commit.message, '[skip ci]') }}
     runs-on: ubuntu-latest
     steps:
       - name: Descargar repositorio
         uses: actions/checkout@v4
+        with:
+          ref: tmp-export-contactos-20260727
 
       - name: Extraer contactos del JSON embebido
         shell: bash
@@ -60,6 +65,7 @@ jobs:
           PY
 
       - name: Publicar archivos en la rama temporal
+        if: github.event_name == 'push'
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
